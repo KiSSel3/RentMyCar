@@ -26,6 +26,8 @@ public static class ModelBuilderExtension
             UserName = "Admin",
             Email = "admin.rent.my.car@gmail.com",
             PhoneNumber = "+111111111111",
+            RefreshToken = "",
+            RefreshTokenExpiryTime = DateTime.MinValue
         };
         
         passwordHasher.HashPassword(admin, "Admin123");
