@@ -1,3 +1,4 @@
+using IdentityService.DAL;
 using IdentityService.DAL.Infrastructure;
 using IdentityService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -10,20 +11,9 @@ public static class WebApplicationBuilderExtension
     public static void AddServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddControllers();
-
-        builder.Services.AddIdentity<UserEntity, RoleEntity>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
-    }
-
-    public static void AddDataBase(this WebApplicationBuilder builder)
-    {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
         
-        string? dataBaseConnection = builder.Configuration.GetConnectionString("PostrgeSql");
-        builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        {
-            options.UseNpgsql(dataBaseConnection);
-        });
+        builder.Services.AddDataAccessLayerServices(builder.Configuration);
     }
 }

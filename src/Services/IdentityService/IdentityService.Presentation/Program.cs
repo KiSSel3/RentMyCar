@@ -3,10 +3,6 @@ using IdentityService.Presentation.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServices();
-builder.AddDataBase();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IdentityService.DAL.Stores;
 
-public class RoleStore : RoleStore<RoleEntity, ApplicationDbContext, Guid>
+public class RoleEntityStore : RoleStore<RoleEntity, ApplicationDbContext, Guid>
 {
-    public RoleStore(ApplicationDbContext context, IdentityErrorDescriber? describer = null) : base(context, describer)
+    public RoleEntityStore(ApplicationDbContext context, IdentityErrorDescriber? describer = null) : base(context, describer)
     { }
 
     public override async Task<IdentityResult> DeleteAsync(RoleEntity role, CancellationToken cancellationToken = default)
