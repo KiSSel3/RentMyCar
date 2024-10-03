@@ -14,12 +14,12 @@ public class ApplicationDbContext : IdentityDbContext<UserEntity, RoleEntity, Gu
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        base.OnModelCreating(builder);
+        
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         
         builder.SeedRolesData();
         builder.SeedUsersData();
         builder.SeedUsersRolesData();
-        
-        base.OnModelCreating(builder);
     }
 }

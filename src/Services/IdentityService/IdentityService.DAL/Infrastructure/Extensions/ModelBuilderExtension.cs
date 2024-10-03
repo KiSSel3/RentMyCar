@@ -30,7 +30,7 @@ public static class ModelBuilderExtension
             RefreshTokenExpiryTime = DateTime.MinValue
         };
         
-        passwordHasher.HashPassword(admin, "Admin123");
+        admin.PasswordHash = passwordHasher.HashPassword(admin, "Admin123");
         
         modelBuilder.Entity<UserEntity>().HasData(admin);
     }
