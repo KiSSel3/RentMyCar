@@ -23,7 +23,7 @@ public class TokenProvider : ITokenProvider
         _userManager = userManager;
     }
 
-    public async Task<TokenResult> GenerateAccessToken(UserEntity userEntity, CancellationToken cancellationToken = default)
+    public async Task<TokenResult> GenerateAccessTokenAsync(UserEntity userEntity, CancellationToken cancellationToken = default)
     {
         var claims = await GetClaimsAsync(userEntity);
         

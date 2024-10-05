@@ -5,6 +5,6 @@ namespace IdentityService.BLL.Providers.Interfaces;
 
 public interface ITokenProvider
 {
-    Task<TokenResult> GenerateAccessToken(UserEntity userEntity, CancellationToken cancellationToken = default);
+    Task<TokenResult> GenerateAccessTokenAsync(UserEntity userEntity, CancellationToken cancellationToken = default);
     TokenResult GenerateRefreshToken();
 }
