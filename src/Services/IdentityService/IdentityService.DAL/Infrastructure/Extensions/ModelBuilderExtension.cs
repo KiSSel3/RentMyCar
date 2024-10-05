@@ -9,8 +9,8 @@ public static class ModelBuilderExtension
     public static void SeedRolesData(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<RoleEntity>().HasData(
-            new RoleEntity() {Id = new Guid("4DFA5285-8884-4C08-B83D-BAC2B36563D5"), Name = "Admin"},
-            new RoleEntity() {Id = new Guid("96B72F66-4305-4635-A30C-A436DC7A0FB5"), Name = "User"}
+            new RoleEntity() {Id = new Guid("4DFA5285-8884-4C08-B83D-BAC2B36563D5"), Name = "Admin", NormalizedName = "ADMIN"},
+            new RoleEntity() {Id = new Guid("96B72F66-4305-4635-A30C-A436DC7A0FB5"), Name = "User", NormalizedName = "USER"}
         );
     }
     
@@ -24,13 +24,15 @@ public static class ModelBuilderExtension
             FirstName = "Admin",
             LastName = "Admin",
             UserName = "Admin",
+            NormalizedUserName = "ADMIN",
             Email = "admin.rent.my.car@gmail.com",
+            NormalizedEmail = "ADMIN.RENT.MY.CAR@GMAIL.COM",
             PhoneNumber = "+111111111111",
             RefreshToken = "",
             RefreshTokenExpiryTime = DateTime.MinValue
         };
         
-        admin.PasswordHash = passwordHasher.HashPassword(admin, "Admin123");
+        admin.PasswordHash = passwordHasher.HashPassword(admin, "Admin");
         
         modelBuilder.Entity<UserEntity>().HasData(admin);
     }

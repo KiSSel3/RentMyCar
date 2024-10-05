@@ -30,10 +30,10 @@ public class UserEntityStore : UserStore<UserEntity, RoleEntity, ApplicationDbCo
         return null;
     }
 
-    public override async Task<UserEntity?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+    public override async Task<UserEntity?> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
     {
         var users = await Users.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(u => u.UserName == name && !u.IsDeleted, cancellationToken);
+            .FirstOrDefaultAsync(u => u.NormalizedUserName == normalizedName && !u.IsDeleted, cancellationToken);
 
         return users;
     }

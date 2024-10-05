@@ -30,10 +30,10 @@ public class RoleEntityStore : RoleStore<RoleEntity, ApplicationDbContext, Guid>
         return null;
     }
 
-    public override async Task<RoleEntity?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+    public override async Task<RoleEntity?> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
     {
         var users = await Roles.IgnoreQueryFilters()
-            .FirstOrDefaultAsync(u => u.Name == name && !u.IsDeleted, cancellationToken);
+            .FirstOrDefaultAsync(u => u.NormalizedName == normalizedName && !u.IsDeleted, cancellationToken);
 
         return users;
     }
