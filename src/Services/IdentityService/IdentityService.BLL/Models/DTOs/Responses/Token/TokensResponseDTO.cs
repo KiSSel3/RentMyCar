@@ -1,4 +1,4 @@
-namespace IdentityService.BLL.DTOs.Responses.Token;
+namespace IdentityService.BLL.Models.DTOs.Responses.Token;
 
 public class TokensResponseDTO
 {

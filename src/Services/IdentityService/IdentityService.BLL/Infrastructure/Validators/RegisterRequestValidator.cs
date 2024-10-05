@@ -1,5 +1,5 @@
 using FluentValidation;
-using IdentityService.BLL.DTOs.Requests.Auth;
+using IdentityService.BLL.Models.DTOs.Requests.Auth;
 
 namespace IdentityService.BLL.Infrastructure.Validators;
 

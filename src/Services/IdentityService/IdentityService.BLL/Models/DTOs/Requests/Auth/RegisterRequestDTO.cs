@@ -1,4 +1,4 @@
-namespace IdentityService.BLL.DTOs.Requests.Auth;
+namespace IdentityService.BLL.Models.DTOs.Requests.Auth;
 
 public class RegisterRequestDTO
 {

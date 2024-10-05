@@ -1,4 +1,4 @@
-namespace IdentityService.BLL.Providers.Options;
+namespace IdentityService.BLL.Models.Options;
 
 public class TokenOptions
 {

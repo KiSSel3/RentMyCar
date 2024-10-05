@@ -1,4 +1,4 @@
-namespace IdentityService.BLL.Providers.Models;
+namespace IdentityService.BLL.Models.Results;
 
 public class TokenResult
 {

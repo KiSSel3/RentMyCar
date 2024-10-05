@@ -1,5 +1,4 @@
-using System.Security.Claims;
-using IdentityService.BLL.Providers.Models;
+using IdentityService.BLL.Models.Results;
 using IdentityService.Domain.Entities;
 
 namespace IdentityService.BLL.Providers.Interfaces;
