@@ -12,6 +12,7 @@ namespace IdentityService.BLL;
 
 public static class DependencyInjection
 {
+
     public static IServiceCollection AddBusinessLogicLayerServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
