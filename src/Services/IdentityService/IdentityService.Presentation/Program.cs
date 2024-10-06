@@ -2,21 +2,14 @@ using IdentityService.Presentation.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddServices();
+builder.AddLogging()
+    .AddServices()
+    .ConfigureJWT()
+    .AddAuthentication()
+    .AddSwaggerDocumentation();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+app.AddSwagger()
+    .AddApplicationMiddleware()
+    .Run();
