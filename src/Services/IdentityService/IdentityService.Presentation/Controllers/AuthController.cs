@@ -7,8 +7,7 @@ namespace IdentityService.Presentation.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
-//TODO: Refactoring - change controller to controllerbase
-public class AuthController : Controller
+public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
 
@@ -40,7 +39,7 @@ public class AuthController : Controller
     
     [Authorize]
     [HttpDelete("logout")]
-    public async Task<IActionResult> LogoutAsync([FromBody] Guid userId, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> LogoutAsync([FromBody] string userId, CancellationToken cancellationToken = default)
     {
         await _authService.RevokeAsync(userId, cancellationToken);
         return Ok();

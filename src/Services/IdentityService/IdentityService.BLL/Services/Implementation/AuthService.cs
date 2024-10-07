@@ -65,8 +65,7 @@ public class AuthService : IAuthService
         var tokenResponse = await GenerateTokensAsync(user, cancellationToken: cancellationToken);
         return tokenResponse;
     }
-
-    //TODO: Refactoring - change the user's search
+    
     public async Task<TokensResponseDTO> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
         var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken && !u.IsDeleted, cancellationToken) ??
@@ -81,12 +80,12 @@ public class AuthService : IAuthService
         return tokenResponse;
     }
     
-    public async Task RevokeAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task RevokeAsync(string userId, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Revoking tokens for user with ID {UserId}.", userId);
         
-        var user = await _userManager.FindByIdAsync(userId.ToString()) ??
-                   throw new EntityNotFoundException("User", userId.ToString());
+        var user = await _userManager.FindByIdAsync(userId) ??
+                   throw new EntityNotFoundException("User", userId);
         
         user.RefreshToken = string.Empty;
         user.RefreshTokenExpiryTime = DateTime.MinValue;
