@@ -21,7 +21,10 @@ public static class DependencyInjection
         services.Configure<TokenOptions>(configuration.GetSection(TokenOptions.DefaultSection));
 
         services.AddScoped<ITokenProvider, TokenProvider>();
+        
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IRoleService, RoleService>();
             
         return services;
     }
