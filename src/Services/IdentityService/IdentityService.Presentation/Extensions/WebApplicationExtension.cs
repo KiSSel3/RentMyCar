@@ -1,3 +1,4 @@
+using IdentityService.Presentation.Middlewares;
 using NLog.Web;
 
 namespace IdentityService.Presentation.Extensions;
@@ -17,6 +18,8 @@ public static class WebApplicationExtension
     
     public static WebApplication AddApplicationMiddleware(this WebApplication app)
     {
+        app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+        
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
