@@ -29,6 +29,16 @@ public static class DependencyInjection
 
     private static void ConfigureIdentity(IServiceCollection services)
     {
+        services.AddIdentityCore<UserEntity>(o =>
+        {
+            o.Password.RequireDigit = false;
+            o.Password.RequireLowercase = false;
+            o.Password.RequireUppercase = false;
+            o.Password.RequireNonAlphanumeric = false;
+            o.Password.RequiredLength = 5;
+            o.User.RequireUniqueEmail = true;
+        });
+        
         services.AddIdentity<UserEntity, RoleEntity>()
             .AddUserStore<UserEntityStore>()
             .AddRoleStore<RoleEntityStore>()

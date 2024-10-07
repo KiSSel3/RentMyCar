@@ -9,8 +9,8 @@ public static class ModelBuilderExtension
     public static void SeedRolesData(this ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<RoleEntity>().HasData(
-            new RoleEntity() {Id = new Guid("4DFA5285-8884-4C08-B83D-BAC2B36563D5"), Name = "Admin", NormalizedName = "ADMIN"},
-            new RoleEntity() {Id = new Guid("96B72F66-4305-4635-A30C-A436DC7A0FB5"), Name = "User", NormalizedName = "USER"}
+            new RoleEntity() {Id = new Guid("4DFA5285-8884-4C08-B83D-BAC2B36563D5"), Name = "Admin", NormalizedName = "ADMIN", ConcurrencyStamp = "1"},
+            new RoleEntity() {Id = new Guid("96B72F66-4305-4635-A30C-A436DC7A0FB5"), Name = "User", NormalizedName = "USER", ConcurrencyStamp = "2"}
         );
     }
     

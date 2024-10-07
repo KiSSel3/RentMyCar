@@ -3,6 +3,7 @@ using System;
 using IdentityService.DAL.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace IdentityService.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241007152153_AddedConcurrencyStampToRole")]
+    partial class AddedConcurrencyStampToRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,6 +131,7 @@ namespace IdentityService.DAL.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("RefreshToken")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
@@ -160,7 +164,7 @@ namespace IdentityService.DAL.Migrations
                         {
                             Id = new Guid("9ab61044-85f6-4c5e-a93a-d860efae0cce"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7a22a913-a1dd-4215-a4b8-5b2cdc29e089",
+                            ConcurrencyStamp = "6a7fde01-fea9-4e17-8966-031daf63591f",
                             Email = "admin.rent.my.car@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -169,7 +173,7 @@ namespace IdentityService.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN.RENT.MY.CAR@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECzoNc7ZK2e99jtOyZfkdLHuMZIV/RzYYn9+CgZAL5NcEn9lwyS2Rz2ywdghPnBt2A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIk1+NKWfYSmTfwlP1mU/xBqEbwj+SZAzy8ARsQMoL+EyWSRdwfD1MauDu7MeKXtTw==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",

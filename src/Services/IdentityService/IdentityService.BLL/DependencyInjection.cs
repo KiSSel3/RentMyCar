@@ -1,5 +1,6 @@
 using System.Reflection;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using IdentityService.BLL.Models.Options;
 using IdentityService.BLL.Providers.Implementation;
 using IdentityService.BLL.Providers.Interfaces;
@@ -15,6 +16,7 @@ public static class DependencyInjection
 
     public static IServiceCollection AddBusinessLogicLayerServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
