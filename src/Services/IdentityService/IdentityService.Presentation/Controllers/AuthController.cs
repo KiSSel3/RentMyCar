@@ -7,6 +7,7 @@ namespace IdentityService.Presentation.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
+//TODO: Refactoring - change controller to controllerbase
 public class AuthController : Controller
 {
     private readonly IAuthService _authService;
