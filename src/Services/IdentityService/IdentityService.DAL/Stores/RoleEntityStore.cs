@@ -21,20 +21,19 @@ public class RoleEntityStore : RoleStore<RoleEntity, ApplicationDbContext, Guid>
     
     public override async Task<RoleEntity?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        if (Guid.TryParse(userId, out var id))
-        {
-            return await Roles.IgnoreQueryFilters()
-                .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted, cancellationToken);
-        }
+        var id = ConvertIdFromString(userId);
+        
+        var roles = await Roles.IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted, cancellationToken);
 
-        return null;
+        return roles;
     }
 
     public override async Task<RoleEntity?> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
     {
-        var users = await Roles.IgnoreQueryFilters()
+        var roles = await Roles.IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.NormalizedName == normalizedName && !u.IsDeleted, cancellationToken);
 
-        return users;
+        return roles;
     }
 }

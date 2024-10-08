@@ -21,13 +21,12 @@ public class UserEntityStore : UserStore<UserEntity, RoleEntity, ApplicationDbCo
 
     public override async Task<UserEntity?> FindByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        if (Guid.TryParse(userId, out var id))
-        {
-            return await Users.IgnoreQueryFilters()
-                .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted, cancellationToken);
-        }
+        var id = ConvertIdFromString(userId);
+        
+        var user = await Users.IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted, cancellationToken);
 
-        return null;
+        return user;
     }
 
     public override async Task<UserEntity?> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
