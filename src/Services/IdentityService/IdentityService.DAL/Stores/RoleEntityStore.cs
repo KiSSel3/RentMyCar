@@ -23,17 +23,17 @@ public class RoleEntityStore : RoleStore<RoleEntity, ApplicationDbContext, Guid>
     {
         var id = ConvertIdFromString(userId);
         
-        var roles = await Roles.IgnoreQueryFilters()
+        var role = await Roles.IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted, cancellationToken);
 
-        return roles;
+        return role;
     }
 
     public override async Task<RoleEntity?> FindByNameAsync(string normalizedName, CancellationToken cancellationToken = default)
     {
-        var roles = await Roles.IgnoreQueryFilters()
+        var role = await Roles.IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.NormalizedName == normalizedName && !u.IsDeleted, cancellationToken);
 
-        return roles;
+        return role;
     }
 }
