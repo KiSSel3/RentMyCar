@@ -18,20 +18,28 @@ public class AuthService : IAuthService
     private readonly ILogger<AuthService> _logger;
     private readonly IMapper _mapper;
 
-    public AuthService(UserManager<UserEntity> userManager, ITokenProvider tokenProvider, IMapper mapper, ILogger<AuthService> logger)
+
+    public AuthService(
+        UserManager<UserEntity> userManager,
+        ITokenProvider tokenProvider,
+        ILogger<AuthService> logger,
+        IMapper mapper)
     {
         _userManager = userManager;
         _tokenProvider = tokenProvider;
-        _mapper = mapper;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<TokensResponseDTO> LoginAsync(LoginRequestDTO loginRequestDto, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("User {UserName} is attempting to log in.", loginRequestDto.UserName);
-        
-        var user = await _userManager.FindByNameAsync(loginRequestDto.UserName) ??
-                   throw new AuthorizationException("Login or password entered incorrectly.");
+
+        var user = await _userManager.FindByNameAsync(loginRequestDto.UserName);
+        if (user is null)
+        {
+            throw new AuthorizationException("Login or password entered incorrectly.");
+        }
         
         var isPasswordCorrect = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
         if (!isPasswordCorrect)
@@ -50,9 +58,9 @@ public class AuthService : IAuthService
         _logger.LogInformation("User {UserName} is registering.", registerRequestDto.UserName);
         
         var user = await _userManager.FindByNameAsync(registerRequestDto.UserName);
-        if (user is not null)
+        if (user is null)
         {
-            throw new AuthorizationException("User with this UserName already exists.");
+            throw new AuthorizationException("Login or password entered incorrectly.");
         }
         
         user = _mapper.Map<UserEntity>(registerRequestDto);
@@ -68,9 +76,13 @@ public class AuthService : IAuthService
     
     public async Task<TokensResponseDTO> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken && !u.IsDeleted, cancellationToken) ??
-                   throw new AuthorizationException("Invalid refresh token.");
-
+        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken && !u.IsDeleted,
+            cancellationToken);
+        if (user is null)
+        {
+            throw new AuthorizationException("Invalid refresh token.");
+        }
+        
         if (user.RefreshTokenExpiryTime <= DateTime.Now)
         {
             throw new AuthorizationException("Refresh token has expired.");
@@ -83,9 +95,12 @@ public class AuthService : IAuthService
     public async Task RevokeAsync(string userId, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Revoking tokens for user with ID {UserId}.", userId);
-        
-        var user = await _userManager.FindByIdAsync(userId) ??
-                   throw new EntityNotFoundException("User", userId);
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            throw new EntityNotFoundException("User", userId);
+        }
         
         user.RefreshToken = string.Empty;
         user.RefreshTokenExpiryTime = DateTime.MinValue;

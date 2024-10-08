@@ -16,11 +16,15 @@ public class RoleService : IRoleService
     private readonly ILogger<RoleService> _logger;
     private readonly IMapper _mapper;
 
-    public RoleService(RoleManager<RoleEntity> roleManager, IMapper mapper, ILogger<RoleService> logger)
+
+    public RoleService(
+        RoleManager<RoleEntity> roleManager,
+        ILogger<RoleService> logger,
+        IMapper mapper)
     {
         _roleManager = roleManager;
-        _mapper = mapper;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<RoleResponseDTO>> GetAllRolesAsync(CancellationToken cancellationToken = default)
@@ -37,9 +41,12 @@ public class RoleService : IRoleService
     public async Task<RoleResponseDTO> GetRoleByIdAsync(string roleId, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Fetching role by ID: {RoleId}", roleId);
-        
-        var role = await _roleManager.FindByIdAsync(roleId) ??
-                   throw new EntityNotFoundException("Role", roleId);
+
+        var role = await _roleManager.FindByIdAsync(roleId);
+        if (role is null)
+        {
+            throw new EntityNotFoundException("Role", roleId);
+        }
         
         _logger.LogInformation("Fetched role: {RoleName} with ID: {RoleId}", role.Name, roleId);
         
@@ -49,9 +56,12 @@ public class RoleService : IRoleService
     public async Task<RoleResponseDTO> GetRoleByNameAsync(string roleName, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Fetching role by name: {RoleName}", roleName);
-        
-        var role = await _roleManager.FindByNameAsync(roleName) ??
-                   throw new EntityNotFoundException($"Role with name {roleName} not found");
+
+        var role = await _roleManager.FindByNameAsync(roleName);
+        if (role is null)
+        {
+            throw new EntityNotFoundException($"Role with name {roleName} not found");
+        }
         
         _logger.LogInformation("Fetched role: {RoleName} with ID: {RoleId}", role.Name, role.Id);
         
@@ -77,12 +87,15 @@ public class RoleService : IRoleService
     public async Task UpdateRoleAsync(string roleId, RoleRequestDTO updateRoleDTO, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Updating role with ID: {RoleId}", roleId);
-        
-        var role = await _roleManager.FindByIdAsync(roleId) ??
-                   throw new EntityNotFoundException("Role", roleId);
+
+        var role = await _roleManager.FindByIdAsync(roleId);
+        if (role is null)
+        {
+            throw new EntityNotFoundException("Role", roleId);
+        }
         
         var existingRole = await _roleManager.FindByNameAsync(updateRoleDTO.Name);
-        if (existingRole != null && existingRole.Id != role.Id)
+        if (existingRole is not null && existingRole.Id != role.Id)
         {
             throw new EntityAlreadyExistsException($"Role with name '{updateRoleDTO.Name}' already exists.");
         }
@@ -97,8 +110,11 @@ public class RoleService : IRoleService
     {
         _logger.LogInformation("Deleting role with ID: {RoleId}", roleId);
         
-        var role = await _roleManager.FindByIdAsync(roleId) ??
-                   throw new EntityNotFoundException("Role", roleId);
+        var role = await _roleManager.FindByIdAsync(roleId);
+        if (role is null)
+        {
+            throw new EntityNotFoundException("Role", roleId);
+        }
 
         await _roleManager.DeleteAsync(role);
         

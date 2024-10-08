@@ -15,13 +15,17 @@ public class UserService : IUserService
     private readonly RoleManager<RoleEntity> _roleManager;
     private readonly ILogger<UserService> _logger;
     private readonly IMapper _mapper;
-
-    public UserService(UserManager<UserEntity> userManager, RoleManager<RoleEntity> roleManager, IMapper mapper, ILogger<UserService> logger)
+    
+    public UserService(
+        UserManager<UserEntity> userManager,
+        RoleManager<RoleEntity> roleManager,
+        ILogger<UserService> logger,
+        IMapper mapper)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        _mapper = mapper;
         _logger = logger;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync(CancellationToken cancellationToken = default)
@@ -38,9 +42,12 @@ public class UserService : IUserService
     public async Task<UserResponseDTO> GetUserByIdAsync(string userId, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation($"Fetching user with ID: {userId}.");
-        
-        var user = await _userManager.FindByIdAsync(userId) ??
-                   throw new EntityNotFoundException("User", userId);
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            throw new EntityNotFoundException("User", userId);
+        }
 
         _logger.LogInformation("Fetched user: {UserName} with ID: {UserId}", user.UserName, userId);
         
@@ -50,9 +57,12 @@ public class UserService : IUserService
     public async Task<UserResponseDTO> GetUserByUsernameAsync(string username, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation($"Fetching user with name: {username}.");
-        
-        var user = await _userManager.FindByNameAsync(username) ??
-                   throw new EntityNotFoundException($"User with username {username} not found");
+
+        var user = await _userManager.FindByNameAsync(username);
+        if (user is null)
+        {
+            throw new EntityNotFoundException($"User with username {username} not found");
+        }
 
         _logger.LogInformation("Fetched user: {UserName} with ID: {UserId}", user.UserName, user.Id);
         
@@ -63,8 +73,11 @@ public class UserService : IUserService
     {
         _logger.LogInformation($"Deleting user with ID: {userId}.");
         
-        var user = await _userManager.FindByIdAsync(userId) ??
-                   throw new EntityNotFoundException("User", userId);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            throw new EntityNotFoundException("User", userId);
+        }
         
         await _userManager.DeleteAsync(user);
         
@@ -75,8 +88,11 @@ public class UserService : IUserService
     {
         _logger.LogInformation($"Adding user with ID: {userId} to role: {roleName}.");
         
-        var user = await _userManager.FindByIdAsync(userId) ??
-                   throw new EntityNotFoundException("User", userId);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            throw new EntityNotFoundException("User", userId);
+        }
 
         var isExist = await _roleManager.RoleExistsAsync(roleName);
         if (!isExist)
@@ -92,9 +108,12 @@ public class UserService : IUserService
     public async Task RemoveUserFromRoleAsync(string userId, string roleName, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation($"Removing user with ID: {userId} from role: {roleName}.");
-        
-        var user = await _userManager.FindByIdAsync(userId) ??
-                   throw new EntityNotFoundException("User", userId);
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            throw new EntityNotFoundException("User", userId);
+        }
 
         var isExist = await _roleManager.RoleExistsAsync(roleName);
         if (!isExist)
