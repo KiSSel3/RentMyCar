@@ -1,9 +1,8 @@
-using System.Linq.Expressions;
 using CarManagementService.Domain.Entities;
 
-namespace CarManagementService.Domain.Abstractions;
+namespace CarManagementService.Domain.Abstractions.BaseRepositories;
 
-public interface IBaseRepository<TEntity>
+public interface ICommandRepository<TEntity>
     where TEntity : BaseEntity
 {
     Task CreateAsync(TEntity entity, CancellationToken cancellationToken = default);

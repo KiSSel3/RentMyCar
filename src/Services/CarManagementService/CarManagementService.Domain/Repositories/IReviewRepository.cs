@@ -1,10 +1,9 @@
-using CarManagementService.Domain.Abstractions;
+using CarManagementService.Domain.Abstractions.BaseRepositories;
 using CarManagementService.Domain.Entities;
 
 namespace CarManagementService.Domain.Repositories;
 
-public interface IReviewRepository : IBaseRepository<ReviewEntity>
+public interface IReviewRepository : ISpecificationQueryRepository<ReviewEntity>
 {
-    Task<IEnumerable<CarEntity>> GetAllAsync(ISpecification<CarEntity> specification, CancellationToken cancellationToken = default);
-    Task<CarEntity> FirstOrDefault(ISpecification<CarEntity> specification, CancellationToken cancellationToken = default); 
+    
 }

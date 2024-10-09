@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using CarManagementService.Domain.Entities;
 using CarManagementService.Domain.Models;
 
-namespace CarManagementService.Domain.Abstractions;
+namespace CarManagementService.Domain.Abstractions.Specifications;
 
 public interface ISpecification<TEntity>
     where TEntity : BaseEntity
