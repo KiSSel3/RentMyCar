@@ -19,4 +19,5 @@ public class RentOfferEntity : BaseEntity
     public bool IsAvailable { get; set; }
     
     public CarEntity Car { get; set; }
+    public ICollection<ImageEntity> Images { get; set; }
 }
