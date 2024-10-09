@@ -1,4 +1,6 @@
+using CarManagementService.Domain.Repositories;
 using CarManagementService.Infrastructure.Infrastructure;
+using CarManagementService.Infrastructure.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,13 @@ public static class DependencyInjection
     {
         ConfigurePostgreSql(services, configuration);
 
+        services.AddScoped<IBrandRepository, BrandRepository>();
+        services.AddScoped<ICarModelRepository, CarModelRepository>();
+        services.AddScoped<ICarRepository, CarRepository>();
+        services.AddScoped<IImageRepository, ImageRepository>();
+        services.AddScoped<IRentOfferRepository, RentOfferRepository>();
+        services.AddScoped<IReviewRepository, ReviewRepository>();
+        
         return services;
     }
 
