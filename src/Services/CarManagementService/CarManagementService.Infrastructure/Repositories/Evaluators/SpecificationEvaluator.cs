@@ -3,7 +3,7 @@ using CarManagementService.Domain.Entities;
 using CarManagementService.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarManagementService.Infrastructure.Specifications;
+namespace CarManagementService.Infrastructure.Repositories.Evaluators;
 
 public static class SpecificationEvaluator
 {

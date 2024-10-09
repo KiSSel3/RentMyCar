@@ -2,7 +2,7 @@ using CarManagementService.Domain.Abstractions.BaseRepositories;
 using CarManagementService.Domain.Abstractions.Specifications;
 using CarManagementService.Domain.Entities;
 using CarManagementService.Infrastructure.Infrastructure;
-using CarManagementService.Infrastructure.Specifications;
+using CarManagementService.Infrastructure.Repositories.Evaluators;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarManagementService.Infrastructure.Repositories.Common;
