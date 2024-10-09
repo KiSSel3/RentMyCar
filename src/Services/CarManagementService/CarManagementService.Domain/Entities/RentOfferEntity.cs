@@ -7,7 +7,7 @@ public class RentOfferEntity : BaseEntity
     public Guid UserId { get; set; }
     public Guid CarId { get; set; }
     
-    public Location Location { get; set; }
+    public LocationModel LocationModel { get; set; }
     
     public DateTime AvailableFrom { get; set; }
     public DateTime AvailableTo { get; set; }
