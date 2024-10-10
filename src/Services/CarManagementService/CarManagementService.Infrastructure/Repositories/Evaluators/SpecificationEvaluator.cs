@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarManagementService.Infrastructure.Repositories.Evaluators;
 
+//TODO: Rewrite
 public static class SpecificationEvaluator
 {
     public static IQueryable<TEntity> GetQuery<TEntity>(

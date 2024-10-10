@@ -15,17 +15,27 @@ public class CarModelRepository : BaseQueryRepository<CarModelEntity>, ICarModel
         _context = context;
     }
 
-    public async Task<CarModelEntity> GetByBrandIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CarModelEntity>> GetByBrandIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.CarModels
             .Include(cm => cm.Brand)
-            .FirstOrDefaultAsync(b => b.Id == id && !b.IsDeleted, cancellationToken);
+            .Where(cm => cm.CarBrandId == id)
+            .ToListAsync(cancellationToken);
     }
 
-    public async Task<CarModelEntity> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CarModelEntity>> GetByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await _context.CarModels
             .Include(cm => cm.Brand)
-            .FirstOrDefaultAsync(b => b.Name == name && !b.IsDeleted, cancellationToken);
+            .Where(cm => cm.Name == name)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<CarModelEntity> GetByBrandIdAndNameAsync(Guid carBrandId, string name, CancellationToken cancellationToken = default)
+    {
+        return await _context.CarModels
+            .Include(cm => cm.Brand)
+            .FirstOrDefaultAsync(cm => cm.CarBrandId == carBrandId && cm.Name == name,
+                cancellationToken);
     }
 }
