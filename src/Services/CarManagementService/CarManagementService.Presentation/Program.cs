@@ -1,3 +1,4 @@
+using CarManagementService.Application;
 using CarManagementService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +10,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//TODO: Temporary - for migrations
+//TODO: Temporary
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
