@@ -13,10 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models\DTOs\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\CarManagementService.Domain\CarManagementService.Domain.csproj" />
     </ItemGroup>
 
