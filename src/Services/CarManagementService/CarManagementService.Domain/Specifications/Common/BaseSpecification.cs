@@ -15,12 +15,12 @@ public abstract class BaseSpecification<TEntity> : ISpecification<TEntity>
 
     public abstract Expression<Func<TEntity, bool>> SatisfiedBy();
     
-    public ISpecification<TEntity> And(ISpecification<TEntity> other)
+    public BaseSpecification<TEntity> And(ISpecification<TEntity> other)
     {
         return new AndSpecification<TEntity>(this, other);
     }
 
-    public ISpecification<TEntity> Or(ISpecification<TEntity> other)
+    public BaseSpecification<TEntity> Or(ISpecification<TEntity> other)
     {
         return new OrSpecification<TEntity>(this, other);
     }
