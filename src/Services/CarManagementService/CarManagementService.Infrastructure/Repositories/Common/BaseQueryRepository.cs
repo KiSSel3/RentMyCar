@@ -1,5 +1,5 @@
 using CarManagementService.Domain.Abstractions.BaseRepositories;
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Infrastructure.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 

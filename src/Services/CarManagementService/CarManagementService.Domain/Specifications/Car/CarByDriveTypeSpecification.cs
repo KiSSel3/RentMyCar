@@ -1,6 +1,5 @@
-using CarManagementService.Domain.Entities;
-using CarManagementService.Domain.Enums;
-using CarManagementService.Domain.Models;
+using CarManagementService.Domain.Data.Entities;
+using CarManagementService.Domain.Data.Enums;
 using CarManagementService.Domain.Specifications.Common;
 
 namespace CarManagementService.Domain.Specifications.Car;

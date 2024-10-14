@@ -1,4 +1,4 @@
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 
 namespace CarManagementService.Domain.Repositories;
 

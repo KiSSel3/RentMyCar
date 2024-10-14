@@ -1,6 +1,5 @@
 using AutoMapper;
 using CarManagementService.Application.Models.DTOs;
-using CarManagementService.Domain.Entities;
 using CarManagementService.Domain.Repositories;
 using MediatR;
 

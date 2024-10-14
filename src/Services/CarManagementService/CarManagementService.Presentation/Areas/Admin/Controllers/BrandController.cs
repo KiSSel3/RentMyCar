@@ -1,8 +1,5 @@
 using CarManagementService.Application.UseCases.Commands.Brand.CreateBrand;
 using CarManagementService.Application.UseCases.Commands.Brand.DeleteBrand;
-using CarManagementService.Application.UseCases.Queries.Brand.GetAllBrands;
-using CarManagementService.Application.UseCases.Queries.Brand.GetBrandById;
-using CarManagementService.Application.UseCases.Queries.Brand.GetBrandByName;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

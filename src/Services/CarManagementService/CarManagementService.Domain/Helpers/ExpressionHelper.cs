@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace CarManagementService.Domain.Specifications.Helpers;
+namespace CarManagementService.Domain.Helpers;
 
 public static class ExpressionHelper
 {

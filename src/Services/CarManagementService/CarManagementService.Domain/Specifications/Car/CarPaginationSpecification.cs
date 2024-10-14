@@ -1,5 +1,5 @@
 using System.Linq.Expressions;
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Specifications.Common;
 
 namespace CarManagementService.Domain.Specifications.Car;

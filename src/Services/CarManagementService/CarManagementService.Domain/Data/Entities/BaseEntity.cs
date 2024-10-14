@@ -1,4 +1,4 @@
-namespace CarManagementService.Domain.Entities;
+namespace CarManagementService.Domain.Data.Entities;
 
 public class BaseEntity
 {

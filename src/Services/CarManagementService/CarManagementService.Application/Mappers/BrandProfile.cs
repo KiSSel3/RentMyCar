@@ -2,7 +2,7 @@ using AutoMapper;
 using CarManagementService.Application.Models.DTOs;
 using CarManagementService.Application.UseCases.Commands.Brand.CreateBrand;
 using CarManagementService.Application.UseCases.Commands.Brand.UpdateBrand;
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 
 namespace CarManagementService.Application.Mappers;
 

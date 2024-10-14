@@ -1,8 +1,8 @@
 using System.Linq.Expressions;
 using CarManagementService.Domain.Abstractions.Specifications;
-using CarManagementService.Domain.Entities;
-using CarManagementService.Domain.Models;
-using CarManagementService.Domain.Specifications.Helpers;
+using CarManagementService.Domain.Data.Entities;
+using CarManagementService.Domain.Data.Models;
+using CarManagementService.Domain.Helpers;
 
 namespace CarManagementService.Domain.Specifications.Common;
 

@@ -1,6 +1,6 @@
-using CarManagementService.Domain.Models;
+using CarManagementService.Domain.Data.Models;
 
-namespace CarManagementService.Domain.Entities;
+namespace CarManagementService.Domain.Data.Entities;
 
 public class RentOfferEntity : BaseEntity
 {

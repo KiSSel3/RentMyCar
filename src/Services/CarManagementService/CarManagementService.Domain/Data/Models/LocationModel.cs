@@ -1,4 +1,4 @@
-namespace CarManagementService.Domain.Models;
+namespace CarManagementService.Domain.Data.Models;
 
 public class LocationModel
 {

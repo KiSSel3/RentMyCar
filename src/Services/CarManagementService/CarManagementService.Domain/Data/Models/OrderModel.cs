@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 
-namespace CarManagementService.Domain.Models;
+namespace CarManagementService.Domain.Data.Models;
 
 public class OrderModel<TEntity>
     where TEntity : BaseEntity

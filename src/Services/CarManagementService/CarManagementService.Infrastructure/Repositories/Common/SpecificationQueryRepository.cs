@@ -1,8 +1,8 @@
 using CarManagementService.Domain.Abstractions.BaseRepositories;
 using CarManagementService.Domain.Abstractions.Specifications;
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
+using CarManagementService.Infrastructure.Evaluators;
 using CarManagementService.Infrastructure.Infrastructure;
-using CarManagementService.Infrastructure.Repositories.Evaluators;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarManagementService.Infrastructure.Repositories.Common;

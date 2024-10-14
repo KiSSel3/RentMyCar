@@ -1,11 +1,10 @@
 using CarManagementService.Domain.Abstractions.Specifications;
-using CarManagementService.Domain.Entities;
-using CarManagementService.Domain.Models;
+using CarManagementService.Domain.Data.Entities;
+using CarManagementService.Domain.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace CarManagementService.Infrastructure.Repositories.Evaluators;
+namespace CarManagementService.Infrastructure.Evaluators;
 
-//TODO: Rewrite
 public static class SpecificationEvaluator
 {
     public static IQueryable<TEntity> GetQuery<TEntity>(
@@ -26,20 +25,15 @@ public static class SpecificationEvaluator
         }
         
         var orderModels = specification.GetOrderModels().ToList();
-        if (!orderModels.Any())
+        if (orderModels.Any())
         {
-            return query
-                .Skip(specification.Skip)
-                .Take(specification.Take);
-        }
-        
-        var orderedQuery = AddFirstOrderExpression(query, orderModels.First());
-        foreach (var orderModel in orderModels.Skip(1))
-        {
-            orderedQuery = AddAnotherOrderExpression(orderedQuery, orderModel);
+            var orderedQuery = AddFirstOrderExpression(query, orderModels.First());
+            
+            query = orderModels.Skip(1)
+                .Aggregate(orderedQuery, AddAnotherOrderExpression);
         }
 
-        return orderedQuery
+        return query
             .Skip(specification.Skip)
             .Take(specification.Take);
     }

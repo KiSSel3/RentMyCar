@@ -1,4 +1,4 @@
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Infrastructure.Infrastructure;
 using CarManagementService.Infrastructure.Repositories.Common;

@@ -1,4 +1,4 @@
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CarManagementService.Infrastructure.Infrastructure.Configurations;

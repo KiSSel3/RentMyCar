@@ -1,7 +1,7 @@
 using AutoMapper;
 using CarManagementService.Application.Exceptions;
 using CarManagementService.Application.UseCases.Commands.Brand.CreateBrand;
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using MediatR;
 

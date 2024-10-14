@@ -1,4 +1,4 @@
-namespace CarManagementService.Domain.Enums;
+namespace CarManagementService.Domain.Data.Enums;
 
 public enum CarBodyType
 {

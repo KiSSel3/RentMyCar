@@ -1,5 +1,5 @@
 using System.Reflection;
-using CarManagementService.Domain.Entities;
+using CarManagementService.Domain.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarManagementService.Infrastructure.Infrastructure;
