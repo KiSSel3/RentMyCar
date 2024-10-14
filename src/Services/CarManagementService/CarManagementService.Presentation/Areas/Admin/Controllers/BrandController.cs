@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CarManagementService.Presentation.Areas.Admin.Controllers;
 
+//TODO: Add update and request dtos
 [ApiController]
 [Route("api/brand")]
 public class BrandController : ControllerBase
@@ -33,6 +34,7 @@ public class BrandController : ControllerBase
         var command = new DeleteBrandCommand { Id = id };
         
         await _mediator.Send(command, cancellationToken);
+        
         return NoContent();
     }
 }

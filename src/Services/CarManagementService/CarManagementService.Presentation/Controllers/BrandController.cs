@@ -23,6 +23,7 @@ public class BrandController : ControllerBase
         var query = new GetAllBrandsQuery();
         
         var result = await _mediator.Send(query, cancellationToken);
+        
         return Ok(result);
     }
     
@@ -32,6 +33,7 @@ public class BrandController : ControllerBase
         var query = new GetBrandByIdQuery() { Id = id };
         
         var result = await _mediator.Send(query, cancellationToken);
+        
         return Ok(result);
     }
 
@@ -41,6 +43,7 @@ public class BrandController : ControllerBase
         var query = new GetBrandByNameQuery() { Name = name };
         
         var result = await _mediator.Send(query, cancellationToken);
+        
         return Ok(result);
     }
 }
