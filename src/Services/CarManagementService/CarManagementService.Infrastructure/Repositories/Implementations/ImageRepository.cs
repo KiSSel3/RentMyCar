@@ -43,4 +43,11 @@ public class ImageRepository : IImageRepository
         return await _context.Images
             .FirstOrDefaultAsync(i => i.Id == id, cancellationToken);
     }
+
+    public async Task<IEnumerable<ImageEntity>> GetByRentOfferIdAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        return await _context.Images.Where(i => i.RentOfferId == id)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
 }

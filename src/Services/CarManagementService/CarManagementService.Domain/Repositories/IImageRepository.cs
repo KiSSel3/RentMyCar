@@ -9,4 +9,5 @@ public interface IImageRepository
     Task RemoveImageAsync(ImageEntity image, CancellationToken cancellationToken = default);
     Task RemoveImagesAsync(IEnumerable<ImageEntity> images, CancellationToken cancellationToken = default);
     Task<ImageEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<ImageEntity>> GetByRentOfferIdAsync(Guid id, CancellationToken cancellationToken = default);
 }
