@@ -18,15 +18,9 @@ public class AddImagesToRentOfferCommandHandler : IRequestHandler<AddImagesToRen
         _rentOfferRepository = rentOfferRepository;
     }
 
-    public async Task Handle(AddImagesToRentOffer.AddImagesToRentOfferCommand request, CancellationToken cancellationToken)
+    public async Task Handle(AddImagesToRentOfferCommand request, CancellationToken cancellationToken)
     {
-        var spec = new RentOfferByIdSpecification(request.RentOfferId);
-
-        var rentOffer = await _rentOfferRepository.FirstOrDefault(spec, cancellationToken);
-        if (rentOffer is null)
-        {
-            throw new EntityNotFoundException(nameof(RentOfferEntity), request.RentOfferId);
-        }
+        await EnsureRelatedEntityExistsAsync(request, cancellationToken);
         
         var images = new List<ImageEntity>();
         foreach (var formFile in request.Images)
@@ -45,6 +39,17 @@ public class AddImagesToRentOfferCommandHandler : IRequestHandler<AddImagesToRen
         await _imageRepository.AddImagesAsync(images, cancellationToken);
     }
 
+    private async Task EnsureRelatedEntityExistsAsync(AddImagesToRentOfferCommand request, CancellationToken cancellationToken)
+    {
+        var spec = new RentOfferByIdSpecification(request.RentOfferId);
+
+        var rentOffer = await _rentOfferRepository.FirstOrDefault(spec, cancellationToken);
+        if (rentOffer is null)
+        {
+            throw new EntityNotFoundException(nameof(RentOfferEntity), request.RentOfferId);
+        }
+    }
+    
     private async Task<byte[]> ConvertToByteArrayAsync(IFormFile file, CancellationToken cancellationToken)
     {
         using var memoryStream = new MemoryStream();

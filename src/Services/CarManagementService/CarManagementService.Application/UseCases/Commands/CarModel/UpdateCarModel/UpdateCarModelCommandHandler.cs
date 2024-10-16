@@ -8,24 +8,32 @@ namespace CarManagementService.Application.UseCases.Commands.CarModel.UpdateCarM
 
 public class UpdateCarModelCommandHandler : IRequestHandler<UpdateCarModelCommand>
 {
-    private readonly ICarModelRepository _repository;
+    private readonly ICarModelRepository _carModelRepository;
+    private readonly IBrandRepository _brandRepository;
     private readonly IMapper _mapper;
 
-    public UpdateCarModelCommandHandler(ICarModelRepository repository, IMapper mapper)
+
+    public UpdateCarModelCommandHandler(
+        ICarModelRepository carModelRepository,
+        IBrandRepository brandRepository,
+        IMapper mapper)
     {
-        _repository = repository;
+        _carModelRepository = carModelRepository;
+        _brandRepository = brandRepository;
         _mapper = mapper;
     }
 
     public async Task Handle(UpdateCarModelCommand request, CancellationToken cancellationToken)
     {
-        var carModel = await _repository.GetByIdAsync(request.Id, cancellationToken);
+        await EnsureEntityExistsAsync(request, cancellationToken);
+        
+        var carModel = await _carModelRepository.GetByIdAsync(request.Id, cancellationToken);
         if (carModel is null)
         {
             throw new EntityNotFoundException(nameof(CarModelEntity), request.Id);
         }
 
-        var existingModel = await _repository
+        var existingModel = await _carModelRepository
             .GetByBrandIdAndNameAsync(request.CarBrandId, request.Name, cancellationToken);
         if (existingModel is not null && existingModel.Id != request.Id)
         {
@@ -34,6 +42,15 @@ public class UpdateCarModelCommandHandler : IRequestHandler<UpdateCarModelComman
 
         _mapper.Map(request, carModel);
 
-        await _repository.UpdateAsync(carModel, cancellationToken);
+        await _carModelRepository.UpdateAsync(carModel, cancellationToken);
+    }
+    
+    private async Task EnsureEntityExistsAsync(UpdateCarModelCommand request, CancellationToken cancellationToken)
+    {
+        var brand = await _brandRepository.GetByIdAsync(request.CarBrandId, cancellationToken);
+        if (brand is null)
+        {
+            throw new EntityNotFoundException(nameof(BrandEntity), request.CarBrandId);
+        }
     }
 }

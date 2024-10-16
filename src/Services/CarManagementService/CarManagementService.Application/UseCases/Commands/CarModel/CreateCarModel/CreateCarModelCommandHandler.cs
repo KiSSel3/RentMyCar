@@ -8,26 +8,42 @@ namespace CarManagementService.Application.UseCases.Commands.CarModel.CreateCarM
 
 public class CreateCarModelCommandHandler : IRequestHandler<CreateCarModelCommand>
 {
-    private readonly ICarModelRepository _repository;
+    private readonly ICarModelRepository _carModelRepository;
+    private readonly IBrandRepository _brandRepository;
     private readonly IMapper _mapper;
 
-    public CreateCarModelCommandHandler(ICarModelRepository repository, IMapper mapper)
+    public CreateCarModelCommandHandler(
+        ICarModelRepository carModelRepository,
+        IBrandRepository brandRepository,
+        IMapper mapper)
     {
-        _repository = repository;
+        _carModelRepository = carModelRepository;
+        _brandRepository = brandRepository;
         _mapper = mapper;
     }
 
     public async Task Handle(CreateCarModelCommand request, CancellationToken cancellationToken)
     {
-        var carModel = await _repository
+        await EnsureEntityExistsAsync(request, cancellationToken);
+        
+        var carModel = await _carModelRepository
             .GetByBrandIdAndNameAsync(request.CarBrandId, request.Name, cancellationToken);
-        if (carModel is not null && carModel.CarBrandId != request.CarBrandId)
+        if (carModel is not null)
         {
-            throw new EntityNotFoundException($"Car model with Brand ID {request.CarBrandId} and Name {request.Name} was not found.");
+            throw new EntityAlreadyExistsException($"Car model with Brand ID {request.CarBrandId} and Name {request.Name} already exists.");
         }
 
         carModel = _mapper.Map<CarModelEntity>(request);
         
-        await _repository.CreateAsync(carModel, cancellationToken);
+        await _carModelRepository.CreateAsync(carModel, cancellationToken);
+    }
+    
+    private async Task EnsureEntityExistsAsync(CreateCarModelCommand request, CancellationToken cancellationToken)
+    {
+        var brand = await _brandRepository.GetByIdAsync(request.CarBrandId, cancellationToken);
+        if (brand is null)
+        {
+            throw new EntityNotFoundException(nameof(BrandEntity), request.CarBrandId);
+        }
     }
 }
