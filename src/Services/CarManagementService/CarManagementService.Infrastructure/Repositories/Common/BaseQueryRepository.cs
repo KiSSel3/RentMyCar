@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using CarManagementService.Domain.Abstractions.BaseRepositories;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Infrastructure.Infrastructure;
@@ -15,15 +16,27 @@ public class BaseQueryRepository<TEntity> : CommandRepository<TEntity>, IBaseQue
         _dbSet = context.Set<TEntity>();
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
     {
-        return await _dbSet.Where(e => !e.IsDeleted)
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
+        IQueryable<TEntity> query = _dbSet.Where(e => !e.IsDeleted).AsNoTracking();
+
+        foreach (var includeProperty in includeProperties)
+        {
+            query = query.Include(includeProperty);
+        }
+
+        return await query.ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken = default, params Expression<Func<TEntity, object>>[] includeProperties)
     {
-        return await _dbSet.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted, cancellationToken);
+        IQueryable<TEntity> query = _dbSet.Where(e => e.Id == id && !e.IsDeleted);
+
+        foreach (var includeProperty in includeProperties)
+        {
+            query = query.Include(includeProperty);
+        }
+
+        return await query.FirstOrDefaultAsync(cancellationToken);
     }
 }
