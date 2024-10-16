@@ -18,13 +18,13 @@ public class PagedList<T> : List<T>
         TotalPages = 0;
     }
     
-    public PagedList(IEnumerable<T> items, int pageNumber, int pageSize)
+    public PagedList(IEnumerable<T> items, int totalCount, int pageNumber, int pageSize)
     {
         AddRange(items);
         
-        TotalCount = Count;
+        TotalCount = totalCount;
         PageSize = pageSize;
         CurrentPage = pageNumber;
-        TotalPages = (int)Math.Ceiling(Count / (double)pageSize);
+        TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
     }
 }

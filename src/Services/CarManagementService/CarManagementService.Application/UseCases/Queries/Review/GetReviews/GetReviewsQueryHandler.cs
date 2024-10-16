@@ -26,9 +26,11 @@ public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PagedList
     {
         var specification = CreateSpecification(request);
 
+        var totalCount = await _reviewRepository.CountAsync(specification, cancellationToken);
+        
         var reviews = await _reviewRepository.GetAllAsync(specification, cancellationToken);
 
-        var pagedList = new PagedList<ReviewEntity>(reviews, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
+        var pagedList = new PagedList<ReviewEntity>(reviews, totalCount, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
         
         return _mapper.Map<PagedList<ReviewDTO>>(pagedList);
     }

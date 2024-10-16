@@ -21,14 +21,14 @@ public class RentOfferMappingProfile : Profile
             .ConvertUsing((src, dest, context) =>
             {
                 var dtos = context.Mapper.Map<List<RentOfferDTO>>(src);
-                return new PagedList<RentOfferDTO>(dtos, src.CurrentPage, src.PageSize);
+                return new PagedList<RentOfferDTO>(dtos, src.TotalCount, src.CurrentPage, src.PageSize);
             });
         
         CreateMap<PagedList<RentOfferEntity>, PagedList<RentOfferDetailDTO>>()
             .ConvertUsing((src, dest, context) =>
             {
                 var dtos = context.Mapper.Map<List<RentOfferDetailDTO>>(src);
-                return new PagedList<RentOfferDetailDTO>(dtos, src.CurrentPage, src.PageSize);
+                return new PagedList<RentOfferDetailDTO>(dtos, src.TotalCount, src.CurrentPage, src.PageSize);
             });
     }
 }

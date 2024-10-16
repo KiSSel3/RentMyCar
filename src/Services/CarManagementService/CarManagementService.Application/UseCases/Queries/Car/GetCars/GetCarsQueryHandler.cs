@@ -25,9 +25,11 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
     {
         var specification = CreateSpecification(request);
         
+        var totalCount = await _repository.CountAsync(specification, cancellationToken);
+        
         var cars = await _repository.GetAllAsync(specification, cancellationToken);
         
-        var pagedList = new PagedList<CarEntity>(cars, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
+        var pagedList = new PagedList<CarEntity>(cars, totalCount, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
 
         return _mapper.Map<PagedList<CarDTO>>(pagedList);
     }

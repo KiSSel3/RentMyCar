@@ -22,7 +22,7 @@ public class CarProfile : Profile
             .ConvertUsing((src, dest, context) =>
             {
                 var dtos = context.Mapper.Map<List<CarDTO>>(src);
-                return new PagedList<CarDTO>(dtos, src.CurrentPage, src.PageSize);
+                return new PagedList<CarDTO>(dtos, src.TotalCount, src.CurrentPage, src.PageSize);
             });
     }
 }
