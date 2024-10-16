@@ -7,12 +7,12 @@ namespace CarManagementService.Application.UseCases.Commands.Review.CreateReview
 
 public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand>
 {
-    private readonly IReviewRepository _reviewRepository;
+    private readonly IReviewRepository _repository;
     private readonly IMapper _mapper;
 
-    public CreateReviewCommandHandler(IReviewRepository reviewRepository, IMapper mapper)
+    public CreateReviewCommandHandler(IReviewRepository repository, IMapper mapper)
     {
-        _reviewRepository = reviewRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
@@ -23,6 +23,6 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand>
         review.CreatedAt = DateTime.UtcNow;
         review.UpdatedAt = DateTime.UtcNow;
 
-        await _reviewRepository.CreateAsync(review, cancellationToken);
+        await _repository.CreateAsync(review, cancellationToken);
     }
 }

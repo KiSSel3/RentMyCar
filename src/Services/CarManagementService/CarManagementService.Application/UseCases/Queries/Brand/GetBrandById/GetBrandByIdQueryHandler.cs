@@ -9,18 +9,18 @@ namespace CarManagementService.Application.UseCases.Queries.Brand.GetBrandById;
 
 public class GetBrandByIdQueryHandler : IRequestHandler<GetBrandByIdQuery, BrandDTO>
 {
-    private readonly IBrandRepository _brandRepository;
+    private readonly IBrandRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetBrandByIdQueryHandler(IBrandRepository brandRepository, IMapper mapper)
+    public GetBrandByIdQueryHandler(IBrandRepository repository, IMapper mapper)
     {
-        _brandRepository = brandRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task<BrandDTO> Handle(GetBrandByIdQuery request, CancellationToken cancellationToken)
     {
-        var brand = await _brandRepository.GetByIdAsync(request.Id, cancellationToken);
+        var brand = await _repository.GetByIdAsync(request.Id, cancellationToken);
         if (brand is null)
         {
             throw new EntityNotFoundException(nameof(BrandEntity), request.Id);

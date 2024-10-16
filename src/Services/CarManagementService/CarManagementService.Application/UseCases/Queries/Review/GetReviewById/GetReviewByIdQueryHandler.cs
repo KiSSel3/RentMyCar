@@ -10,12 +10,12 @@ namespace CarManagementService.Application.UseCases.Queries.Review.GetReviewById
 
 public class GetReviewByIdQueryHandler : IRequestHandler<GetReviewByIdQuery, ReviewDTO>
 {
-    private readonly IReviewRepository _reviewRepository;
+    private readonly IReviewRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetReviewByIdQueryHandler(IReviewRepository reviewRepository, IMapper mapper)
+    public GetReviewByIdQueryHandler(IReviewRepository repository, IMapper mapper)
     {
-        _reviewRepository = reviewRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
@@ -23,7 +23,7 @@ public class GetReviewByIdQueryHandler : IRequestHandler<GetReviewByIdQuery, Rev
     {
         var specification = new ReviewByIdSpecification(request.Id);
 
-        var review = await _reviewRepository.GetAllAsync(specification, cancellationToken);
+        var review = await _repository.GetBySpecificationAsync(specification, cancellationToken);
         if (review is null)
         {
             throw new EntityNotFoundException(nameof(ReviewEntity), request.Id);

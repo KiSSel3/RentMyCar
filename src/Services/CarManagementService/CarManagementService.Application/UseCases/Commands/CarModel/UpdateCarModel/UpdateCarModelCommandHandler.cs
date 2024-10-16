@@ -8,24 +8,24 @@ namespace CarManagementService.Application.UseCases.Commands.CarModel.UpdateCarM
 
 public class UpdateCarModelCommandHandler : IRequestHandler<UpdateCarModelCommand>
 {
-    private readonly ICarModelRepository _carModelRepository;
+    private readonly ICarModelRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateCarModelCommandHandler(ICarModelRepository carModelRepository, IMapper mapper)
+    public UpdateCarModelCommandHandler(ICarModelRepository repository, IMapper mapper)
     {
-        _carModelRepository = carModelRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task Handle(UpdateCarModelCommand request, CancellationToken cancellationToken)
     {
-        var carModel = await _carModelRepository.GetByIdAsync(request.Id, cancellationToken);
+        var carModel = await _repository.GetByIdAsync(request.Id, cancellationToken);
         if (carModel is null)
         {
             throw new EntityNotFoundException(nameof(CarModelEntity), request.Id);
         }
 
-        var existingModel = await _carModelRepository
+        var existingModel = await _repository
             .GetByBrandIdAndNameAsync(request.CarBrandId, request.Name, cancellationToken);
         if (existingModel is not null && existingModel.Id != request.Id)
         {
@@ -34,6 +34,6 @@ public class UpdateCarModelCommandHandler : IRequestHandler<UpdateCarModelComman
 
         _mapper.Map(request, carModel);
 
-        await _carModelRepository.UpdateAsync(carModel, cancellationToken);
+        await _repository.UpdateAsync(carModel, cancellationToken);
     }
 }

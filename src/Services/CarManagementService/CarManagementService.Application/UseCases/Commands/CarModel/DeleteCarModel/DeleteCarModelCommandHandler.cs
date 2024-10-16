@@ -7,21 +7,21 @@ namespace CarManagementService.Application.UseCases.Commands.CarModel.DeleteCarM
 
 public class DeleteCarModelCommandHandler : IRequestHandler<DeleteCarModelCommand>
 {
-    private readonly ICarModelRepository _carModelRepository;
+    private readonly ICarModelRepository _repository;
 
-    public DeleteCarModelCommandHandler(ICarModelRepository carModelRepository)
+    public DeleteCarModelCommandHandler(ICarModelRepository repository)
     {
-        _carModelRepository = carModelRepository;
+        _repository = repository;
     }
 
     public async Task Handle(DeleteCarModelCommand request, CancellationToken cancellationToken)
     {
-        var carModel = await _carModelRepository.GetByIdAsync(request.Id, cancellationToken);
+        var carModel = await _repository.GetByIdAsync(request.Id, cancellationToken);
         if (carModel is null)
         {
             throw new EntityNotFoundException(nameof(CarModelEntity), request.Id);
         }
 
-        await _carModelRepository.DeleteAsync(carModel, cancellationToken);
+        await _repository.DeleteAsync(carModel, cancellationToken);
     }
 }

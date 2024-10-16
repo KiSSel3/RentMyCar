@@ -8,31 +8,26 @@ public class CreateRentOfferCommandValidator : AbstractValidator<CreateRentOffer
     public CreateRentOfferCommandValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty()
-            .WithMessage("UserId is required.");
+            .NotEmpty().WithMessage("UserId is required.");
         
         RuleFor(x => x.CarId)
-            .NotEmpty()
-            .WithMessage("CarId is required.");
+            .NotEmpty().WithMessage("CarId is required.");
         
         RuleFor(x => x.LocationModel)
             .SetValidator(new LocationModelValidator());
         
+        RuleFor(x => x.PricePerDay)
+            .GreaterThan(0).WithMessage("PricePerDay must be greater than 0.");
+        
         RuleFor(x => x.AvailableFrom)
-            .NotEmpty()
-            .WithMessage("AvailableFrom is required.");
+            .NotEmpty().WithMessage("AvailableFrom is required.");
         
         RuleFor(x => x.AvailableTo)
-            .NotEmpty()
-            .WithMessage("AvailableTo is required.");
+            .NotEmpty().WithMessage("AvailableTo is required.");
         
         RuleFor(x => x.AvailableTo)
             .GreaterThan(x => x.AvailableFrom)
             .WithMessage("AvailableTo must be later than AvailableFrom.");
-        
-        RuleFor(x => x.PricePerDay)
-            .GreaterThan(0)
-            .WithMessage("PricePerDay must be greater than 0.");
         
         RuleFor(x => x.Description)
             .NotEmpty()

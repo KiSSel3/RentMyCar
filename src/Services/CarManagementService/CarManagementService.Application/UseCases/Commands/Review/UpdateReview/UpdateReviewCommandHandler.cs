@@ -9,12 +9,12 @@ namespace CarManagementService.Application.UseCases.Commands.Review.UpdateReview
 
 public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand>
 {
-    private readonly IReviewRepository _reviewRepository;
+    private readonly IReviewRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateReviewCommandHandler(IReviewRepository reviewRepository, IMapper mapper)
+    public UpdateReviewCommandHandler(IReviewRepository repository, IMapper mapper)
     {
-        _reviewRepository = reviewRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
@@ -22,7 +22,7 @@ public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand>
     {
         var spec = new ReviewByIdSpecification(request.Id);
         
-        var review = await _reviewRepository.FirstOrDefault(spec, cancellationToken);
+        var review = await _repository.FirstOrDefault(spec, cancellationToken);
         if (review is null)
         {
             throw new EntityNotFoundException(nameof(ReviewEntity), request.Id);
@@ -32,6 +32,6 @@ public class UpdateReviewCommandHandler : IRequestHandler<UpdateReviewCommand>
         
         review.UpdatedAt = DateTime.UtcNow;
 
-        await _reviewRepository.UpdateAsync(review, cancellationToken);
+        await _repository.UpdateAsync(review, cancellationToken);
     }
 }

@@ -9,18 +9,18 @@ namespace CarManagementService.Application.UseCases.Queries.CarModel.GetCarModel
 
 public class GetCarModelByIdQueryHandler : IRequestHandler<GetCarModelByIdQuery, CarModelDTO>
 {
-    private readonly ICarModelRepository _carModelRepository;
+    private readonly ICarModelRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetCarModelByIdQueryHandler(ICarModelRepository carModelRepository, IMapper mapper)
+    public GetCarModelByIdQueryHandler(ICarModelRepository repository, IMapper mapper)
     {
-        _carModelRepository = carModelRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task<CarModelDTO> Handle(GetCarModelByIdQuery request, CancellationToken cancellationToken)
     {
-        var carModel = await _carModelRepository.GetByIdAsync(request.Id, cancellationToken);
+        var carModel = await _repository.GetByIdAsync(request.Id, cancellationToken);
         if (carModel is null)
         {
             throw new EntityNotFoundException(nameof(CarModelEntity), request.Id);

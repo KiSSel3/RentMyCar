@@ -17,7 +17,7 @@ public class SpecificationQueryRepository<TEntity> : CommandRepository<TEntity>,
         _dbSet = context.Set<TEntity>();
     }
 
-    public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<TEntity>> GetBySpecificationAsync(ISpecification<TEntity> specification, CancellationToken cancellationToken = default)
     {
         return await SpecificationEvaluator.GetQuery(_dbSet, specification)
             .Where(e=>!e.IsDeleted)

@@ -5,7 +5,7 @@ using CarManagementService.Application.UseCases.Commands.RentOffer.CreateRentOff
 using CarManagementService.Application.UseCases.Commands.RentOffer.UpdateRentOffer;
 using CarManagementService.Domain.Data.Entities;
 
-namespace CarManagementService.Application.Mappers;
+namespace CarManagementService.Application.Infrastructure.Mappers;
 
 public class RentOfferMappingProfile : Profile
 {

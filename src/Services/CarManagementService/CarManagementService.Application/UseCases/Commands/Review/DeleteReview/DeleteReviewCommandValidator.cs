@@ -8,6 +8,6 @@ public class DeleteReviewCommandValidator : AbstractValidator<DeleteReviewComman
     public DeleteReviewCommandValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty();
+            .NotEmpty().WithMessage("Review ID is required.");
     }
 }

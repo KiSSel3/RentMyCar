@@ -15,11 +15,13 @@ public class GetReviewsQueryValidator : AbstractValidator<GetReviewsQuery>
             .WithMessage("RentOfferId must not be empty when provided.");
 
         RuleFor(x => x.MinDate)
-            .LessThanOrEqualTo(x => x.MaxDate).When(x => x.MinDate.HasValue && x.MaxDate.HasValue)
+            .LessThanOrEqualTo(x => x.MaxDate)
+            .When(x => x.MinDate.HasValue && x.MaxDate.HasValue)
             .WithMessage("MinDate must be less than or equal to MaxDate.");
 
         RuleFor(x => x.MaxDate)
-            .GreaterThanOrEqualTo(x => x.MinDate).When(x => x.MinDate.HasValue && x.MaxDate.HasValue)
+            .GreaterThanOrEqualTo(x => x.MinDate)
+            .When(x => x.MinDate.HasValue && x.MaxDate.HasValue)
             .WithMessage("MaxDate must be greater than or equal to MinDate.");
 
         RuleFor(x => x.MinRating)
@@ -33,5 +35,9 @@ public class GetReviewsQueryValidator : AbstractValidator<GetReviewsQuery>
         RuleFor(x => x.PageSize)
             .GreaterThan(0).When(x => x.PageSize.HasValue)
             .WithMessage("Page size must be greater than 0.");
+        
+        RuleFor(x => x)
+            .Must(x => (x.PageNumber.HasValue && x.PageSize.HasValue) || (!x.PageNumber.HasValue && !x.PageSize.HasValue))
+            .WithMessage("Both PageNumber and PageSize must be provided together for pagination.");
     }
 }

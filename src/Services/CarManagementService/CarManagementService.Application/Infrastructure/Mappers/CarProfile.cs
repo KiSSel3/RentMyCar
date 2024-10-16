@@ -5,7 +5,7 @@ using CarManagementService.Application.UseCases.Commands.Car.CreateCar;
 using CarManagementService.Application.UseCases.Commands.Car.UpdateCar;
 using CarManagementService.Domain.Data.Entities;
 
-namespace CarManagementService.Application.Mappers;
+namespace CarManagementService.Application.Infrastructure.Mappers;
 
 public class CarProfile : Profile
 {

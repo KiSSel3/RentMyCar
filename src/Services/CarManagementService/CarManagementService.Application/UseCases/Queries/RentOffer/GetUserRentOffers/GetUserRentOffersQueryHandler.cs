@@ -4,6 +4,7 @@ using CarManagementService.Application.Models.DTOs;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.RentOffer;
+using CarManagementService.Domain.Specifications.Review;
 using MediatR;
 
 namespace CarManagementService.Application.UseCases.Queries.RentOffer.GetUserRentOffers;
@@ -21,13 +22,19 @@ public class GetUserRentOffersQueryHandler : IRequestHandler<GetUserRentOffersQu
 
     public async Task<PagedList<RentOfferDTO>> Handle(GetUserRentOffersQuery request, CancellationToken cancellationToken)
     {
-        var specification = new RentOfferByUserIdSpecification(request.UserId);
+        request.PageSize ??= int.MaxValue;
+        request.PageNumber ??= 1;
         
-        var totalCount = await _repository.CountAsync(specification, cancellationToken);
+        var rentOfferByUserIdSpec = new RentOfferByUserIdSpecification(request.UserId);
+        var rentOfferPaginationSpec = new RentOfferPaginationSpecification(request.PageNumber.Value, request.PageSize.Value);
+
+        var combinedSpec = rentOfferPaginationSpec.And(rentOfferPaginationSpec);
         
-        var rentOffers = await _repository.GetAllAsync(specification, cancellationToken);
+        var totalCount = await _repository.CountAsync(combinedSpec, cancellationToken);
         
-        var pagedList = new PagedList<RentOfferEntity>(rentOffers, totalCount, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
+        var rentOffers = await _repository.GetBySpecificationAsync(combinedSpec, cancellationToken);
+        
+        var pagedList = new PagedList<RentOfferEntity>(rentOffers, totalCount, request.PageNumber.Value, request.PageSize.Value);
         
         return _mapper.Map<PagedList<RentOfferDTO>>(pagedList);
     }

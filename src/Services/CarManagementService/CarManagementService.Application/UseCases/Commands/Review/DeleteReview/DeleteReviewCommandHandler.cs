@@ -8,23 +8,23 @@ namespace CarManagementService.Application.UseCases.Commands.Review.DeleteReview
 
 public class DeleteReviewCommandHandler : IRequestHandler<DeleteReviewCommand>
 {
-    private readonly IReviewRepository _reviewRepository;
+    private readonly IReviewRepository _repository;
 
-    public DeleteReviewCommandHandler(IReviewRepository reviewRepository)
+    public DeleteReviewCommandHandler(IReviewRepository repository)
     {
-        _reviewRepository = reviewRepository;
+        _repository = repository;
     }
 
     public async Task Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
     {
         var spec = new ReviewByIdSpecification(request.Id);
         
-        var review = await _reviewRepository.FirstOrDefault(spec, cancellationToken);
+        var review = await _repository.FirstOrDefault(spec, cancellationToken);
         if (review is null)
         {
             throw new EntityNotFoundException(nameof(ReviewEntity), request.Id);
         }
 
-        await _reviewRepository.DeleteAsync(review, cancellationToken);
+        await _repository.DeleteAsync(review, cancellationToken);
     }
 }

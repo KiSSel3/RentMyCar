@@ -8,18 +8,18 @@ namespace CarManagementService.Application.UseCases.Commands.CarModel.CreateCarM
 
 public class CreateCarModelCommandHandler : IRequestHandler<CreateCarModelCommand>
 {
-    private readonly ICarModelRepository _carModelRepository;
+    private readonly ICarModelRepository _repository;
     private readonly IMapper _mapper;
 
-    public CreateCarModelCommandHandler(ICarModelRepository carModelRepository, IMapper mapper)
+    public CreateCarModelCommandHandler(ICarModelRepository repository, IMapper mapper)
     {
-        _carModelRepository = carModelRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task Handle(CreateCarModelCommand request, CancellationToken cancellationToken)
     {
-        var carModel = await _carModelRepository
+        var carModel = await _repository
             .GetByBrandIdAndNameAsync(request.CarBrandId, request.Name, cancellationToken);
         if (carModel is not null && carModel.CarBrandId != request.CarBrandId)
         {
@@ -28,6 +28,6 @@ public class CreateCarModelCommandHandler : IRequestHandler<CreateCarModelComman
 
         carModel = _mapper.Map<CarModelEntity>(request);
         
-        await _carModelRepository.CreateAsync(carModel, cancellationToken);
+        await _repository.CreateAsync(carModel, cancellationToken);
     }
 }

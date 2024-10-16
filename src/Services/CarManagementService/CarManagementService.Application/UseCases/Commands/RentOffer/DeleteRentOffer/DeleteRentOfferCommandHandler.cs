@@ -9,23 +9,23 @@ namespace CarManagementService.Application.UseCases.Commands.RentOffer.DeleteRen
 
 public class DeleteRentOfferCommandHandler : IRequestHandler<DeleteRentOfferCommand>
 {
-    private readonly IRentOfferRepository _rentOfferRepository;
+    private readonly IRentOfferRepository _repository;
 
-    public DeleteRentOfferCommandHandler(IRentOfferRepository rentOfferRepository)
+    public DeleteRentOfferCommandHandler(IRentOfferRepository repository)
     {
-        _rentOfferRepository = rentOfferRepository;
+        _repository = repository;
     }
 
     public async Task Handle(DeleteRentOfferCommand request, CancellationToken cancellationToken)
     {
         var spec = new RentOfferByIdSpecification(request.Id);
 
-        var rentOffer = await _rentOfferRepository.FirstOrDefault(spec, cancellationToken);
+        var rentOffer = await _repository.FirstOrDefault(spec, cancellationToken);
         if (rentOffer is null)
         {
             throw new EntityNotFoundException(nameof(RentOfferEntity), request.Id);
         }
 
-        await _rentOfferRepository.DeleteAsync(rentOffer, cancellationToken);
+        await _repository.DeleteAsync(rentOffer, cancellationToken);
     }
 }

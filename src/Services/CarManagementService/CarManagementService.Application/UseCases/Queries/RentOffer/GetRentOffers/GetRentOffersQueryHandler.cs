@@ -23,13 +23,16 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
 
     public async Task<PagedList<RentOfferDetailDTO>> Handle(GetRentOffersQuery request, CancellationToken cancellationToken)
     {
+        request.PageSize ??= int.MaxValue;
+        request.PageNumber ??= 1;
+        
         var specification = CreateSpecification(request);
         
         var totalCount = await _repository.CountAsync(specification, cancellationToken);
         
-        var rentOffers = await _repository.GetAllAsync(specification, cancellationToken);
+        var rentOffers = await _repository.GetBySpecificationAsync(specification, cancellationToken);
         
-        var pagedList = new PagedList<RentOfferEntity>(rentOffers, totalCount, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
+        var pagedList = new PagedList<RentOfferEntity>(rentOffers, totalCount, request.PageNumber.Value, request.PageSize.Value);
 
         return _mapper.Map<PagedList<RentOfferDetailDTO>>(pagedList);
     }

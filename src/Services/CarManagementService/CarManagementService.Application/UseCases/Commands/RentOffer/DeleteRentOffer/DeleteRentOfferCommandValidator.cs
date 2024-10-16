@@ -7,7 +7,6 @@ public class DeleteRentOfferCommandValidator : AbstractValidator<DeleteRentOffer
     public DeleteRentOfferCommandValidator()
     {
         RuleFor(x => x.Id)
-            .NotEmpty()
-            .WithMessage("Id is required.");
+            .NotEmpty().WithMessage("Id is required.");
     }
 }

@@ -4,7 +4,7 @@ using CarManagementService.Application.UseCases.Commands.Brand.CreateBrand;
 using CarManagementService.Application.UseCases.Commands.Brand.UpdateBrand;
 using CarManagementService.Domain.Data.Entities;
 
-namespace CarManagementService.Application.Mappers;
+namespace CarManagementService.Application.Infrastructure.Mappers;
 
 public class BrandProfile : Profile
 {

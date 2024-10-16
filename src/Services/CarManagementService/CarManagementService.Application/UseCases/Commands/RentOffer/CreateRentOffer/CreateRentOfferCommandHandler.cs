@@ -9,12 +9,12 @@ namespace CarManagementService.Application.UseCases.Commands.RentOffer.CreateRen
 
 public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferCommand>
 {
-    private readonly IRentOfferRepository _rentOfferRepository;
+    private readonly IRentOfferRepository _repository;
     private readonly IMapper _mapper;
 
-    public CreateRentOfferCommandHandler(IRentOfferRepository rentOfferRepository, IMapper mapper)
+    public CreateRentOfferCommandHandler(IRentOfferRepository repository, IMapper mapper)
     {
-        _rentOfferRepository = rentOfferRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
@@ -26,32 +26,6 @@ public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferComm
         rentOffer.UpdatedAt = DateTime.UtcNow;
         rentOffer.IsAvailable = true;
 
-        await _rentOfferRepository.CreateAsync(rentOffer, cancellationToken);
+        await _repository.CreateAsync(rentOffer, cancellationToken);
     }
-    
-    /*private async Task AddImagesToRentOfferAsync(Guid rentOfferId, List<IFormFile> formFiles, CancellationToken cancellationToken)
-    {
-        var images = new List<ImageEntity>();
-        foreach (var formFile in formFiles)
-        {
-            var imageByte = await ConvertToByteArrayAsync(formFile, cancellationToken);
-            
-            var image = new ImageEntity
-            {
-                RentOfferId = rentOfferId,
-                Image = imageByte
-            };
-            
-            images.Add(image);
-        }
-
-        await _imageRepository.AddImagesAsync(images, cancellationToken);
-    }
-    
-    private async Task<byte[]> ConvertToByteArrayAsync(IFormFile file, CancellationToken cancellationToken)
-    {
-        using var memoryStream = new MemoryStream();
-        await file.CopyToAsync(memoryStream, cancellationToken);
-        return memoryStream.ToArray();
-    }*/
 }

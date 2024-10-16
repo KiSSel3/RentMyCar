@@ -13,24 +13,27 @@ namespace CarManagementService.Application.UseCases.Queries.Review.GetReviews;
 
 public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PagedList<ReviewDTO>>
 {
-    private readonly IReviewRepository _reviewRepository;
+    private readonly IReviewRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetReviewsQueryHandler(IReviewRepository reviewRepository, IMapper mapper)
+    public GetReviewsQueryHandler(IReviewRepository repository, IMapper mapper)
     {
-        _reviewRepository = reviewRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task<PagedList<ReviewDTO>> Handle(GetReviewsQuery request, CancellationToken cancellationToken)
     {
+        request.PageSize ??= int.MaxValue;
+        request.PageNumber ??= 1;
+        
         var specification = CreateSpecification(request);
 
-        var totalCount = await _reviewRepository.CountAsync(specification, cancellationToken);
+        var totalCount = await _repository.CountAsync(specification, cancellationToken);
         
-        var reviews = await _reviewRepository.GetAllAsync(specification, cancellationToken);
+        var reviews = await _repository.GetBySpecificationAsync(specification, cancellationToken);
 
-        var pagedList = new PagedList<ReviewEntity>(reviews, totalCount, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
+        var pagedList = new PagedList<ReviewEntity>(reviews, totalCount, request.PageNumber.Value, request.PageSize.Value);
         
         return _mapper.Map<PagedList<ReviewDTO>>(pagedList);
     }

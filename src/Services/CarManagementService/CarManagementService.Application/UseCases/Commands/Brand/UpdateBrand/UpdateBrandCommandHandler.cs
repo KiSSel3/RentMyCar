@@ -9,24 +9,24 @@ namespace CarManagementService.Application.UseCases.Commands.Brand.UpdateBrand;
 
 public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand>
 {
-    private readonly IBrandRepository _brandRepository;
+    private readonly IBrandRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateBrandCommandHandler(IBrandRepository brandRepository, IMapper mapper)
+    public UpdateBrandCommandHandler(IBrandRepository repository, IMapper mapper)
     {
-        _brandRepository = brandRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
     {
-        var brand = await _brandRepository.GetByIdAsync(request.Id, cancellationToken);
+        var brand = await _repository.GetByIdAsync(request.Id, cancellationToken);
         if (brand is null)
         {
             throw new EntityNotFoundException(nameof(BrandEntity), request.Id);
         }
         
-        var existingBrand = await _brandRepository.GetByNameAsync(request.Name, cancellationToken);
+        var existingBrand = await _repository.GetByNameAsync(request.Name, cancellationToken);
         if (existingBrand is not null && existingBrand.Id != request.Id)
         {
             throw new EntityAlreadyExistsException(nameof(BrandEntity), request.Name);
@@ -34,7 +34,6 @@ public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand>
         
         _mapper.Map(request, brand);
 
-        await _brandRepository.UpdateAsync(brand, cancellationToken);
-        
+        await _repository.UpdateAsync(brand, cancellationToken);
     }
 }

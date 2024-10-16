@@ -7,18 +7,18 @@ namespace CarManagementService.Application.UseCases.Queries.CarModel.GetCarModel
 
 public class GetCarModelsByBrandIdQueryHandler : IRequestHandler<GetCarModelsByBrandIdQuery, IEnumerable<CarModelDTO>>
 {
-    private readonly ICarModelRepository _carModelRepository;
+    private readonly ICarModelRepository _repository;
     private readonly IMapper _mapper;
 
-    public GetCarModelsByBrandIdQueryHandler(ICarModelRepository carModelRepository, IMapper mapper)
+    public GetCarModelsByBrandIdQueryHandler(ICarModelRepository repository, IMapper mapper)
     {
-        _carModelRepository = carModelRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
     public async Task<IEnumerable<CarModelDTO>> Handle(GetCarModelsByBrandIdQuery request, CancellationToken cancellationToken)
     {
-        var carModels = await _carModelRepository.GetByBrandIdAsync(request.BrandId, cancellationToken);
+        var carModels = await _repository.GetByBrandIdAsync(request.BrandId, cancellationToken);
         
         return _mapper.Map<IEnumerable<CarModelDTO>>(carModels);
     }

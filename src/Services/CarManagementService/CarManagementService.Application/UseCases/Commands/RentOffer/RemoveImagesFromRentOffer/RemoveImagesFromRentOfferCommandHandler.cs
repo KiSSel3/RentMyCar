@@ -6,23 +6,23 @@ namespace CarManagementService.Application.UseCases.Commands.RentOffer.RemoveIma
 
 public class RemoveImagesFromRentOfferCommandHandler : IRequestHandler<RemoveImagesFromRentOfferCommand>
 {
-    private readonly IImageRepository _imageRepository;
+    private readonly IImageRepository _repository;
 
-    public RemoveImagesFromRentOfferCommandHandler(IImageRepository imageRepository)
+    public RemoveImagesFromRentOfferCommandHandler(IImageRepository repository)
     {
-        _imageRepository = imageRepository;
+        _repository = repository;
     }
 
     public async Task Handle(RemoveImagesFromRentOfferCommand request, CancellationToken cancellationToken)
     {
-        var allImages = await _imageRepository.GetByRentOfferIdAsync(request.RentOfferId, cancellationToken);
+        var allImages = await _repository.GetByRentOfferIdAsync(request.RentOfferId, cancellationToken);
         
-        var imagesToRemove = allImages.Where(img => request.ImageIds.Contains(img.Id)).ToList();
-        if (imagesToRemove.Count == 0)
+        var imagesToRemove = allImages.Where(img => request.ImageIds.Contains(img.Id));
+        if (!imagesToRemove.Any())
         {
             throw new EntityNotFoundException("No images found with the provided IDs for this RentOffer.");
         }
         
-        await _imageRepository.RemoveImagesAsync(imagesToRemove, cancellationToken);
+        await _repository.RemoveImagesAsync(imagesToRemove, cancellationToken);
     }
 }

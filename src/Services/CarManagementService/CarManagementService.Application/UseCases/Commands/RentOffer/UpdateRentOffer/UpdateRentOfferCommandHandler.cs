@@ -10,12 +10,12 @@ namespace CarManagementService.Application.UseCases.Commands.RentOffer.UpdateRen
 
 public class UpdateRentOfferCommandHandler : IRequestHandler<UpdateRentOfferCommand>
 {
-    private readonly IRentOfferRepository _rentOfferRepository;
+    private readonly IRentOfferRepository _repository;
     private readonly IMapper _mapper;
 
-    public UpdateRentOfferCommandHandler(IRentOfferRepository rentOfferRepository, IMapper mapper)
+    public UpdateRentOfferCommandHandler(IRentOfferRepository repository, IMapper mapper)
     {
-        _rentOfferRepository = rentOfferRepository;
+        _repository = repository;
         _mapper = mapper;
     }
 
@@ -23,7 +23,7 @@ public class UpdateRentOfferCommandHandler : IRequestHandler<UpdateRentOfferComm
     {
         var spec = new RentOfferByIdSpecification(request.Id);
 
-        var rentOffer = await _rentOfferRepository.FirstOrDefault(spec, cancellationToken);
+        var rentOffer = await _repository.FirstOrDefault(spec, cancellationToken);
         if (rentOffer is null)
         {
             throw new EntityNotFoundException(nameof(RentOfferEntity), request.Id);
@@ -33,6 +33,6 @@ public class UpdateRentOfferCommandHandler : IRequestHandler<UpdateRentOfferComm
         
         rentOffer.UpdatedAt = DateTime.UtcNow;
 
-        await _rentOfferRepository.UpdateAsync(rentOffer, cancellationToken);
+        await _repository.UpdateAsync(rentOffer, cancellationToken);
     }
 }

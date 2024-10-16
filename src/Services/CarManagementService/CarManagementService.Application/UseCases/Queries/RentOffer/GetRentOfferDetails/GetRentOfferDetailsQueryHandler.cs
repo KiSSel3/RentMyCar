@@ -28,8 +28,7 @@ public class GetRentOfferDetailsQueryHandler : IRequestHandler<GetRentOfferDetai
         var combinedSpec = rentOfferByIdSpec.And(rentOfferIncludeCar).And(rentOfferIncludeImages);
 
         var rentOffer = await _repository.FirstOrDefault(combinedSpec, cancellationToken);
-
-        if (rentOffer == null)
+        if (rentOffer is null)
         {
             throw new EntityNotFoundException(nameof(RentOfferEntity), request.Id);   
         }

@@ -23,20 +23,23 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
 
     public async Task<PagedList<CarDTO>> Handle(GetCarsQuery request, CancellationToken cancellationToken)
     {
+        request.PageSize ??= int.MaxValue;
+        request.PageNumber ??= 1;
+        
         var specification = CreateSpecification(request);
         
         var totalCount = await _repository.CountAsync(specification, cancellationToken);
         
-        var cars = await _repository.GetAllAsync(specification, cancellationToken);
+        var cars = await _repository.GetBySpecificationAsync(specification, cancellationToken);
         
-        var pagedList = new PagedList<CarEntity>(cars, totalCount, request.PageNumber ?? 1, request.PageSize ?? int.MaxValue);
+        var pagedList = new PagedList<CarEntity>(cars, totalCount, request.PageNumber.Value, request.PageSize.Value);
 
         return _mapper.Map<PagedList<CarDTO>>(pagedList);
     }
 
     private ISpecification<CarEntity> CreateSpecification(GetCarsQuery request)
     {
-        BaseSpecification<CarEntity> spec = new CarIncludeAllSpecification();
+        var spec = new CarIncludeAllSpecification() as BaseSpecification<CarEntity>;
 
         if (request.ModelId.HasValue)
         {

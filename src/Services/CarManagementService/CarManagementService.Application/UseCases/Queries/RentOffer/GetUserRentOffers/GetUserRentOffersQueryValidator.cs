@@ -7,17 +7,18 @@ public class GetUserRentOffersQueryValidator : AbstractValidator<GetUserRentOffe
     public GetUserRentOffersQueryValidator()
     {
         RuleFor(x => x.UserId)
-            .NotEmpty()
-            .WithMessage("UserId must not be empty.");
+            .NotEmpty().WithMessage("UserId must not be empty.");
 
         RuleFor(x => x.PageNumber)
-            .GreaterThan(0)
-            .When(x => x.PageNumber.HasValue)
+            .GreaterThan(0).When(x => x.PageNumber.HasValue)
             .WithMessage("Page number must be greater than 0.");
 
         RuleFor(x => x.PageSize)
-            .GreaterThan(0)
-            .When(x => x.PageSize.HasValue)
+            .GreaterThan(0).When(x => x.PageSize.HasValue)
             .WithMessage("Page size must be greater than 0.");
+        
+        RuleFor(x => x)
+            .Must(x => (x.PageNumber.HasValue && x.PageSize.HasValue) || (!x.PageNumber.HasValue && !x.PageSize.HasValue))
+            .WithMessage("Both PageNumber and PageSize must be provided together for pagination.");
     }
 }

@@ -7,15 +7,12 @@ public class RemoveImagesFromRentOfferCommandValidator : AbstractValidator<Remov
     public RemoveImagesFromRentOfferCommandValidator()
     {
         RuleFor(x => x.RentOfferId)
-            .NotEmpty()
-            .WithMessage("RentOfferId is required.");
+            .NotEmpty().WithMessage("RentOfferId is required.");
         
         RuleFor(x => x.ImageIds)
-            .NotEmpty()
-            .WithMessage("At least one ImageId is required.");
+            .NotEmpty().WithMessage("At least one ImageId is required.");
         
         RuleForEach(x => x.ImageIds)
-            .NotEmpty()
-            .WithMessage("ImageId must not be empty.");
+            .NotEmpty().WithMessage("ImageId must not be empty.");
     }
 }

@@ -23,6 +23,7 @@ public class GetCarByIdQueryHandler : IRequestHandler<GetCarByIdQuery, CarDTO>
     {
         var carByIdSpec = new CarByIdSpecification(request.CarId);
         var includeSpec = new CarIncludeAllSpecification();
+        
         var combinedSpec = carByIdSpec.And(includeSpec);
 
         var car = await _repository.FirstOrDefault(combinedSpec, cancellationToken);
