@@ -18,7 +18,7 @@ public class GetAllCarModelsQueryHandler : IRequestHandler<GetAllCarModelsQuery,
 
     public async Task<IEnumerable<CarModelDTO>> Handle(GetAllCarModelsQuery request, CancellationToken cancellationToken)
     {
-        var carModels = await _repository.GetAllAsync(cancellationToken);
+        var carModels = await _repository.GetAllAsync(cancellationToken, entity => entity.Brand);
         
         return _mapper.Map<IEnumerable<CarModelDTO>>(carModels);
     }

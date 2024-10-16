@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using CarManagementService.Presentation.Infrastructure.Filters;
 using Microsoft.OpenApi.Models;
 
@@ -8,7 +9,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddPresentationServices(this IServiceCollection services)
     {
-        services.AddControllers();
+        services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
         
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -18,7 +23,7 @@ public static class DependencyInjection
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-            c.OperationFilter<AddValidationErrorsToSwagger>();
+            //c.OperationFilter<AddValidationErrorsToSwagger>();
         });
 
         return services;

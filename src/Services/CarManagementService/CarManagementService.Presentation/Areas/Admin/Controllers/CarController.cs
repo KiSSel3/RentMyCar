@@ -22,7 +22,7 @@ public class CarController : ControllerBase
     }
     
     [HttpPost("create")]
-    public async Task<IActionResult> CreateCarAsync([FromBody] CarRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CreateCarAsync([FromForm] CarRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateCarCommand>(request);
         
@@ -32,7 +32,7 @@ public class CarController : ControllerBase
     }
     
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateCarAsync(Guid id, [FromBody] CarRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateCarAsync(Guid id, [FromForm] CarRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<UpdateCarCommand>(request);
         command.Id = id;

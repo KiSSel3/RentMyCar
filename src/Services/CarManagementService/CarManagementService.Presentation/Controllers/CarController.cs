@@ -4,6 +4,7 @@ using CarManagementService.Application.UseCases.Queries.Car.GetCars;
 using CarManagementService.Presentation.Models.DTOs.Car;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace CarManagementService.Presentation.Controllers;
 
@@ -20,12 +21,24 @@ public class CarController : ControllerBase
         _mapper = mapper;
     }
     
-    [HttpGet("get-by-parameters")]
-    public async Task<IActionResult> GetCarsByParametersAsync([FromBody] CarParametersRequestDTO request, CancellationToken cancellationToken = default)
+    [HttpPost("get-by-parameters")]
+    public async Task<IActionResult> GetCarsByParametersAsync([FromForm] CarParametersRequestDTO request, CancellationToken cancellationToken = default)
     {
         var query = _mapper.Map<GetCarsQuery>(request);
         
         var result = await _mediator.Send(query, cancellationToken);
+        
+        var metadata = new
+        {
+            result.TotalCount,
+            result.PageSize,
+            result.CurrentPage,
+            result.TotalPages,
+            result.HasNext,
+            result.HasPrevious
+        };
+
+        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
         
         return Ok(result);
     }

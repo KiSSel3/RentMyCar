@@ -20,7 +20,7 @@ public class GetCarModelByIdQueryHandler : IRequestHandler<GetCarModelByIdQuery,
 
     public async Task<CarModelDTO> Handle(GetCarModelByIdQuery request, CancellationToken cancellationToken)
     {
-        var carModel = await _repository.GetByIdAsync(request.Id, cancellationToken);
+        var carModel = await _repository.GetByIdAsync(request.Id, cancellationToken, entity =>entity.Brand);
         if (carModel is null)
         {
             throw new EntityNotFoundException(nameof(CarModelEntity), request.Id);
