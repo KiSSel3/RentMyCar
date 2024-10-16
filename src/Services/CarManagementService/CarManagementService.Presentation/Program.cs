@@ -1,18 +1,13 @@
 using CarManagementService.Application;
 using CarManagementService.Infrastructure;
+using CarManagementService.Presentation;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 //TODO: Temporary
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
+builder.Services.AddPresentationServices();
 
 var app = builder.Build();
 
