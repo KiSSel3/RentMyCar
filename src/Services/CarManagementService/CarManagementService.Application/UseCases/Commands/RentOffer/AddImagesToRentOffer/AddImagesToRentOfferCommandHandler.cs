@@ -5,9 +5,9 @@ using CarManagementService.Domain.Specifications.RentOffer;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
-namespace CarManagementService.Application.UseCases.Commands.RentOffer.AddImagesToRentOfferCommand;
+namespace CarManagementService.Application.UseCases.Commands.RentOffer.AddImagesToRentOffer;
 
-public class AddImagesToRentOfferCommandHandler : IRequestHandler<AddImagesToRentOfferCommand>
+public class AddImagesToRentOfferCommandHandler : IRequestHandler<AddImagesToRentOffer.AddImagesToRentOfferCommand>
 {
     private readonly IRentOfferRepository _rentOfferRepository;
     private readonly IImageRepository _imageRepository;
@@ -18,7 +18,7 @@ public class AddImagesToRentOfferCommandHandler : IRequestHandler<AddImagesToRen
         _rentOfferRepository = rentOfferRepository;
     }
 
-    public async Task Handle(AddImagesToRentOfferCommand request, CancellationToken cancellationToken)
+    public async Task Handle(AddImagesToRentOffer.AddImagesToRentOfferCommand request, CancellationToken cancellationToken)
     {
         var spec = new RentOfferByIdSpecification(request.RentOfferId);
 

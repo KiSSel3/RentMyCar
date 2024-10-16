@@ -10,6 +10,12 @@ public class UpdateRentOfferCommandValidator : AbstractValidator<UpdateRentOffer
         RuleFor(x => x.Id)
             .NotEmpty().WithMessage("Id is required.");
         
+        RuleFor(x => x.CarId)
+            .NotEmpty().WithMessage("CarId is required.");
+        
+        RuleFor(x => x.IsAvailable)
+            .NotEmpty().WithMessage("IsAvailable is required.");
+        
         RuleFor(x => x.LocationModel)
             .SetValidator(new LocationModelValidator());
         

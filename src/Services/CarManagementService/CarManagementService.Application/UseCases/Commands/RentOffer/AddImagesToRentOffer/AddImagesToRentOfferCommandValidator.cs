@@ -1,10 +1,9 @@
 using CarManagementService.Application.Infrastructure.CommonValidators;
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
 
-namespace CarManagementService.Application.UseCases.Commands.RentOffer.AddImagesToRentOfferCommand;
+namespace CarManagementService.Application.UseCases.Commands.RentOffer.AddImagesToRentOffer;
 
-public class AddImagesToRentOfferCommandValidator : AbstractValidator<AddImagesToRentOfferCommand>
+public class AddImagesToRentOfferCommandValidator : AbstractValidator<AddImagesToRentOffer.AddImagesToRentOfferCommand>
 {
     public AddImagesToRentOfferCommandValidator()
     {
