@@ -6,6 +6,7 @@ using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Common;
 using CarManagementService.Domain.Specifications.RentOffer;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Queries.RentOffer.GetRentOffers;
 
@@ -13,15 +14,22 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
 {
     private readonly IRentOfferRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ILogger<GetRentOffersQueryHandler> _logger;
 
-    public GetRentOffersQueryHandler(IRentOfferRepository repository, IMapper mapper)
+    public GetRentOffersQueryHandler(
+        IRentOfferRepository repository, 
+        IMapper mapper,
+        ILogger<GetRentOffersQueryHandler> logger)
     {
         _repository = repository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<PagedList<RentOfferDetailDTO>> Handle(GetRentOffersQuery request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Fetching rent offers with parameters");
+
         request.PageSize ??= int.MaxValue;
         request.PageNumber ??= 1;
         
@@ -34,6 +42,9 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
         var rentOffers = await _repository.GetBySpecificationAsync(spec, cancellationToken);
         
         var pagedList = new PagedList<RentOfferEntity>(rentOffers, totalCount, request.PageNumber.Value, request.PageSize.Value);
+
+        _logger.LogInformation("Retrieved {TotalCount} rent offers, returning page {PageNumber} with {PageSize} items", 
+            totalCount, request.PageNumber.Value, rentOffers.Count());
 
         return _mapper.Map<PagedList<RentOfferDetailDTO>>(pagedList);
     }

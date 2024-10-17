@@ -6,6 +6,7 @@ using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Car;
 using CarManagementService.Domain.Specifications.Common;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Queries.Car.GetCars;
 
@@ -13,15 +14,22 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
 {
     private readonly ICarRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ILogger<GetCarsQueryHandler> _logger;
 
-    public GetCarsQueryHandler(ICarRepository repository, IMapper mapper)
+    public GetCarsQueryHandler(
+        ICarRepository repository, 
+        IMapper mapper,
+        ILogger<GetCarsQueryHandler> logger)
     {
         _repository = repository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<PagedList<CarDTO>> Handle(GetCarsQuery request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Fetching cars with filters.");
+        
         request.PageSize ??= int.MaxValue;
         request.PageNumber ??= 1;
         
@@ -35,9 +43,10 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
         
         var pagedList = new PagedList<CarEntity>(cars, totalCount, request.PageNumber.Value, request.PageSize.Value);
 
+        _logger.LogInformation("Retrieved {CarCount} cars out of {TotalCount} total", cars.Count(), totalCount);
+
         return _mapper.Map<PagedList<CarDTO>>(pagedList);
     }
-
     private BaseSpecification<CarEntity> CreateSpecification(GetCarsQuery request)
     {
         var spec = new CarIncludeAllSpecification() as BaseSpecification<CarEntity>;

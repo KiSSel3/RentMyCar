@@ -4,6 +4,7 @@ using CarManagementService.Application.UseCases.Commands.Brand.CreateBrand;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Commands.Brand.UpdateBrand;
 
@@ -11,15 +12,22 @@ public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand>
 {
     private readonly IBrandRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ILogger<UpdateBrandCommandHandler> _logger;
 
-    public UpdateBrandCommandHandler(IBrandRepository repository, IMapper mapper)
+    public UpdateBrandCommandHandler(
+        IBrandRepository repository,
+        IMapper mapper,
+        ILogger<UpdateBrandCommandHandler> logger)
     {
         _repository = repository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task Handle(UpdateBrandCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Starting to update brand with ID: {BrandId}", request.Id);
+
         var brand = await _repository.GetByIdAsync(request.Id, cancellationToken);
         if (brand is null)
         {
@@ -35,5 +43,7 @@ public class UpdateBrandCommandHandler : IRequestHandler<UpdateBrandCommand>
         _mapper.Map(request, brand);
 
         await _repository.UpdateAsync(brand, cancellationToken);
+
+        _logger.LogInformation("Successfully updated brand with ID: {BrandId}", request.Id);
     }
 }

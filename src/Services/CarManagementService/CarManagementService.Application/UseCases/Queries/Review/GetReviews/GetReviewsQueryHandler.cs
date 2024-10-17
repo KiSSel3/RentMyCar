@@ -6,6 +6,7 @@ using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Common;
 using CarManagementService.Domain.Specifications.Review;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Queries.Review.GetReviews;
 
@@ -13,15 +14,22 @@ public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PagedList
 {
     private readonly IReviewRepository _repository;
     private readonly IMapper _mapper;
+    private readonly ILogger<GetReviewsQueryHandler> _logger;
 
-    public GetReviewsQueryHandler(IReviewRepository repository, IMapper mapper)
+    public GetReviewsQueryHandler(
+        IReviewRepository repository, 
+        IMapper mapper,
+        ILogger<GetReviewsQueryHandler> logger)
     {
         _repository = repository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<PagedList<ReviewDTO>> Handle(GetReviewsQuery request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Fetching reviews with parameters");
+
         request.PageSize ??= int.MaxValue;
         request.PageNumber ??= 1;
         
@@ -34,10 +42,12 @@ public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PagedList
         var reviews = await _repository.GetBySpecificationAsync(spec, cancellationToken);
 
         var pagedList = new PagedList<ReviewEntity>(reviews, totalCount, request.PageNumber.Value, request.PageSize.Value);
+
+        _logger.LogInformation("Retrieved {TotalCount} reviews, returning page {PageNumber} with {PageSize} items", 
+            totalCount, request.PageNumber.Value, reviews.Count());
         
         return _mapper.Map<PagedList<ReviewDTO>>(pagedList);
     }
-    
     private BaseSpecification<ReviewEntity> CreateSpecification(GetReviewsQuery request)
     {
         var spec = new ReviewIncludeRentOfferSpecification() as BaseSpecification<ReviewEntity>;

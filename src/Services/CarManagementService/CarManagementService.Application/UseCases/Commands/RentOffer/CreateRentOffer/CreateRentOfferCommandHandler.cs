@@ -6,6 +6,7 @@ using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Car;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Commands.RentOffer.CreateRentOffer;
 
@@ -14,19 +15,24 @@ public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferComm
     private readonly IRentOfferRepository _rentOfferRepository;
     private readonly ICarRepository _carRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<CreateRentOfferCommandHandler> _logger;
     
     public CreateRentOfferCommandHandler(
         IRentOfferRepository rentOfferRepository,
         ICarRepository carRepository,
-        IMapper mapper)
+        IMapper mapper,
+        ILogger<CreateRentOfferCommandHandler> logger)
     {
         _rentOfferRepository = rentOfferRepository;
         _carRepository = carRepository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task Handle(CreateRentOfferCommand request, CancellationToken cancellationToken)
     {
+        _logger.LogInformation("Starting to create rent offer for car with ID: {CarId}", request.CarId);
+
         await EnsureRelatedEntityExistsAsync(request, cancellationToken);
         
         var rentOffer = _mapper.Map<RentOfferEntity>(request);
@@ -34,8 +40,10 @@ public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferComm
         rentOffer.CreatedAt = DateTime.UtcNow;
         rentOffer.UpdatedAt = DateTime.UtcNow;
         rentOffer.IsAvailable = true;
-
+        
         await _rentOfferRepository.CreateAsync(rentOffer, cancellationToken);
+
+        _logger.LogInformation("Successfully created rent offer with ID: {RentOfferId} for car: {CarId}", rentOffer.Id, request.CarId);
     }
     
     private async Task EnsureRelatedEntityExistsAsync(CreateRentOfferCommand request, CancellationToken cancellationToken)
@@ -48,5 +56,4 @@ public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferComm
             throw new EntityNotFoundException(nameof(CarEntity), request.CarId);
         }
     }
-    
 }
