@@ -40,8 +40,10 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
 
     private BaseSpecification<RentOfferEntity> CreateSpecification(GetRentOffersQuery request)
     {
-        BaseSpecification<RentOfferEntity> spec = new RentOfferIncludeCarSpecification();
+        var spec = new RentOfferIncludeCarSpecification() as BaseSpecification<RentOfferEntity>;
 
+        spec = spec.And(new RentOfferIncludeImagesSpecification());
+        
         if (request.CarId.HasValue)
         {
             spec = spec.And(new RentOfferByCarIdSpecification(request.CarId.Value));

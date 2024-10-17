@@ -11,8 +11,13 @@ public class RentOfferMappingProfile : Profile
 {
     public RentOfferMappingProfile()
     {
-        CreateMap<RentOfferEntity, RentOfferDTO>();
-        CreateMap<RentOfferEntity, RentOfferDetailDTO>();
+        CreateMap<RentOfferEntity, RentOfferDTO>()
+            .ForMember(dest => dest.Location,
+                opt => opt.MapFrom(src => src.LocationModel));
+        
+        CreateMap<RentOfferEntity, RentOfferDetailDTO>()
+            .ForMember(dest => dest.Location,
+                opt => opt.MapFrom(src => src.LocationModel));
 
         CreateMap<CreateRentOfferCommand, RentOfferEntity>();
         CreateMap<UpdateRentOfferCommand, RentOfferEntity>();
