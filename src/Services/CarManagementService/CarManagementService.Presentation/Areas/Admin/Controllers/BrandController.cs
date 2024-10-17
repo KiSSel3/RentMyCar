@@ -4,12 +4,14 @@ using CarManagementService.Application.UseCases.Commands.Brand.DeleteBrand;
 using CarManagementService.Application.UseCases.Commands.Brand.UpdateBrand;
 using CarManagementService.Presentation.Models.DTOs.Brand;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarManagementService.Presentation.Areas.Admin.Controllers;
 
 [ApiController]
 [Route("api/brand")]
+[Authorize(Policy = "AdminArea")]
 public class BrandController : ControllerBase
 {
     private readonly IMediator _mediator;

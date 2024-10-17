@@ -6,6 +6,7 @@ using CarManagementService.Application.UseCases.Queries.Review.GetReviewById;
 using CarManagementService.Application.UseCases.Queries.Review.GetReviews;
 using CarManagementService.Presentation.Models.DTOs.Review;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -24,6 +25,7 @@ public class ReviewController : ControllerBase
         _mapper = mapper;
     }
 
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreateReviewAsync([FromForm] CreateReviewRequestDTO request, CancellationToken cancellationToken = default)
     {
@@ -34,6 +36,7 @@ public class ReviewController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateReviewAsync(Guid id, [FromForm] UpdateReviewRequestDTO request, CancellationToken cancellationToken = default)
     {
@@ -45,6 +48,7 @@ public class ReviewController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteReviewAsync(Guid id, CancellationToken cancellationToken = default)
     {

@@ -4,12 +4,14 @@ using CarManagementService.Application.UseCases.Commands.Car.DeleteCar;
 using CarManagementService.Application.UseCases.Commands.Car.UpdateCar;
 using CarManagementService.Presentation.Models.DTOs.Car;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarManagementService.Presentation.Areas.Admin.Controllers;
 
 [ApiController]
 [Route("api/car")]
+[Authorize(Policy = "AdminArea")]
 public class CarController : ControllerBase
 {
     private readonly IMediator _mediator;

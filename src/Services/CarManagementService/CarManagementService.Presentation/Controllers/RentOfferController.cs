@@ -11,6 +11,7 @@ using CarManagementService.Application.UseCases.Queries.RentOffer.GetUserRentOff
 using CarManagementService.Presentation.Models.DTOs.Common;
 using CarManagementService.Presentation.Models.DTOs.RentOffer;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -29,6 +30,7 @@ public class RentOfferController : ControllerBase
         _mapper = mapper;
     }
 
+    [Authorize]
     [HttpPost("create")]
     public async Task<IActionResult> CreateRentOfferAsync([FromForm] CreateRentOfferRequestDTO request, CancellationToken cancellationToken = default)
     {
@@ -39,6 +41,7 @@ public class RentOfferController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("update/{id}")]
     public async Task<IActionResult> UpdateRentOfferAsync(Guid id, [FromForm] UpdateRentOfferRequestDTO request, CancellationToken cancellationToken = default)
     {
@@ -50,6 +53,7 @@ public class RentOfferController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("delete/{id}")]
     public async Task<IActionResult> DeleteRentOfferAsync(Guid id, CancellationToken cancellationToken = default)
     {
@@ -60,6 +64,7 @@ public class RentOfferController : ControllerBase
         return NoContent();
     }
     
+    [Authorize]
     [HttpPost("add-images/{id}")]
     public async Task<IActionResult> AddImagesToRentOfferAsync(Guid id, [FromForm] AddImagesRequestDTO request, CancellationToken cancellationToken = default)
     {
@@ -71,6 +76,7 @@ public class RentOfferController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPost("remove-images/{id}")]
     public async Task<IActionResult> RemoveImagesFromRentOfferAsync(Guid id, [FromForm] RemoveImagesRequestDTO request, CancellationToken cancellationToken = default)
     {
