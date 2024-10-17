@@ -23,7 +23,7 @@ public class GetReviewByIdQueryHandler : IRequestHandler<GetReviewByIdQuery, Rev
     {
         var specification = new ReviewByIdSpecification(request.Id);
 
-        var review = await _repository.GetBySpecificationAsync(specification, cancellationToken);
+        var review = await _repository.FirstOrDefault(specification, cancellationToken);
         if (review is null)
         {
             throw new EntityNotFoundException(nameof(ReviewEntity), request.Id);
