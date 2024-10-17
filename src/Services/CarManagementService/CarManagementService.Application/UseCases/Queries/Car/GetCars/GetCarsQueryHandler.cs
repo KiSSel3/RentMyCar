@@ -1,7 +1,6 @@
 using AutoMapper;
 using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
-using CarManagementService.Domain.Abstractions.Specifications;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Car;
@@ -26,18 +25,20 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
         request.PageSize ??= int.MaxValue;
         request.PageNumber ??= 1;
         
-        var specification = CreateSpecification(request);
+        var spec = CreateSpecification(request);
         
-        var totalCount = await _repository.CountAsync(specification, cancellationToken);
+        var totalCount = await _repository.CountAsync(spec, cancellationToken);
+
+        spec = spec.And(new CarPaginationSpecification(request.PageNumber.Value, request.PageSize.Value));
         
-        var cars = await _repository.GetBySpecificationAsync(specification, cancellationToken);
+        var cars = await _repository.GetBySpecificationAsync(spec, cancellationToken);
         
         var pagedList = new PagedList<CarEntity>(cars, totalCount, request.PageNumber.Value, request.PageSize.Value);
 
         return _mapper.Map<PagedList<CarDTO>>(pagedList);
     }
 
-    private ISpecification<CarEntity> CreateSpecification(GetCarsQuery request)
+    private BaseSpecification<CarEntity> CreateSpecification(GetCarsQuery request)
     {
         var spec = new CarIncludeAllSpecification() as BaseSpecification<CarEntity>;
 
@@ -76,11 +77,6 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
             {
                 spec = spec.And(new CarByMaxYearSpecification(request.MaxYear.Value));
             }
-        }
-
-        if (request.PageNumber.HasValue && request.PageSize.HasValue)
-        {
-            spec = spec.And(new CarPaginationSpecification(request.PageNumber.Value, request.PageSize.Value));
         }
 
         return spec;

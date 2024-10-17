@@ -28,9 +28,9 @@ public class GetUserRentOffersQueryHandler : IRequestHandler<GetUserRentOffersQu
         var rentOfferByUserIdSpec = new RentOfferByUserIdSpecification(request.UserId);
         var rentOfferPaginationSpec = new RentOfferPaginationSpecification(request.PageNumber.Value, request.PageSize.Value);
 
-        var combinedSpec = rentOfferPaginationSpec.And(rentOfferPaginationSpec);
+        var combinedSpec = rentOfferPaginationSpec.And(rentOfferByUserIdSpec);
         
-        var totalCount = await _repository.CountAsync(combinedSpec, cancellationToken);
+        var totalCount = await _repository.CountAsync(rentOfferByUserIdSpec, cancellationToken);
         
         var rentOffers = await _repository.GetBySpecificationAsync(combinedSpec, cancellationToken);
         

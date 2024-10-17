@@ -16,6 +16,8 @@ public sealed class AndSpecification<TEntity> : BaseSpecification<TEntity>
     {
         _leftSpecification = leftSpecification;
         _rightSpecification = rightSpecification;
+
+        ApplyPagination();
     }
 
     public override IEnumerable<Expression<Func<TEntity, object>>> GetIncludes()
@@ -40,5 +42,11 @@ public sealed class AndSpecification<TEntity> : BaseSpecification<TEntity>
         var rightExpression = _rightSpecification.SatisfiedBy();
 
         return leftExpression.And(rightExpression);
+    }
+    
+    private void ApplyPagination()
+    {
+        Skip = Math.Max(_leftSpecification.Skip, _rightSpecification.Skip);
+        Take = Math.Min(_leftSpecification.Take, _rightSpecification.Take);
     }
 }

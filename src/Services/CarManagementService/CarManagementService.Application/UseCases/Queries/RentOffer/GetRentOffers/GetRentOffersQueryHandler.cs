@@ -1,7 +1,6 @@
 using AutoMapper;
 using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
-using CarManagementService.Domain.Abstractions.Specifications;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Common;
@@ -26,18 +25,20 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
         request.PageSize ??= int.MaxValue;
         request.PageNumber ??= 1;
         
-        var specification = CreateSpecification(request);
+        var spec = CreateSpecification(request);
         
-        var totalCount = await _repository.CountAsync(specification, cancellationToken);
+        var totalCount = await _repository.CountAsync(spec, cancellationToken);
         
-        var rentOffers = await _repository.GetBySpecificationAsync(specification, cancellationToken);
+        spec = spec.And(new RentOfferPaginationSpecification(request.PageNumber.Value, request.PageSize.Value));
+        
+        var rentOffers = await _repository.GetBySpecificationAsync(spec, cancellationToken);
         
         var pagedList = new PagedList<RentOfferEntity>(rentOffers, totalCount, request.PageNumber.Value, request.PageSize.Value);
 
         return _mapper.Map<PagedList<RentOfferDetailDTO>>(pagedList);
     }
 
-    private ISpecification<RentOfferEntity> CreateSpecification(GetRentOffersQuery request)
+    private BaseSpecification<RentOfferEntity> CreateSpecification(GetRentOffersQuery request)
     {
         BaseSpecification<RentOfferEntity> spec = new RentOfferIncludeCarSpecification();
 
@@ -74,11 +75,6 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
         if (request.AvailableTo.HasValue)
         {
             spec = spec.And(new RentOfferByMaxAvailableDateSpecification(request.AvailableTo.Value));
-        }
-
-        if (request.PageNumber.HasValue && request.PageSize.HasValue)
-        {
-            spec = spec.And(new RentOfferPaginationSpecification(request.PageNumber.Value, request.PageSize.Value));
         }
 
         return spec;
