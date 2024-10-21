@@ -1,8 +1,7 @@
 namespace BookingService.Domain.Entities;
 
-public class NotificationEntity
+public class NotificationEntity : BaseEntity
 {
-    public Guid Id { get; set; }
     public Guid UserId { get; set; }
 
     public DateTime CreatedAt { get; set; }

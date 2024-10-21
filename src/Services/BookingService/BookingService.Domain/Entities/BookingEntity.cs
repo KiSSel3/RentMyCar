@@ -2,9 +2,8 @@ using BookingService.Domain.Enums;
 
 namespace BookingService.Domain.Entities;
 
-public class BookingEntity
+public class BookingEntity : BaseEntity
 {
-    public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public Guid RentOfferId { get; set; }
     
