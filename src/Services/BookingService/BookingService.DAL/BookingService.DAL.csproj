@@ -15,8 +15,4 @@
       <ProjectReference Include="..\BookingService.Domain\BookingService.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Repositories\" />
-    </ItemGroup>
-
 </Project>
