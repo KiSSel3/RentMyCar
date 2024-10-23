@@ -50,4 +50,9 @@ public class NotificationRepository : INotificationRepository
     {
         return await _collection.Find(n => !n.IsSent).ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<NotificationEntity>> GetUnsentNotificationsByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _collection.Find(n => n.UserId == userId && !n.IsSent).ToListAsync(cancellationToken);
+    }
 }
