@@ -1,5 +1,4 @@
 using BookingService.BLL.Models.DTOs.Booking;
-using BookingService.BLL.Models.DTOs.Common;
 
 namespace BookingService.BLL.Services.Interfaces;
 
@@ -15,5 +14,5 @@ public interface IBookingService
     
     Task<IEnumerable<BookingDTO>> GetBookingsAsync(BookingParametersDTO parametersDTO, CancellationToken cancellationToken = default);
     
-    Task<IEnumerable<DateTime>> GetAvailableDatesAsync(Guid rentOfferId, DateRangeDTO dateRangeDTO, CancellationToken cancellationToken = default);
+    Task<IEnumerable<DateTime>> GetAvailableDatesAsync(Guid rentOfferId, CancellationToken cancellationToken = default);
 }
