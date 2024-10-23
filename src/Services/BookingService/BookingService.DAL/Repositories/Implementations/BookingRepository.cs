@@ -41,9 +41,9 @@ public class BookingRepository : IBookingRepository
         await _collection.DeleteOneAsync(b => b.Id == id, cancellationToken);
     }
 
-    public async Task<IEnumerable<BookingEntity>> GetByFilterAsync(Expression<Func<BookingEntity, bool>> filterExpression,
+    public async Task<IEnumerable<BookingEntity>> GetByFilterAsync(FilterDefinition<BookingEntity> filter,
         CancellationToken cancellationToken = default)
     {
-        return await _collection.Find(filterExpression).ToListAsync(cancellationToken);
+        return await _collection.Find(filter).ToListAsync(cancellationToken);
     }
 }

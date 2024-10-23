@@ -2,18 +2,20 @@ using System.Linq.Expressions;
 using BookingService.BLL.Infrastructure.Helpers;
 using BookingService.Domain.Entities;
 using BookingService.Domain.Enums;
+using MongoDB.Driver;
 
 namespace BookingService.BLL.Infrastructure.Filters;
 
 public class BookingFilterBuilder
 {
-    private readonly List<Expression<Func<BookingEntity, bool>>> _filters = new();
+    private readonly FilterDefinitionBuilder<BookingEntity> _builder = Builders<BookingEntity>.Filter;
+    private readonly List<FilterDefinition<BookingEntity>> _filters = new();
 
     public BookingFilterBuilder ByUserId(Guid? userId)
     {
         if (userId.HasValue)
         {
-            _filters.Add(b => b.UserId == userId.Value);
+            _filters.Add(_builder.Eq(b => b.UserId, userId.Value));
         }
         
         return this;
@@ -23,7 +25,7 @@ public class BookingFilterBuilder
     {
         if (rentOfferId.HasValue)
         {
-            _filters.Add(b => b.RentOfferId == rentOfferId.Value);
+            _filters.Add(_builder.Eq(b => b.RentOfferId, rentOfferId.Value));
         }
         
         return this;
@@ -33,7 +35,7 @@ public class BookingFilterBuilder
     {
         if (startDate.HasValue)
         {
-            _filters.Add(b=>b.RentalStart >= startDate.Value);
+            _filters.Add(_builder.Gte(b => b.RentalStart, startDate.Value));
         }
 
         return this;
@@ -43,7 +45,7 @@ public class BookingFilterBuilder
     {
         if (endDate.HasValue)
         {
-            _filters.Add(b=>b.RentalEnd <= endDate.Value);
+            _filters.Add(_builder.Lte(b => b.RentalEnd, endDate.Value));
         }
 
         return this;
@@ -53,35 +55,29 @@ public class BookingFilterBuilder
     {
         if (status.HasValue)
         {
-            _filters.Add(b => b.Events
-                .OrderByDescending(e => e.Timestamp)
-                .First().Status == status.Value);
+            _filters.Add(_builder.ElemMatch(b => b.Events, 
+                e => e.Status == status.Value));
         }
 
         return this;
     }
-    
+
     public BookingFilterBuilder ByDateOverlap(DateTime start, DateTime end)
     {
-        _filters.Add(b => 
-            (b.RentalStart <= end) && (b.RentalEnd >= start));
-            
+        _filters.Add(_builder.And(
+            _builder.Lte(b => b.RentalStart, end),
+            _builder.Gte(b => b.RentalEnd, start)));
+        
         return this;
     }
-    
-    public Expression<Func<BookingEntity, bool>> Build()
+
+    public FilterDefinition<BookingEntity> Build()
     {
         if (!_filters.Any())
         {
-            return filter => true;
-        }
-        
-        var combinedExpression = _filters.First();
-        foreach (var expression in _filters.Skip(1))
-        {
-            combinedExpression = combinedExpression.And(expression);
+            return _builder.Empty;
         }
 
-        return combinedExpression;
+        return _builder.And(_filters);
     }
 }
