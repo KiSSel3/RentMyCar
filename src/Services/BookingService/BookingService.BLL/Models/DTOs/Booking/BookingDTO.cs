@@ -13,5 +13,5 @@ public class BookingDTO
     
     public decimal TotalPrice { get; set; }
     
-    public ICollection<EventDto> Events { get; set; }
+    public ICollection<EventDTO> Events { get; set; }
 }
