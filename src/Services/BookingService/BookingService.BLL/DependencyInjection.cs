@@ -1,4 +1,5 @@
 using System.Reflection;
+using BookingService.BLL.Models.Options;
 using BookingService.BLL.Providers.Implementations;
 using BookingService.BLL.Providers.Interfaces;
 using BookingService.BLL.Services.Implementations;
@@ -17,13 +18,24 @@ public static class DependencyInjection
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        
+        services.Configure<BookingCacheOptions>(configuration.GetSection(BookingCacheOptions.SectionName));
 
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetSection("Redis")["ConnectionString"];
+            options.InstanceName = configuration.GetSection("Redis")["InstanceName"];
+        });
+        
         services.AddScoped<IRentOfferProvider, MockRentOfferProvider>();
         services.AddScoped<IUserProvider, MockUserProvider>();
+        services.AddScoped<ICacheProvider, CacheProvider>();
         
-        services.AddScoped<IBookingService, Services.Implementations.BookingService>();
-        services.AddScoped<INotificationService, NotificationService>();
+        services.AddScoped<Services.Implementations.BookingService>();
+        services.AddScoped<IBookingService, CachedBookingServiceDecorator>();
             
+        services.AddScoped<INotificationService, NotificationService>();
+        
         return services;
     }
 }
