@@ -1,6 +1,6 @@
 using BookingService.BLL.Models.Results;
 
-namespace BookingService.BLL.ExternalProviders.Interfaces;
+namespace BookingService.BLL.Providers.Interfaces;
 
 public interface IRentOfferProvider
 {

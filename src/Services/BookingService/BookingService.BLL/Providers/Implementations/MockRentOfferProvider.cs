@@ -1,8 +1,8 @@
 using BookingService.BLL.Exceptions;
-using BookingService.BLL.ExternalProviders.Interfaces;
 using BookingService.BLL.Models.Results;
+using BookingService.BLL.Providers.Interfaces;
 
-namespace BookingService.BLL.ExternalProviders.Implementations;
+namespace BookingService.BLL.Providers.Implementations;
 
 public class MockRentOfferProvider : IRentOfferProvider
 {

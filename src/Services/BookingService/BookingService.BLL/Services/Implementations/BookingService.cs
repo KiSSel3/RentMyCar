@@ -1,8 +1,8 @@
 using AutoMapper;
 using BookingService.BLL.Exceptions;
-using BookingService.BLL.ExternalProviders.Interfaces;
 using BookingService.BLL.Infrastructure.Filters;
 using BookingService.BLL.Models.DTOs.Booking;
+using BookingService.BLL.Providers.Interfaces;
 using BookingService.BLL.Services.Interfaces;
 using BookingService.DAL.Repositories.Interfaces;
 using BookingService.Domain.Entities;

@@ -1,6 +1,6 @@
 using System.Reflection;
-using BookingService.BLL.ExternalProviders.Implementations;
-using BookingService.BLL.ExternalProviders.Interfaces;
+using BookingService.BLL.Providers.Implementations;
+using BookingService.BLL.Providers.Interfaces;
 using BookingService.BLL.Services.Implementations;
 using BookingService.BLL.Services.Interfaces;
 using FluentValidation;
