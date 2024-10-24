@@ -1,10 +1,10 @@
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
+using CarManagementService.Application.Models.Results;
 using MediatR;
 
 namespace CarManagementService.Application.UseCases.Queries.RentOffer.GetRentOffers;
 
-public class GetRentOffersQuery : IRequest<PagedList<RentOfferDetailDTO>>
+public class GetRentOffersQuery : IRequest<PaginatedResult<RentOfferDetailDTO>>
 {
     public Guid? CarId { get; set; }
     public string? City { get; set; }

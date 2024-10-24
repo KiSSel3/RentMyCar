@@ -1,5 +1,4 @@
 using AutoMapper;
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
 using CarManagementService.Application.UseCases.Commands.Car.CreateCar;
 using CarManagementService.Application.UseCases.Commands.Car.UpdateCar;
@@ -17,12 +16,5 @@ public class CarProfile : Profile
         CreateMap<CreateCarCommand, CarEntity>();
         CreateMap<UpdateCarCommand, CarEntity>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
-        
-        CreateMap<PagedList<CarEntity>, PagedList<CarDTO>>()
-            .ConvertUsing((src, dest, context) =>
-            {
-                var dtos = context.Mapper.Map<List<CarDTO>>(src);
-                return new PagedList<CarDTO>(dtos, src.TotalCount, src.CurrentPage, src.PageSize);
-            });
     }
 }

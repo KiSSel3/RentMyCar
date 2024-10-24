@@ -28,18 +28,6 @@ public class CarController : ControllerBase
         
         var result = await _mediator.Send(query, cancellationToken);
         
-        var metadata = new
-        {
-            result.TotalCount,
-            result.PageSize,
-            result.CurrentPage,
-            result.TotalPages,
-            result.HasNext,
-            result.HasPrevious
-        };
-
-        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
-        
         return Ok(result);
     }
     

@@ -94,19 +94,7 @@ public class RentOfferController : ControllerBase
         var query = _mapper.Map<GetRentOffersQuery>(request);
         
         var result = await _mediator.Send(query, cancellationToken);
-        
-        var metadata = new
-        {
-            result.TotalCount,
-            result.PageSize,
-            result.CurrentPage,
-            result.TotalPages,
-            result.HasNext,
-            result.HasPrevious
-        };
 
-        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
-        
         return Ok(result);
     }
     
@@ -117,19 +105,7 @@ public class RentOfferController : ControllerBase
         query.UserId = id;
         
         var result = await _mediator.Send(query, cancellationToken);
-        
-        var metadata = new
-        {
-            result.TotalCount,
-            result.PageSize,
-            result.CurrentPage,
-            result.TotalPages,
-            result.HasNext,
-            result.HasPrevious
-        };
 
-        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
-        
         return Ok(result);
     }
     

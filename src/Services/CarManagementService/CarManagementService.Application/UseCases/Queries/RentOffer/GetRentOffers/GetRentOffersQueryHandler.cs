@@ -1,6 +1,6 @@
 using AutoMapper;
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
+using CarManagementService.Application.Models.Results;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Common;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Queries.RentOffer.GetRentOffers;
 
-public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, PagedList<RentOfferDetailDTO>>
+public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, PaginatedResult<RentOfferDetailDTO>>
 {
     private readonly IRentOfferRepository _repository;
     private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
         _logger = logger;
     }
 
-    public async Task<PagedList<RentOfferDetailDTO>> Handle(GetRentOffersQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<RentOfferDetailDTO>> Handle(GetRentOffersQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Fetching rent offers with parameters");
 
@@ -41,12 +41,23 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
         
         var rentOffers = await _repository.GetBySpecificationAsync(spec, cancellationToken);
         
-        var pagedList = new PagedList<RentOfferEntity>(rentOffers, totalCount, request.PageNumber.Value, request.PageSize.Value);
+        var rentOfferDTOs = _mapper.Map<IEnumerable<RentOfferDetailDTO>>(rentOffers);
+    
+        var totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize.Value);
 
+        var result = new PaginatedResult<RentOfferDetailDTO>
+        {
+            Collection = rentOfferDTOs,
+            CurrentPage = request.PageNumber.Value,
+            PageSize = request.PageSize.Value,
+            TotalPageCount = totalPages,
+            TotalItemCount = totalCount
+        };
+        
         _logger.LogInformation("Retrieved {TotalCount} rent offers, returning page {PageNumber} with {PageSize} items", 
             totalCount, request.PageNumber.Value, rentOffers.Count());
 
-        return _mapper.Map<PagedList<RentOfferDetailDTO>>(pagedList);
+        return result;
     }
 
     private BaseSpecification<RentOfferEntity> CreateSpecification(GetRentOffersQuery request)

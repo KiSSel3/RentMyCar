@@ -1,6 +1,6 @@
 using AutoMapper;
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
+using CarManagementService.Application.Models.Results;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Car;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Queries.Car.GetCars;
 
-public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDTO>>
+public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PaginatedResult<CarDTO>>
 {
     private readonly ICarRepository _repository;
     private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
         _logger = logger;
     }
 
-    public async Task<PagedList<CarDTO>> Handle(GetCarsQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<CarDTO>> Handle(GetCarsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Fetching cars with filters.");
         
@@ -40,12 +40,23 @@ public class GetCarsQueryHandler : IRequestHandler<GetCarsQuery, PagedList<CarDT
         spec = spec.And(new CarPaginationSpecification(request.PageNumber.Value, request.PageSize.Value));
         
         var cars = await _repository.GetBySpecificationAsync(spec, cancellationToken);
+
+        var carDTOs = _mapper.Map<IEnumerable<CarDTO>>(cars);
         
-        var pagedList = new PagedList<CarEntity>(cars, totalCount, request.PageNumber.Value, request.PageSize.Value);
+        var totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize.Value);
+        
+        var result = new PaginatedResult<CarDTO>
+        {
+            Collection = carDTOs,
+            CurrentPage = request.PageNumber.Value,
+            PageSize = request.PageSize.Value,
+            TotalPageCount = totalPages,
+            TotalItemCount = totalCount
+        };
 
         _logger.LogInformation("Retrieved {CarCount} cars out of {TotalCount} total", cars.Count(), totalCount);
-
-        return _mapper.Map<PagedList<CarDTO>>(pagedList);
+        
+        return result;
     }
     private BaseSpecification<CarEntity> CreateSpecification(GetCarsQuery request)
     {

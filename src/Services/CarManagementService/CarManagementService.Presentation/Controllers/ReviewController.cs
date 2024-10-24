@@ -8,7 +8,6 @@ using CarManagementService.Presentation.Models.DTOs.Review;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace CarManagementService.Presentation.Controllers;
 
@@ -65,18 +64,6 @@ public class ReviewController : ControllerBase
         var query = _mapper.Map<GetReviewsQuery>(request);
         
         var result = await _mediator.Send(query, cancellationToken);
-        
-        var metadata = new
-        {
-            result.TotalCount,
-            result.PageSize,
-            result.CurrentPage,
-            result.TotalPages,
-            result.HasNext,
-            result.HasPrevious
-        };
-
-        Response.Headers.Append("X-Pagination", JsonConvert.SerializeObject(metadata));
         
         return Ok(result);
     }

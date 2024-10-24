@@ -1,6 +1,6 @@
 using AutoMapper;
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
+using CarManagementService.Application.Models.Results;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Common;
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CarManagementService.Application.UseCases.Queries.Review.GetReviews;
 
-public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PagedList<ReviewDTO>>
+public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PaginatedResult<ReviewDTO>>
 {
     private readonly IReviewRepository _repository;
     private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PagedList
         _logger = logger;
     }
 
-    public async Task<PagedList<ReviewDTO>> Handle(GetReviewsQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedResult<ReviewDTO>> Handle(GetReviewsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Fetching reviews with parameters");
 
@@ -41,13 +41,25 @@ public class GetReviewsQueryHandler : IRequestHandler<GetReviewsQuery, PagedList
         
         var reviews = await _repository.GetBySpecificationAsync(spec, cancellationToken);
 
-        var pagedList = new PagedList<ReviewEntity>(reviews, totalCount, request.PageNumber.Value, request.PageSize.Value);
+        var reviewDTOs = _mapper.Map<IEnumerable<ReviewDTO>>(reviews);
+    
+        var totalPages = (int)Math.Ceiling(totalCount / (double)request.PageSize.Value);
 
+        var result = new PaginatedResult<ReviewDTO>
+        {
+            Collection = reviewDTOs,
+            CurrentPage = request.PageNumber.Value,
+            PageSize = request.PageSize.Value,
+            TotalPageCount = totalPages,
+            TotalItemCount = totalCount
+        };
+        
         _logger.LogInformation("Retrieved {TotalCount} reviews, returning page {PageNumber} with {PageSize} items", 
             totalCount, request.PageNumber.Value, reviews.Count());
-        
-        return _mapper.Map<PagedList<ReviewDTO>>(pagedList);
+
+        return result;
     }
+    
     private BaseSpecification<ReviewEntity> CreateSpecification(GetReviewsQuery request)
     {
         var spec = new ReviewIncludeRentOfferSpecification() as BaseSpecification<ReviewEntity>;

@@ -1,5 +1,4 @@
 using AutoMapper;
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
 using CarManagementService.Application.UseCases.Commands.RentOffer.CreateRentOffer;
 using CarManagementService.Application.UseCases.Commands.RentOffer.UpdateRentOffer;
@@ -21,19 +20,5 @@ public class RentOfferMappingProfile : Profile
 
         CreateMap<CreateRentOfferCommand, RentOfferEntity>();
         CreateMap<UpdateRentOfferCommand, RentOfferEntity>();
-        
-        CreateMap<PagedList<RentOfferEntity>, PagedList<RentOfferDTO>>()
-            .ConvertUsing((src, dest, context) =>
-            {
-                var dtos = context.Mapper.Map<List<RentOfferDTO>>(src);
-                return new PagedList<RentOfferDTO>(dtos, src.TotalCount, src.CurrentPage, src.PageSize);
-            });
-        
-        CreateMap<PagedList<RentOfferEntity>, PagedList<RentOfferDetailDTO>>()
-            .ConvertUsing((src, dest, context) =>
-            {
-                var dtos = context.Mapper.Map<List<RentOfferDetailDTO>>(src);
-                return new PagedList<RentOfferDetailDTO>(dtos, src.TotalCount, src.CurrentPage, src.PageSize);
-            });
     }
 }

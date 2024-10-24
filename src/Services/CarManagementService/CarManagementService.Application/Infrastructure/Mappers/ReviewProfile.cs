@@ -1,5 +1,4 @@
 using AutoMapper;
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
 using CarManagementService.Application.UseCases.Commands.Review.CreateReview;
 using CarManagementService.Application.UseCases.Commands.Review.UpdateReview;
@@ -15,12 +14,5 @@ public class ReviewProfile : Profile
         CreateMap<UpdateReviewCommand, ReviewEntity>();
         
         CreateMap<ReviewEntity, ReviewDTO>();
-        
-        CreateMap<PagedList<ReviewEntity>, PagedList<ReviewDTO>>()
-            .ConvertUsing((src, dest, context) =>
-            {
-                var dtos = context.Mapper.Map<List<ReviewDTO>>(src);
-                return new PagedList<ReviewDTO>(dtos, src.TotalCount, src.CurrentPage, src.PageSize);
-            });
     }
 }

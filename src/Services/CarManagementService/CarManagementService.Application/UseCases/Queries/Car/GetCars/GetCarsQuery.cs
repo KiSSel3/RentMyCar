@@ -1,11 +1,11 @@
-using CarManagementService.Application.Helpers;
 using CarManagementService.Application.Models.DTOs;
+using CarManagementService.Application.Models.Results;
 using CarManagementService.Domain.Data.Enums;
 using MediatR;
 
 namespace CarManagementService.Application.UseCases.Queries.Car.GetCars;
 
-public class GetCarsQuery : IRequest<PagedList<CarDTO>>
+public class GetCarsQuery : IRequest<PaginatedResult<CarDTO>>
 {
     public Guid? ModelId { get; set; }
     public CarBodyType? BodyType { get; set; }
