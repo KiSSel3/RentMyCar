@@ -7,6 +7,7 @@ using BookingService.BLL.Services.Interfaces;
 using BookingService.DAL.Repositories.Interfaces;
 using BookingService.Domain.Entities;
 using BookingService.Domain.Enums;
+using Microsoft.Extensions.Logging;
 
 namespace BookingService.BLL.Services.Implementations;
 
@@ -15,23 +16,30 @@ public class BookingService : IBookingService
     private readonly IBookingRepository _bookingRepository;
     private readonly IRentOfferProvider _rentOfferProvider;
     private readonly IUserProvider _userProvider;
+    private readonly ILogger<BookingService> _logger;
     private readonly IMapper _mapper;
-    
+
+
     public BookingService(
         IBookingRepository bookingRepository,
         IRentOfferProvider rentOfferProvider,
         IUserProvider userProvider,
+        ILogger<BookingService> logger,
         IMapper mapper)
     {
         _bookingRepository = bookingRepository;
         _rentOfferProvider = rentOfferProvider;
         _userProvider = userProvider;
+        _logger = logger;
         _mapper = mapper;
     }
 
     public async Task CreateBookingAsync(CreateBookingDTO createBookingDTO,
         CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Creating new booking for RentOffer {RentOfferId} and User {UserId}", 
+            createBookingDTO.RentOfferId, createBookingDTO.UserId);
+        
         var isUserValid = await _userProvider.IsUserValidAsync(createBookingDTO.UserId, cancellationToken);
         if (!isUserValid)
         {
@@ -62,11 +70,17 @@ public class BookingService : IBookingService
         };
         
         await _bookingRepository.CreateAsync(booking, cancellationToken);
+        
+        _logger.LogInformation("Successfully created booking {BookingId} with total price {TotalPrice}", 
+            booking.Id, booking.TotalPrice);
     }
 
     public async Task UpdateBookingAsync(Guid bookingId, UpdateBookingDTO updateBookingDTO,
         CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Updating booking {BookingId} with status {Status}", 
+            bookingId, updateBookingDTO.Status);
+        
         var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
         if (booking is null)
         {
@@ -81,10 +95,14 @@ public class BookingService : IBookingService
         });
         
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
+        
+        _logger.LogInformation("Successfully updated booking {BookingId}", bookingId);
     }
 
     public async Task DeleteBookingAsync(Guid bookingId, CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Deleting booking {BookingId}", bookingId);
+        
         var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
         if (booking is null)
         {
@@ -92,10 +110,14 @@ public class BookingService : IBookingService
         }
         
         await _bookingRepository.DeleteAsync(bookingId, cancellationToken);
+        
+        _logger.LogInformation("Successfully deleted booking {BookingId}", bookingId);
     }
 
     public async Task<BookingDTO> GetBookingByIdAsync(Guid bookingId, CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Retrieving booking {BookingId}", bookingId);
+        
         var booking = await _bookingRepository.GetByIdAsync(bookingId, cancellationToken);
         if (booking is null)
         {
@@ -108,6 +130,8 @@ public class BookingService : IBookingService
     public async Task<IEnumerable<BookingDTO>> GetBookingsAsync(BookingParametersDTO parametersDTO,
         CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Retrieving bookings with parameters.");
+        
         var filter = new BookingFilterBuilder()
             .ByUserId(parametersDTO.UserId)
             .ByRentOfferId(parametersDTO.RentOfferId)
@@ -122,6 +146,8 @@ public class BookingService : IBookingService
 
     public async Task<IEnumerable<DateTime>> GetAvailableDatesAsync(Guid rentOfferId, CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Retrieving available dates for RentOffer {RentOfferId}", rentOfferId);
+        
         var rentOffer = await _rentOfferProvider.GetRentOfferById(rentOfferId, cancellationToken);
         if (rentOffer is null || !rentOffer.IsAvailable)
         {
@@ -153,6 +179,9 @@ public class BookingService : IBookingService
             currentDate = currentDate.AddDays(1);
         }
 
+        _logger.LogInformation("Found {Count} available dates for RentOffer {RentOfferId}", 
+            availableDates.Count, rentOfferId);
+        
         return availableDates;
     }
     

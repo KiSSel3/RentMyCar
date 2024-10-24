@@ -13,8 +13,7 @@ public class CachedBookingServiceDecorator : IBookingService
     private readonly ILogger<CachedBookingServiceDecorator> _logger;
     private readonly BookingService _inner;
     private readonly BookingCacheOptions _bookingCacheOptions;
-
-
+    
     public CachedBookingServiceDecorator(
         ICacheProvider cacheProvider,
         ILogger<CachedBookingServiceDecorator> logger,
@@ -33,6 +32,8 @@ public class CachedBookingServiceDecorator : IBookingService
         
         await _inner.CreateBookingAsync(createBookingDTO, cancellationToken);
         
+        _logger.LogInformation("Removing cache for available dates with key {CacheKey} after booking creation", key);
+        
         await _cacheProvider.RemoveCacheDataAsync(key, cancellationToken);
     }
 
@@ -44,6 +45,8 @@ public class CachedBookingServiceDecorator : IBookingService
         
         var key = GetAvailableDatesKey(booking.RentOfferId);
         
+        _logger.LogInformation("Removing cache for available dates with key {CacheKey} after booking creation", key);
+        
         await _cacheProvider.RemoveCacheDataAsync(key, cancellationToken);
     }
 
@@ -54,6 +57,8 @@ public class CachedBookingServiceDecorator : IBookingService
         var booking = await _inner.GetBookingByIdAsync(bookingId, cancellationToken);
         
         var key = GetAvailableDatesKey(booking.RentOfferId);
+        
+        _logger.LogInformation("Removing cache for available dates with key {CacheKey} after booking creation", key);
         
         await _cacheProvider.RemoveCacheDataAsync(key, cancellationToken);
     }
@@ -72,17 +77,22 @@ public class CachedBookingServiceDecorator : IBookingService
     {
         var key = GetAvailableDatesKey(rentOfferId);
         
+        _logger.LogInformation("Attempting to get available dates from cache with key {CacheKey}", key);
+        
         var cachedDates = await _cacheProvider.GetCachedDataAsync<IEnumerable<DateTime>>(key, cancellationToken);
         if (cachedDates is not null)
         {
-            _logger.LogInformation("Cache hit for available dates of rent offer {RentOfferId}", rentOfferId);
+            _logger.LogInformation("Cache hit: Retrieved available dates from cache for rent offer {RentOfferId}", rentOfferId);
             
             return cachedDates;
         }
 
-        _logger.LogInformation("Cache miss for available dates of rent offer {RentOfferId}", rentOfferId);
+        _logger.LogInformation("Cache miss: Available dates not found in cache for rent offer {RentOfferId}", rentOfferId);
         
         var dates = await _inner.GetAvailableDatesAsync(rentOfferId, cancellationToken);
+        
+        _logger.LogInformation("Setting cache for available dates with key {CacheKey}, TTL: {CacheTtl}", 
+            key, _bookingCacheOptions.AvailableDatesCacheTtl);
         
         await _cacheProvider.SetCacheDataAsync(key, dates, _bookingCacheOptions.AvailableDatesCacheTtl, cancellationToken);
         
