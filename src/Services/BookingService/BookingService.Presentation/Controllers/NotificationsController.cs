@@ -1,10 +1,12 @@
 using BookingService.BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingService.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Policy = "AdminArea")]
 public class NotificationsController : ControllerBase
 {
     private readonly INotificationService _notificationService;

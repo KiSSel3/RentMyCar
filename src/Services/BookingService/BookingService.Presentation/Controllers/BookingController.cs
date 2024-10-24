@@ -1,5 +1,6 @@
 using BookingService.BLL.Models.DTOs.Booking;
 using BookingService.BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookingService.Presentation.Controllers;
@@ -15,6 +16,7 @@ public class BookingsController : ControllerBase
         _bookingService = bookingService;
     }
 
+    [Authorize]
     [HttpPost("create")]
     public async Task<ActionResult> CreateBooking([FromForm] CreateBookingDTO createBookingDTO, CancellationToken cancellationToken)
     {
@@ -22,6 +24,7 @@ public class BookingsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpPut("update/{bookingId}")]
     public async Task<ActionResult> UpdateBooking(Guid bookingId, [FromForm] UpdateBookingDTO updateBookingDTO, CancellationToken cancellationToken)
     {
@@ -29,6 +32,7 @@ public class BookingsController : ControllerBase
         return NoContent();
     }
 
+    [Authorize]
     [HttpDelete("delete/{bookingId}")]
     public async Task<ActionResult> DeleteBooking(Guid bookingId, CancellationToken cancellationToken)
     {
