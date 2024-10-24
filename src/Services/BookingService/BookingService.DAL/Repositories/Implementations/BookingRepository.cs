@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using BookingService.DAL.Infrastructure;
 using BookingService.DAL.Repositories.Interfaces;
 using BookingService.Domain.Entities;

@@ -1,5 +1,3 @@
-using BookingService.Domain.Enums;
-
 namespace BookingService.Domain.Entities;
 
 public class BookingEntity : BaseEntity

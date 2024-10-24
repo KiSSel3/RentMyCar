@@ -1,3 +1,5 @@
+using BookingService.Presentation.Middlewares;
+
 namespace BookingService.Presentation.Extensions;
 
 public static class WebApplicationExtension
@@ -15,7 +17,7 @@ public static class WebApplicationExtension
     
     public static WebApplication AddApplicationMiddleware(this WebApplication app)
     {
-        //app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+        app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
         
         app.UseHttpsRedirection();
         app.UseStaticFiles();
