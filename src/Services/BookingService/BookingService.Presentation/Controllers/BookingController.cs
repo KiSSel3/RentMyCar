@@ -18,7 +18,7 @@ public class BookingsController : ControllerBase
 
     [Authorize]
     [HttpPost("create")]
-    public async Task<ActionResult> CreateBooking([FromForm] CreateBookingDTO createBookingDTO, CancellationToken cancellationToken)
+    public async Task<ActionResult> CreateBooking([FromBody] CreateBookingDTO createBookingDTO, CancellationToken cancellationToken)
     {
         await _bookingService.CreateBookingAsync(createBookingDTO, cancellationToken);
         return NoContent();
@@ -26,7 +26,7 @@ public class BookingsController : ControllerBase
 
     [Authorize]
     [HttpPut("update/{bookingId}")]
-    public async Task<ActionResult> UpdateBooking(Guid bookingId, [FromForm] UpdateBookingDTO updateBookingDTO, CancellationToken cancellationToken)
+    public async Task<ActionResult> UpdateBooking(Guid bookingId, [FromBody] UpdateBookingDTO updateBookingDTO, CancellationToken cancellationToken)
     {
         await _bookingService.UpdateBookingAsync(bookingId, updateBookingDTO, cancellationToken);
         return NoContent();
@@ -48,7 +48,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost("get-by-parameters")]
-    public async Task<ActionResult> GetBookings([FromForm] BookingParametersDTO parameters, CancellationToken cancellationToken)
+    public async Task<ActionResult> GetBookings([FromBody] BookingParametersDTO parameters, CancellationToken cancellationToken)
     {
         var bookings = await _bookingService.GetBookingsAsync(parameters, cancellationToken);
         return Ok(bookings);
