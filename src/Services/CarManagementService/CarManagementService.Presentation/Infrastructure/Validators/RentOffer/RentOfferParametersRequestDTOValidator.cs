@@ -1,11 +1,15 @@
+using CarManagementService.Presentation.Infrastructure.Validators.Common;
+using CarManagementService.Presentation.Models.DTOs.RentOffer;
 using FluentValidation;
 
-namespace CarManagementService.Application.UseCases.Queries.RentOffer.GetRentOffers;
+namespace CarManagementService.Presentation.Infrastructure.Validators.RentOffer;
 
-public class GetRentOffersQueryValidator : AbstractValidator<GetRentOffersQuery>
+public class RentOfferParametersRequestDTOValidator : AbstractValidator<RentOfferParametersRequestDTO>
 {
-    public GetRentOffersQueryValidator()
+    public RentOfferParametersRequestDTOValidator()
     {
+        Include(new PaginationRequestDTOValidator());
+        
         RuleFor(x => x.CarId)
             .NotEmpty().When(x => x.CarId.HasValue)
             .WithMessage("CarId must not be empty when provided.");
@@ -30,17 +34,5 @@ public class GetRentOffersQueryValidator : AbstractValidator<GetRentOffersQuery>
             .LessThanOrEqualTo(x => x.AvailableTo)
             .When(x => x.AvailableFrom.HasValue && x.AvailableTo.HasValue)
             .WithMessage("Available from date must be earlier than or equal to available to date.");
-
-        RuleFor(x => x.PageNumber)
-            .GreaterThan(0).When(x => x.PageNumber.HasValue)
-            .WithMessage("Page number must be greater than 0.");
-
-        RuleFor(x => x.PageSize)
-            .GreaterThan(0).When(x => x.PageSize.HasValue)
-            .WithMessage("Page size must be greater than 0.");
-        
-        RuleFor(x => x)
-            .Must(x => (x.PageNumber.HasValue && x.PageSize.HasValue) || (!x.PageNumber.HasValue && !x.PageSize.HasValue))
-            .WithMessage("Both PageNumber and PageSize must be provided together for pagination.");
     }
 }

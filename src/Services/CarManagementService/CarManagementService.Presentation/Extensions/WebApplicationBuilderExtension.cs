@@ -3,6 +3,8 @@ using System.Text;
 using System.Text.Json.Serialization;
 using CarManagementService.Application;
 using CarManagementService.Infrastructure;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -20,6 +22,9 @@ public static class WebApplicationBuilderExtension
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+        
+        builder.Services.AddFluentValidationAutoValidation();
+        builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

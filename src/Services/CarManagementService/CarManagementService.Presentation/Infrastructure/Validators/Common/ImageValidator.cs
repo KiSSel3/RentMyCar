@@ -1,7 +1,6 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Http;
 
-namespace CarManagementService.Application.Infrastructure.CommonValidators;
+namespace CarManagementService.Presentation.Infrastructure.Validators.Common;
 
 public class ImageValidator : AbstractValidator<IFormFile>
 {

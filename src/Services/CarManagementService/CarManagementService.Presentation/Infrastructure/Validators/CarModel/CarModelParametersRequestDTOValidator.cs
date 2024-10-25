@@ -1,10 +1,11 @@
+using CarManagementService.Presentation.Models.DTOs.CarModel;
 using FluentValidation;
 
-namespace CarManagementService.Application.UseCases.Queries.CarModel.GetCarModelByBrandIdAndName;
+namespace CarManagementService.Presentation.Infrastructure.Validators.CarModel;
 
-public class GetCarModelByBrandIdAndNameQueryValidator : AbstractValidator<GetCarModelByBrandIdAndNameQuery>
+public class CarModelParametersRequestDTOValidator : AbstractValidator<CarModelParametersRequestDTO>
 {
-    public GetCarModelByBrandIdAndNameQueryValidator()
+    public CarModelParametersRequestDTOValidator()
     {
         RuleFor(query => query.BrandId)
             .NotEmpty().WithMessage("Brand ID is required.");

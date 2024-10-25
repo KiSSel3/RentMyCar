@@ -11,8 +11,7 @@ public class ReviewMappingProfile : Profile
     public ReviewMappingProfile()
     {
         CreateMap<CreateReviewRequestDTO, CreateReviewCommand>();
-        CreateMap<UpdateReviewRequestDTO, UpdateReviewCommand>();
-
+        
         CreateMap<ReviewParametersRequestDTO, GetReviewsQuery>();
     }
 }

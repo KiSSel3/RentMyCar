@@ -1,10 +1,11 @@
+using CarManagementService.Presentation.Models.DTOs.Car;
 using FluentValidation;
 
-namespace CarManagementService.Application.UseCases.Commands.Car.CreateCar;
+namespace CarManagementService.Presentation.Infrastructure.Validators.Car;
 
-public class CreateCarCommandValidator : AbstractValidator<CreateCarCommand>
+public class CarRequestDTOValidator : AbstractValidator<CarRequestDTO>
 {
-    public CreateCarCommandValidator()
+    public CarRequestDTOValidator()
     {
         RuleFor(x => x.ModelId)
             .NotEmpty().WithMessage("ModelId is required.");

@@ -37,7 +37,7 @@ public class ReviewController : ControllerBase
 
     [Authorize]
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateReviewAsync(Guid id, [FromBody] UpdateReviewRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateReviewAsync(Guid id, [FromBody] ReviewRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<UpdateReviewCommand>(request);
         command.Id = id;

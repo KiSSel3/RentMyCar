@@ -1,15 +1,13 @@
-using CarManagementService.Application.Infrastructure.CommonValidators;
+using CarManagementService.Presentation.Infrastructure.Validators.Common;
+using CarManagementService.Presentation.Models.DTOs.RentOffer;
 using FluentValidation;
 
-namespace CarManagementService.Application.UseCases.Commands.RentOffer.CreateRentOffer;
+namespace CarManagementService.Presentation.Infrastructure.Validators.RentOffer;
 
-public class CreateRentOfferCommandValidator : AbstractValidator<CreateRentOfferCommand>
+public class RentOfferRequestDTOValidator : AbstractValidator<RentOfferRequestDTO>
 {
-    public CreateRentOfferCommandValidator()
+    public RentOfferRequestDTOValidator()
     {
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("UserId is required.");
-        
         RuleFor(x => x.CarId)
             .NotEmpty().WithMessage("CarId is required.");
         
@@ -33,6 +31,5 @@ public class CreateRentOfferCommandValidator : AbstractValidator<CreateRentOffer
             .NotEmpty()
             .MaximumLength(1000)
             .WithMessage("Description is required and must not exceed 1000 characters.");
-        
     }
 }

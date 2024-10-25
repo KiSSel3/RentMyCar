@@ -1,5 +1,6 @@
 using System.Net;
 using CarManagementService.Application.Exceptions;
+using FluentValidation;
 using Newtonsoft.Json;
 
 namespace CarManagementService.Presentation.Middlewares;

@@ -1,7 +1,7 @@
 using CarManagementService.Domain.Data.Models;
 using FluentValidation;
 
-namespace CarManagementService.Application.Infrastructure.CommonValidators;
+namespace CarManagementService.Presentation.Infrastructure.Validators.Common;
 
 public class LocationModelValidator : AbstractValidator<LocationModel>
 {

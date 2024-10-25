@@ -1,11 +1,15 @@
+using CarManagementService.Presentation.Infrastructure.Validators.Common;
+using CarManagementService.Presentation.Models.DTOs.Review;
 using FluentValidation;
 
-namespace CarManagementService.Application.UseCases.Queries.Review.GetReviews;
+namespace CarManagementService.Presentation.Infrastructure.Validators.Review;
 
-public class GetReviewsQueryValidator : AbstractValidator<GetReviewsQuery>
+public class ReviewParametersRequestDTOValidator : AbstractValidator<ReviewParametersRequestDTO>
 {
-    public GetReviewsQueryValidator()
+    public ReviewParametersRequestDTOValidator()
     {
+        Include(new PaginationRequestDTOValidator());
+        
         RuleFor(x => x.ReviewerId)
             .NotEmpty().When(x => x.ReviewerId.HasValue)
             .WithMessage("ReviewerId must not be empty when provided.");
@@ -27,17 +31,5 @@ public class GetReviewsQueryValidator : AbstractValidator<GetReviewsQuery>
         RuleFor(x => x.MinRating)
             .InclusiveBetween(1, 5).When(x => x.MinRating.HasValue)
             .WithMessage("MinRating must be between 1 and 5.");
-
-        RuleFor(x => x.PageNumber)
-            .GreaterThan(0).When(x => x.PageNumber.HasValue)
-            .WithMessage("Page number must be greater than 0.");
-
-        RuleFor(x => x.PageSize)
-            .GreaterThan(0).When(x => x.PageSize.HasValue)
-            .WithMessage("Page size must be greater than 0.");
-        
-        RuleFor(x => x)
-            .Must(x => (x.PageNumber.HasValue && x.PageSize.HasValue) || (!x.PageNumber.HasValue && !x.PageSize.HasValue))
-            .WithMessage("Both PageNumber and PageSize must be provided together for pagination.");
     }
 }
