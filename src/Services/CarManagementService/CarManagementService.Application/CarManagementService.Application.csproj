@@ -18,4 +18,17 @@
       <ProjectReference Include="..\CarManagementService.Domain\CarManagementService.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="UseCases\Brand\Commands\" />
+      <Folder Include="UseCases\Brand\Queries\" />
+      <Folder Include="UseCases\CarModel\Commands\" />
+      <Folder Include="UseCases\CarModel\Queries\" />
+      <Folder Include="UseCases\Car\Commands\" />
+      <Folder Include="UseCases\Car\Queries\" />
+      <Folder Include="UseCases\RentOffer\Commands\" />
+      <Folder Include="UseCases\RentOffer\Queries\" />
+      <Folder Include="UseCases\Review\Commands\" />
+      <Folder Include="UseCases\Review\Queries\" />
+    </ItemGroup>
+
 </Project>

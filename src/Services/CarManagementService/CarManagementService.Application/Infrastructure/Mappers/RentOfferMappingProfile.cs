@@ -1,7 +1,7 @@
 using AutoMapper;
 using CarManagementService.Application.Models.DTOs;
-using CarManagementService.Application.UseCases.Commands.RentOffer.CreateRentOffer;
-using CarManagementService.Application.UseCases.Commands.RentOffer.UpdateRentOffer;
+using CarManagementService.Application.UseCases.RentOffer.Commands.CreateRentOffer;
+using CarManagementService.Application.UseCases.RentOffer.Commands.UpdateRentOffer;
 using CarManagementService.Domain.Data.Entities;
 
 namespace CarManagementService.Application.Infrastructure.Mappers;

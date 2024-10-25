@@ -1,7 +1,7 @@
 using AutoMapper;
 using CarManagementService.Application.Models.DTOs;
-using CarManagementService.Application.UseCases.Commands.Car.CreateCar;
-using CarManagementService.Application.UseCases.Commands.Car.UpdateCar;
+using CarManagementService.Application.UseCases.Car.Commands.CreateCar;
+using CarManagementService.Application.UseCases.Car.Commands.UpdateCar;
 using CarManagementService.Domain.Data.Entities;
 
 namespace CarManagementService.Application.Infrastructure.Mappers;

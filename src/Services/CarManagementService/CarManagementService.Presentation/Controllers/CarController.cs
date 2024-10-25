@@ -1,6 +1,6 @@
 using AutoMapper;
-using CarManagementService.Application.UseCases.Queries.Car.GetCarById;
-using CarManagementService.Application.UseCases.Queries.Car.GetCars;
+using CarManagementService.Application.UseCases.Car.Queries.GetCarById;
+using CarManagementService.Application.UseCases.Car.Queries.GetCars;
 using CarManagementService.Presentation.Models.DTOs.Car;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

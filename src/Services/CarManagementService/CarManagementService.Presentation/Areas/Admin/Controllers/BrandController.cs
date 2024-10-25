@@ -1,7 +1,7 @@
 using AutoMapper;
-using CarManagementService.Application.UseCases.Commands.Brand.CreateBrand;
-using CarManagementService.Application.UseCases.Commands.Brand.DeleteBrand;
-using CarManagementService.Application.UseCases.Commands.Brand.UpdateBrand;
+using CarManagementService.Application.UseCases.Brand.Commands.CreateBrand;
+using CarManagementService.Application.UseCases.Brand.Commands.DeleteBrand;
+using CarManagementService.Application.UseCases.Brand.Commands.UpdateBrand;
 using CarManagementService.Presentation.Models.DTOs.Brand;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

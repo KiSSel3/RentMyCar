@@ -1,7 +1,7 @@
 using AutoMapper;
-using CarManagementService.Application.UseCases.Commands.Car.CreateCar;
-using CarManagementService.Application.UseCases.Commands.Car.DeleteCar;
-using CarManagementService.Application.UseCases.Commands.Car.UpdateCar;
+using CarManagementService.Application.UseCases.Car.Commands.CreateCar;
+using CarManagementService.Application.UseCases.Car.Commands.DeleteCar;
+using CarManagementService.Application.UseCases.Car.Commands.UpdateCar;
 using CarManagementService.Presentation.Models.DTOs.Car;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

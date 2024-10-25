@@ -1,10 +1,10 @@
 using AutoMapper;
-using CarManagementService.Application.UseCases.Commands.RentOffer.AddImagesToRentOffer;
-using CarManagementService.Application.UseCases.Commands.RentOffer.CreateRentOffer;
-using CarManagementService.Application.UseCases.Commands.RentOffer.RemoveImagesFromRentOffer;
-using CarManagementService.Application.UseCases.Commands.RentOffer.UpdateRentOffer;
-using CarManagementService.Application.UseCases.Queries.RentOffer.GetRentOffers;
-using CarManagementService.Application.UseCases.Queries.RentOffer.GetUserRentOffers;
+using CarManagementService.Application.UseCases.RentOffer.Commands.AddImagesToRentOffer;
+using CarManagementService.Application.UseCases.RentOffer.Commands.CreateRentOffer;
+using CarManagementService.Application.UseCases.RentOffer.Commands.RemoveImagesFromRentOffer;
+using CarManagementService.Application.UseCases.RentOffer.Commands.UpdateRentOffer;
+using CarManagementService.Application.UseCases.RentOffer.Queries.GetRentOffers;
+using CarManagementService.Application.UseCases.RentOffer.Queries.GetUserRentOffers;
 using CarManagementService.Presentation.Models.DTOs.Common;
 using CarManagementService.Presentation.Models.DTOs.RentOffer;
 

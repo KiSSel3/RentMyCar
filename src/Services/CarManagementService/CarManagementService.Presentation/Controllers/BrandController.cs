@@ -1,6 +1,6 @@
-using CarManagementService.Application.UseCases.Queries.Brand.GetAllBrands;
-using CarManagementService.Application.UseCases.Queries.Brand.GetBrandById;
-using CarManagementService.Application.UseCases.Queries.Brand.GetBrandByName;
+using CarManagementService.Application.UseCases.Brand.Queries.GetAllBrands;
+using CarManagementService.Application.UseCases.Brand.Queries.GetBrandById;
+using CarManagementService.Application.UseCases.Brand.Queries.GetBrandByName;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

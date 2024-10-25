@@ -1,9 +1,9 @@
 using AutoMapper;
-using CarManagementService.Application.UseCases.Queries.CarModel.GetAllCarModels;
-using CarManagementService.Application.UseCases.Queries.CarModel.GetCarModelByBrandIdAndName;
-using CarManagementService.Application.UseCases.Queries.CarModel.GetCarModelById;
-using CarManagementService.Application.UseCases.Queries.CarModel.GetCarModelsByBrandId;
-using CarManagementService.Application.UseCases.Queries.CarModel.GetCarModelsByName;
+using CarManagementService.Application.UseCases.CarModel.Queries.GetAllCarModels;
+using CarManagementService.Application.UseCases.CarModel.Queries.GetCarModelByBrandIdAndName;
+using CarManagementService.Application.UseCases.CarModel.Queries.GetCarModelById;
+using CarManagementService.Application.UseCases.CarModel.Queries.GetCarModelsByBrandId;
+using CarManagementService.Application.UseCases.CarModel.Queries.GetCarModelsByName;
 using CarManagementService.Presentation.Models.DTOs.CarModel;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
