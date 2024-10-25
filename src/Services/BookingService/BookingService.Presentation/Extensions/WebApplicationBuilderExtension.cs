@@ -84,7 +84,7 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "CarManagementService", Version = "v1" });
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookingService", Version = "v1" });
             
             options.AddSecurityDefinition(
                 "Bearer",
