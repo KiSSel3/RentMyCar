@@ -26,7 +26,7 @@ public class ReviewController : ControllerBase
 
     [Authorize]
     [HttpPost("create")]
-    public async Task<IActionResult> CreateReviewAsync([FromForm] CreateReviewRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CreateReviewAsync([FromBody] CreateReviewRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateReviewCommand>(request);
 
@@ -37,7 +37,7 @@ public class ReviewController : ControllerBase
 
     [Authorize]
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateReviewAsync(Guid id, [FromForm] UpdateReviewRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateReviewAsync(Guid id, [FromBody] UpdateReviewRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<UpdateReviewCommand>(request);
         command.Id = id;
@@ -59,7 +59,7 @@ public class ReviewController : ControllerBase
     }
     
     [HttpPost("get-reviews")]
-    public async Task<IActionResult> GetReviewsAsync([FromForm] ReviewParametersRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetReviewsAsync([FromBody] ReviewParametersRequestDTO request, CancellationToken cancellationToken = default)
     {
         var query = _mapper.Map<GetReviewsQuery>(request);
         

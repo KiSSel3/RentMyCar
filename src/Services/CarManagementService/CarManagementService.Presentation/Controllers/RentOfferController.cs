@@ -32,7 +32,7 @@ public class RentOfferController : ControllerBase
 
     [Authorize]
     [HttpPost("create")]
-    public async Task<IActionResult> CreateRentOfferAsync([FromForm] CreateRentOfferRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CreateRentOfferAsync([FromBody] CreateRentOfferRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateRentOfferCommand>(request);
 
@@ -43,7 +43,7 @@ public class RentOfferController : ControllerBase
 
     [Authorize]
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateRentOfferAsync(Guid id, [FromForm] UpdateRentOfferRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateRentOfferAsync(Guid id, [FromBody] UpdateRentOfferRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<UpdateRentOfferCommand>(request);
         command.Id = id;
@@ -78,7 +78,7 @@ public class RentOfferController : ControllerBase
 
     [Authorize]
     [HttpPost("remove-images/{id}")]
-    public async Task<IActionResult> RemoveImagesFromRentOfferAsync(Guid id, [FromForm] RemoveImagesRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> RemoveImagesFromRentOfferAsync(Guid id, [FromBody] RemoveImagesRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<RemoveImagesFromRentOfferCommand>(request);
         command.RentOfferId = id;
@@ -89,7 +89,7 @@ public class RentOfferController : ControllerBase
     }
     
     [HttpPost("get-by-parameters")]
-    public async Task<IActionResult> GetRentOffersByParametersAsync([FromForm] RentOfferParametersRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetRentOffersByParametersAsync([FromBody] RentOfferParametersRequestDTO request, CancellationToken cancellationToken = default)
     {
         var query = _mapper.Map<GetRentOffersQuery>(request);
         
@@ -99,7 +99,7 @@ public class RentOfferController : ControllerBase
     }
     
     [HttpPost("get-by-user-id/{id}")]
-    public async Task<IActionResult> GetRentOffersByUserIdAsync(Guid id, [FromForm] PaginationRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetRentOffersByUserIdAsync(Guid id, [FromBody] PaginationRequestDTO request, CancellationToken cancellationToken = default)
     {
         var query = _mapper.Map<GetUserRentOffersQuery>(request);
         query.UserId = id;

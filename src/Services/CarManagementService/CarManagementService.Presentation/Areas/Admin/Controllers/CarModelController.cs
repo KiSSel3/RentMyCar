@@ -24,7 +24,7 @@ public class CarModelController : ControllerBase
     }
     
     [HttpPost("create")]
-    public async Task<IActionResult> CreateCarModelAsync([FromForm] CarModelRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CreateCarModelAsync([FromBody] CarModelRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateCarModelCommand>(request);
         
@@ -34,7 +34,7 @@ public class CarModelController : ControllerBase
     }
     
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateCarModelAsync(Guid id, [FromForm] CarModelRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateCarModelAsync(Guid id, [FromBody] CarModelRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<UpdateCarModelCommand>(request);
         command.Id = id;

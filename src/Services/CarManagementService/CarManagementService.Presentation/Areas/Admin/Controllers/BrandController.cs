@@ -24,7 +24,7 @@ public class BrandController : ControllerBase
     }
     
     [HttpPost("create")]
-    public async Task<IActionResult> CreateBrandAsync([FromForm] BrandRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> CreateBrandAsync([FromBody] BrandRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<CreateBrandCommand>(request);
         
@@ -34,7 +34,7 @@ public class BrandController : ControllerBase
     }
     
     [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateBrandAsync(Guid id, [FromForm] BrandRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> UpdateBrandAsync(Guid id, [FromBody] BrandRequestDTO request, CancellationToken cancellationToken = default)
     {
         var command = _mapper.Map<UpdateBrandCommand>(request);
         command.Id = id;

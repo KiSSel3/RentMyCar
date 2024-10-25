@@ -64,7 +64,7 @@ public class CarModelController : ControllerBase
     }
     
     [HttpPost("get-by-parameters")]
-    public async Task<IActionResult> GetCarModelByParametersAsync([FromForm] CarModelParametersRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetCarModelByParametersAsync([FromBody] CarModelParametersRequestDTO request, CancellationToken cancellationToken = default)
     {
         var query = _mapper.Map<GetCarModelByBrandIdAndNameQuery>(request);
         
