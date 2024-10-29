@@ -1,14 +1,14 @@
 using BookingService.BLL.Exceptions;
+using BookingService.BLL.External.Interfaces;
 using BookingService.BLL.Models.Results;
-using BookingService.BLL.Providers.Interfaces;
 
-namespace BookingService.BLL.Providers.Implementations;
+namespace BookingService.BLL.External.Implementations;
 
-public class MockUserProvider : IUserProvider
+public class MockUserService : IUserService
 {
     private readonly IEnumerable<UserResult> _userResults;
 
-    public MockUserProvider()
+    public MockUserService()
     {
         _userResults = new List<UserResult>()
         {

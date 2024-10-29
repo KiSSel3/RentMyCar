@@ -1,14 +1,14 @@
 using BookingService.BLL.Exceptions;
+using BookingService.BLL.External.Interfaces;
 using BookingService.BLL.Models.Results;
-using BookingService.BLL.Providers.Interfaces;
 
-namespace BookingService.BLL.Providers.Implementations;
+namespace BookingService.BLL.External.Implementations;
 
-public class MockRentOfferProvider : IRentOfferProvider
+public class MockRentOfferService : IRentOfferService
 {
     private readonly IEnumerable<RentOfferResult> _rentOfferResults;
 
-    public MockRentOfferProvider()
+    public MockRentOfferService()
     {
         _rentOfferResults = new List<RentOfferResult>()
         {

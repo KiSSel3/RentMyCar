@@ -1,7 +1,7 @@
 using AutoMapper;
 using BookingService.BLL.Exceptions;
+using BookingService.BLL.External.Interfaces;
 using BookingService.BLL.Models.DTOs.Notification;
-using BookingService.BLL.Providers.Interfaces;
 using BookingService.BLL.Services.Interfaces;
 using BookingService.DAL.Repositories.Interfaces;
 using BookingService.Domain.Entities;
@@ -12,18 +12,18 @@ namespace BookingService.BLL.Services.Implementations;
 public class NotificationService : INotificationService
 {
     private readonly INotificationRepository _notificationRepository;
-    private readonly IUserProvider _userProvider;
+    private readonly IUserService _userService;
     private readonly ILogger<NotificationService> _logger;
     private readonly IMapper _mapper;
     
     public NotificationService(
         INotificationRepository notificationRepository,
-        IUserProvider userProvider,
+        IUserService userService,
         ILogger<NotificationService> logger,
         IMapper mapper)
     {
         _notificationRepository = notificationRepository;
-        _userProvider = userProvider;
+        _userService = userService;
         _logger = logger;
         _mapper = mapper;
     }
@@ -55,7 +55,7 @@ public class NotificationService : INotificationService
     {
         _logger.LogInformation("Retrieving notifications for user {UserId}", userId);
         
-        var isUserValid = await _userProvider.IsUserValidAsync(userId, cancellationToken);
+        var isUserValid = await _userService.IsUserValidAsync(userId, cancellationToken);
         if (!isUserValid)
         {
             throw new EntityNotFoundException("UserEntity", userId);
@@ -74,7 +74,7 @@ public class NotificationService : INotificationService
     {
         _logger.LogInformation("Retrieving unsent notifications for user {UserId}", userId);
         
-        var isUserValid = await _userProvider.IsUserValidAsync(userId, cancellationToken);
+        var isUserValid = await _userService.IsUserValidAsync(userId, cancellationToken);
         if (!isUserValid)
         {
             throw new EntityNotFoundException("UserEntity", userId);

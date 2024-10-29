@@ -1,8 +1,8 @@
 using BookingService.BLL.Models.Results;
 
-namespace BookingService.BLL.Providers.Interfaces;
+namespace BookingService.BLL.External.Interfaces;
 
-public interface IRentOfferProvider
+public interface IRentOfferService
 {
     Task<RentOfferResult> GetRentOfferById(Guid id, CancellationToken cancellationToken = default);
 }

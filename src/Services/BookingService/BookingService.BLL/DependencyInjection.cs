@@ -1,4 +1,6 @@
 using System.Reflection;
+using BookingService.BLL.External.Implementations;
+using BookingService.BLL.External.Interfaces;
 using BookingService.BLL.Models.Options;
 using BookingService.BLL.Providers.Implementations;
 using BookingService.BLL.Providers.Interfaces;
@@ -27,8 +29,8 @@ public static class DependencyInjection
             options.InstanceName = configuration.GetSection("Redis")["InstanceName"];
         });
         
-        services.AddScoped<IRentOfferProvider, MockRentOfferProvider>();
-        services.AddScoped<IUserProvider, MockUserProvider>();
+        services.AddScoped<IRentOfferService, MockRentOfferService>();
+        services.AddScoped<IUserService, MockUserService>();
         services.AddScoped<ICacheProvider, CacheProvider>();
         
         services.AddScoped<Services.Implementations.BookingService>();

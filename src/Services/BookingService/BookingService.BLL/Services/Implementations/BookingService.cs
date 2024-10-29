@@ -1,8 +1,8 @@
 using AutoMapper;
 using BookingService.BLL.Exceptions;
+using BookingService.BLL.External.Interfaces;
 using BookingService.BLL.Infrastructure.Filters;
 using BookingService.BLL.Models.DTOs.Booking;
-using BookingService.BLL.Providers.Interfaces;
 using BookingService.BLL.Services.Interfaces;
 using BookingService.DAL.Repositories.Interfaces;
 using BookingService.Domain.Entities;
@@ -14,22 +14,22 @@ namespace BookingService.BLL.Services.Implementations;
 public class BookingService : IBookingService
 {
     private readonly IBookingRepository _bookingRepository;
-    private readonly IRentOfferProvider _rentOfferProvider;
-    private readonly IUserProvider _userProvider;
+    private readonly IRentOfferService _rentOfferService;
+    private readonly IUserService _userService;
     private readonly ILogger<BookingService> _logger;
     private readonly IMapper _mapper;
 
 
     public BookingService(
         IBookingRepository bookingRepository,
-        IRentOfferProvider rentOfferProvider,
-        IUserProvider userProvider,
+        IRentOfferService rentOfferService,
+        IUserService userService,
         ILogger<BookingService> logger,
         IMapper mapper)
     {
         _bookingRepository = bookingRepository;
-        _rentOfferProvider = rentOfferProvider;
-        _userProvider = userProvider;
+        _rentOfferService = rentOfferService;
+        _userService = userService;
         _logger = logger;
         _mapper = mapper;
     }
@@ -40,13 +40,13 @@ public class BookingService : IBookingService
         _logger.LogInformation("Creating new booking for RentOffer {RentOfferId} and User {UserId}", 
             createBookingDTO.RentOfferId, createBookingDTO.UserId);
         
-        var isUserValid = await _userProvider.IsUserValidAsync(createBookingDTO.UserId, cancellationToken);
+        var isUserValid = await _userService.IsUserValidAsync(createBookingDTO.UserId, cancellationToken);
         if (!isUserValid)
         {
             throw new EntityNotFoundException("UserEntity", createBookingDTO.UserId);
         }
         
-        var rentOffer = await _rentOfferProvider.GetRentOfferById(createBookingDTO.RentOfferId, cancellationToken);
+        var rentOffer = await _rentOfferService.GetRentOfferById(createBookingDTO.RentOfferId, cancellationToken);
         if (rentOffer is null || !rentOffer.IsAvailable)
         {
             throw new EntityNotFoundException("RentOfferEntity", createBookingDTO.RentOfferId);
@@ -148,7 +148,7 @@ public class BookingService : IBookingService
     {
         _logger.LogInformation("Retrieving available dates for RentOffer {RentOfferId}", rentOfferId);
         
-        var rentOffer = await _rentOfferProvider.GetRentOfferById(rentOfferId, cancellationToken);
+        var rentOffer = await _rentOfferService.GetRentOfferById(rentOfferId, cancellationToken);
         if (rentOffer is null || !rentOffer.IsAvailable)
         {
             throw new EntityNotFoundException("RentOfferEntity", rentOfferId);
