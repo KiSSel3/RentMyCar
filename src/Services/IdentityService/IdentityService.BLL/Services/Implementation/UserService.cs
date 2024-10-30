@@ -1,6 +1,7 @@
 using AutoMapper;
 using IdentityService.BLL.Exceptions;
 using IdentityService.BLL.Models.DTOs.Responses.User;
+using IdentityService.BLL.Publishers.Interfaces;
 using IdentityService.BLL.Services.Interfaces;
 using IdentityService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -15,17 +16,20 @@ public class UserService : IUserService
     private readonly RoleManager<RoleEntity> _roleManager;
     private readonly ILogger<UserService> _logger;
     private readonly IMapper _mapper;
+    private readonly INotificationPublisher _notificationPublisher;
     
     public UserService(
         UserManager<UserEntity> userManager,
         RoleManager<RoleEntity> roleManager,
         ILogger<UserService> logger,
-        IMapper mapper)
+        IMapper mapper,
+        INotificationPublisher notificationPublisher)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _logger = logger;
         _mapper = mapper;
+        _notificationPublisher = notificationPublisher;
     }
 
     public async Task<IEnumerable<UserResponseDTO>> GetAllUsersAsync(CancellationToken cancellationToken = default)
@@ -82,6 +86,8 @@ public class UserService : IUserService
         await _userManager.DeleteAsync(user);
         
         _logger.LogInformation($"User with ID: {userId} deleted successfully.");
+
+        await _notificationPublisher.PublishUserDeletedMessage(user, cancellationToken);
     }
 
     public async Task AddUserToRoleAsync(string userId, string roleName, CancellationToken cancellationToken = default)
@@ -103,6 +109,8 @@ public class UserService : IUserService
         await _userManager.AddToRoleAsync(user, roleName);
         
         _logger.LogInformation($"User with ID: {userId} added to role: {roleName}.");
+
+        await _notificationPublisher.PublishUserRoleAssignedMessage(user, roleName, cancellationToken);
     }
 
     public async Task RemoveUserFromRoleAsync(string userId, string roleName, CancellationToken cancellationToken = default)
@@ -124,5 +132,7 @@ public class UserService : IUserService
         await _userManager.RemoveFromRoleAsync(user, roleName);
         
         _logger.LogInformation($"User with ID: {userId} removed from role: {roleName}.");
+        
+        await _notificationPublisher.PublishUserRoleAssignedMessage(user, roleName, cancellationToken);
     }
 }

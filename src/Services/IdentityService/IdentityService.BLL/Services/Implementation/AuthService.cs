@@ -3,6 +3,7 @@ using IdentityService.BLL.Exceptions;
 using IdentityService.BLL.Models.DTOs.Requests.Auth;
 using IdentityService.BLL.Models.DTOs.Responses.Token;
 using IdentityService.BLL.Providers.Interfaces;
+using IdentityService.BLL.Publishers.Interfaces;
 using IdentityService.BLL.Services.Interfaces;
 using IdentityService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -17,18 +18,20 @@ public class AuthService : IAuthService
     private readonly ITokenProvider _tokenProvider;
     private readonly ILogger<AuthService> _logger;
     private readonly IMapper _mapper;
-
-
+    private readonly INotificationPublisher _notificationPublisher;
+    
     public AuthService(
         UserManager<UserEntity> userManager,
         ITokenProvider tokenProvider,
         ILogger<AuthService> logger,
-        IMapper mapper)
+        IMapper mapper,
+        INotificationPublisher notificationPublisher)
     {
         _userManager = userManager;
         _tokenProvider = tokenProvider;
         _logger = logger;
         _mapper = mapper;
+        _notificationPublisher = notificationPublisher;
     }
 
     public async Task<TokensResponseDTO> LoginAsync(LoginRequestDTO loginRequestDto, CancellationToken cancellationToken = default)
@@ -56,19 +59,20 @@ public class AuthService : IAuthService
     public async Task<TokensResponseDTO> RegisterAsync(RegisterRequestDTO registerRequestDto, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("User {UserName} is registering.", registerRequestDto.UserName);
+
+        var user = _mapper.Map<UserEntity>(registerRequestDto);
         
-        var user = await _userManager.FindByNameAsync(registerRequestDto.UserName);
-        if (user is null)
+        var result = await _userManager.CreateAsync(user, registerRequestDto.Password);
+        if (!result.Succeeded)
         {
-            throw new AuthorizationException("Login or password entered incorrectly.");
+            throw new ApplicationException("A user with this data already exists.");
         }
         
-        user = _mapper.Map<UserEntity>(registerRequestDto);
-        
-        await _userManager.CreateAsync(user, registerRequestDto.Password);
         await _userManager.AddToRoleAsync(user, "User");
 
         _logger.LogInformation("User {UserName} registered successfully.", registerRequestDto.UserName);
+
+        await _notificationPublisher.PublishUserRegisteredMessage(user, cancellationToken);
         
         var tokenResponse = await GenerateTokensAsync(user, cancellationToken: cancellationToken);
         return tokenResponse;
