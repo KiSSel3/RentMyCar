@@ -1,6 +1,6 @@
-using Shared.Messages.Common;
+using Contracts.Messages.Common;
 
-namespace Shared.Messages.CarManagementService;
+namespace Contracts.Messages.CarManagementService;
 
 public class RentOfferDeletedMessage : BaseMessage
 {

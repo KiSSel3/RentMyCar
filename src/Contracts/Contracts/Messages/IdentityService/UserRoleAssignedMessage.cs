@@ -1,6 +1,6 @@
-using Shared.Messages.Common;
+using Contracts.Messages.Common;
 
-namespace Shared.Messages.IdentityService;
+namespace Contracts.Messages.IdentityService;
 
 public class UserRoleAssignedMessage : BaseMessage
 {

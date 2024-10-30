@@ -1,4 +1,4 @@
-namespace Shared.Messages.Common;
+namespace Contracts.Messages.Common;
 
 public class BaseMessage
 {
