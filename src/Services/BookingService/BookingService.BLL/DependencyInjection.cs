@@ -1,4 +1,5 @@
 using System.Reflection;
+using BookingService.BLL.Consumers.IdentityConsumers;
 using BookingService.BLL.External.Implementations;
 using BookingService.BLL.External.Interfaces;
 using BookingService.BLL.Models.Options;
@@ -8,6 +9,7 @@ using BookingService.BLL.Services.Implementations;
 using BookingService.BLL.Services.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,6 +39,37 @@ public static class DependencyInjection
         services.AddScoped<IBookingService, CachedBookingServiceDecorator>();
             
         services.AddScoped<INotificationService, NotificationService>();
+        
+        services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+
+            x.AddConsumers(typeof(UserRegisteredConsumer).Assembly);
+    
+            x.UsingRabbitMq((context, configurator) =>
+            {
+                configurator.Host(new Uri(configuration["MessageBroker:Host"]), h =>
+                {
+                    h.Username(configuration["MessageBroker:Username"]);
+                    h.Password(configuration["MessageBroker:Password"]);
+                });
+
+                configurator.UseMessageRetry(r =>
+                {
+                    r.Intervals(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(15));
+                });
+
+                configurator.UseCircuitBreaker(cb =>
+                {
+                    cb.TrackingPeriod = TimeSpan.FromMinutes(1);
+                    cb.TripThreshold = 15;
+                    cb.ActiveThreshold = 10;
+                    cb.ResetInterval = TimeSpan.FromMinutes(5);
+                });
+                
+                configurator.ConfigureEndpoints(context);
+            });
+        });
         
         return services;
     }
