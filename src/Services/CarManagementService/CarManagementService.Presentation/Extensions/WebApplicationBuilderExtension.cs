@@ -29,7 +29,7 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         builder.Services.AddInfrastructureServices(builder.Configuration);
-        builder.Services.AddApplicationServices();
+        builder.Services.AddApplicationServices(builder.Configuration);
         
         return builder;
     }
