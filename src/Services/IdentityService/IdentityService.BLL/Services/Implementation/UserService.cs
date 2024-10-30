@@ -133,6 +133,6 @@ public class UserService : IUserService
         
         _logger.LogInformation($"User with ID: {userId} removed from role: {roleName}.");
         
-        await _notificationPublisher.PublishUserRoleAssignedMessage(user, roleName, cancellationToken);
+        await _notificationPublisher.PublishUserRoleRemovedMessage(user, roleName, cancellationToken);
     }
 }

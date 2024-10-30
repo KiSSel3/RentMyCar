@@ -72,7 +72,7 @@ public class NotificationPublisher : INotificationPublisher
         _logger.LogInformation("Publishing UserRoleRemovedMessage for user {UserId} with role {RoleName}", 
             user.Id, roleName);
         
-        var message = new UserRoleAssignedMessage()
+        var message = new UserRoleRemovedMessage()
         {
             UserId = user.Id,
             Role = roleName,
