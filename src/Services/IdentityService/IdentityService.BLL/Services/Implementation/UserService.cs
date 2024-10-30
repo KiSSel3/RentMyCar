@@ -87,7 +87,7 @@ public class UserService : IUserService
         
         _logger.LogInformation($"User with ID: {userId} deleted successfully.");
 
-        await _notificationPublisher.PublishUserDeletedMessage(user, cancellationToken);
+        await _notificationPublisher.PublishUserDeletedMessageAsync(user, cancellationToken);
     }
 
     public async Task AddUserToRoleAsync(string userId, string roleName, CancellationToken cancellationToken = default)
@@ -110,7 +110,7 @@ public class UserService : IUserService
         
         _logger.LogInformation($"User with ID: {userId} added to role: {roleName}.");
 
-        await _notificationPublisher.PublishUserRoleAssignedMessage(user, roleName, cancellationToken);
+        await _notificationPublisher.PublishUserRoleAssignedMessageAsync(user, roleName, cancellationToken);
     }
 
     public async Task RemoveUserFromRoleAsync(string userId, string roleName, CancellationToken cancellationToken = default)
@@ -133,6 +133,6 @@ public class UserService : IUserService
         
         _logger.LogInformation($"User with ID: {userId} removed from role: {roleName}.");
         
-        await _notificationPublisher.PublishUserRoleRemovedMessage(user, roleName, cancellationToken);
+        await _notificationPublisher.PublishUserRoleRemovedMessageAsync(user, roleName, cancellationToken);
     }
 }

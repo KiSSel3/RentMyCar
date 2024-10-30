@@ -72,7 +72,7 @@ public class AuthService : IAuthService
 
         _logger.LogInformation("User {UserName} registered successfully.", registerRequestDto.UserName);
 
-        await _notificationPublisher.PublishUserRegisteredMessage(user, cancellationToken);
+        await _notificationPublisher.PublishUserRegisteredMessageAsync(user, cancellationToken);
         
         var tokenResponse = await GenerateTokensAsync(user, cancellationToken: cancellationToken);
         return tokenResponse;

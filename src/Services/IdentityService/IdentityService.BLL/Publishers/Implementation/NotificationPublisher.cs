@@ -17,7 +17,7 @@ public class NotificationPublisher : INotificationPublisher
         _logger = logger;
     }
 
-    public async Task PublishUserRegisteredMessage(UserEntity user, CancellationToken cancellationToken = default)
+    public async Task PublishUserRegisteredMessageAsync(UserEntity user, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Publishing UserRegisteredMessage for user {UserId}", user.Id);
         
@@ -33,7 +33,7 @@ public class NotificationPublisher : INotificationPublisher
         _logger.LogInformation("Successfully published UserRegisteredMessage for user {UserId}", user.Id);
     }
 
-    public async Task PublishUserDeletedMessage(UserEntity user, CancellationToken cancellationToken = default)
+    public async Task PublishUserDeletedMessageAsync(UserEntity user, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Publishing UserDeletedMessage for user {UserId}", user.Id);
         
@@ -49,7 +49,7 @@ public class NotificationPublisher : INotificationPublisher
         _logger.LogInformation("Successfully published UserDeletedMessage for user {UserId}", user.Id);
     }
 
-    public async Task PublishUserRoleAssignedMessage(UserEntity user, string roleName, CancellationToken cancellationToken = default)
+    public async Task PublishUserRoleAssignedMessageAsync(UserEntity user, string roleName, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Publishing UserRoleAssignedMessage for user {UserId} with role {RoleName}", 
             user.Id, roleName);
@@ -67,7 +67,7 @@ public class NotificationPublisher : INotificationPublisher
             user.Id, roleName);
     }
 
-    public async Task PublishUserRoleRemovedMessage(UserEntity user, string roleName, CancellationToken cancellationToken = default)
+    public async Task PublishUserRoleRemovedMessageAsync(UserEntity user, string roleName, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Publishing UserRoleRemovedMessage for user {UserId} with role {RoleName}", 
             user.Id, roleName);
