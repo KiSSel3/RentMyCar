@@ -4,5 +4,5 @@ namespace Shared.Messages.IdentityService;
 
 public class UserRegisteredMessage : BaseMessage
 {
-    public string Username { get; set; }
+    public string Username { get; init; }
 }
