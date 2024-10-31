@@ -1,4 +1,4 @@
-using BookingService.DAL.Repositories.Interfaces;
+using BookingService.BLL.Handlers.Interfaces;
 using BookingService.Domain.Entities;
 using Contracts.Messages.CarManagementService;
 using MassTransit;
@@ -8,14 +8,14 @@ namespace BookingService.BLL.Consumers.CarManagementConsumers;
 
 public class RentOfferCreatedConsumer : IConsumer<RentOfferCreatedMessage>
 {
-    private readonly INotificationRepository _notificationRepository;
+    private readonly INotificationHandler _notificationHandler;
     private readonly ILogger<RentOfferCreatedConsumer> _logger;
 
     public RentOfferCreatedConsumer(
-        INotificationRepository notificationRepository,
+        INotificationHandler notificationHandler,
         ILogger<RentOfferCreatedConsumer> logger)
     {
-        _notificationRepository = notificationRepository;
+        _notificationHandler = notificationHandler;
         _logger = logger;
     }
 
@@ -32,13 +32,12 @@ public class RentOfferCreatedConsumer : IConsumer<RentOfferCreatedMessage>
         {
             UserId = message.UserId,
             CreatedAt = message.CreatedAt,
-            Message = $"Your rent offer for {message.CarBrand} {message.CarModel} has been created. Price per day: ${message.PricePerDay}",
-            IsSent = false
+            Message = $"Your rent offer for {message.CarBrand} {message.CarModel} has been created. Price per day: ${message.PricePerDay}"
         };
 
-        await _notificationRepository.CreateAsync(notification, context.CancellationToken);
+        await _notificationHandler.SendAndPersistAsync(notification, context.CancellationToken);
 
-        _logger.LogInformation("Successfully created rent offer notification for user ID: {UserId}, car: {CarBrand} {CarModel}",
+        _logger.LogInformation("Successfully processed rent offer notification for user ID: {UserId}, car: {CarBrand} {CarModel}",
             message.UserId,
             message.CarBrand,
             message.CarModel);

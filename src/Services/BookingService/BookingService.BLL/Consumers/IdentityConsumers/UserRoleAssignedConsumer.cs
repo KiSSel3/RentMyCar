@@ -1,4 +1,4 @@
-using BookingService.DAL.Repositories.Interfaces;
+using BookingService.BLL.Handlers.Interfaces;
 using BookingService.Domain.Entities;
 using Contracts.Messages.IdentityService;
 using MassTransit;
@@ -8,14 +8,14 @@ namespace BookingService.BLL.Consumers.IdentityConsumers;
 
 public class UserRoleAssignedConsumer : IConsumer<UserRoleAssignedMessage>
 {
-    private readonly INotificationRepository _notificationRepository;
+    private readonly INotificationHandler _notificationHandler;
     private readonly ILogger<UserRoleAssignedConsumer> _logger;
 
     public UserRoleAssignedConsumer(
-        INotificationRepository notificationRepository,
+        INotificationHandler notificationHandler,
         ILogger<UserRoleAssignedConsumer> logger)
     {
-        _notificationRepository = notificationRepository;
+        _notificationHandler = notificationHandler;
         _logger = logger;
     }
 
@@ -31,13 +31,12 @@ public class UserRoleAssignedConsumer : IConsumer<UserRoleAssignedMessage>
         {
             UserId = message.UserId,
             CreatedAt = message.CreatedAt,
-            Message = $"You have been assigned the {message.Role} role.",
-            IsSent = false
+            Message = $"You have been assigned the {message.Role} role."
         };
 
-        await _notificationRepository.CreateAsync(notification, context.CancellationToken);
+        await _notificationHandler.SendAndPersistAsync(notification, context.CancellationToken);
 
-        _logger.LogInformation("Successfully created role assignment notification for user ID: {UserId}, role: {Role}", 
+        _logger.LogInformation("Successfully processed role assignment notification for user ID: {UserId}, role: {Role}", 
             message.UserId,
             message.Role);
     }

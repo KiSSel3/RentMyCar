@@ -1,4 +1,4 @@
-using BookingService.DAL.Repositories.Interfaces;
+using BookingService.BLL.Handlers.Interfaces;
 using BookingService.Domain.Entities;
 using Contracts.Messages.CarManagementService;
 using MassTransit;
@@ -8,14 +8,14 @@ namespace BookingService.BLL.Consumers.CarManagementConsumers;
 
 public class RentOfferDeletedConsumer : IConsumer<RentOfferDeletedMessage>
 {
-    private readonly INotificationRepository _notificationRepository;
+    private readonly INotificationHandler _notificationHandler;
     private readonly ILogger<RentOfferDeletedConsumer> _logger;
 
     public RentOfferDeletedConsumer(
-        INotificationRepository notificationRepository,
+        INotificationHandler notificationHandler,
         ILogger<RentOfferDeletedConsumer> logger)
     {
-        _notificationRepository = notificationRepository;
+        _notificationHandler = notificationHandler;
         _logger = logger;
     }
 
@@ -32,13 +32,12 @@ public class RentOfferDeletedConsumer : IConsumer<RentOfferDeletedMessage>
         {
             UserId = message.UserId,
             CreatedAt = message.CreatedAt,
-            Message = $"Your rent offer for {message.CarBrand} {message.CarModel} has been deleted. Contact support if this is an error.",
-            IsSent = false
+            Message = $"Your rent offer for {message.CarBrand} {message.CarModel} has been deleted. Contact support if this is an error."
         };
 
-        await _notificationRepository.CreateAsync(notification, context.CancellationToken);
+        await _notificationHandler.SendAndPersistAsync(notification, context.CancellationToken);
 
-        _logger.LogInformation("Successfully created offer deletion notification for user ID: {UserId}, car: {CarBrand} {CarModel}",
+        _logger.LogInformation("Successfully processed offer deletion notification for user ID: {UserId}, car: {CarBrand} {CarModel}",
             message.UserId,
             message.CarBrand,
             message.CarModel);

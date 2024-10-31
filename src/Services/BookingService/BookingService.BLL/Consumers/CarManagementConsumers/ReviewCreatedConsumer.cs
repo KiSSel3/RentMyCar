@@ -1,4 +1,4 @@
-using BookingService.DAL.Repositories.Interfaces;
+using BookingService.BLL.Handlers.Interfaces;
 using BookingService.Domain.Entities;
 using Contracts.Messages.CarManagementService;
 using MassTransit;
@@ -8,14 +8,14 @@ namespace BookingService.BLL.Consumers.CarManagementConsumers;
 
 public class ReviewCreatedConsumer : IConsumer<ReviewCreatedMessage>
 {
-    private readonly INotificationRepository _notificationRepository;
+    private readonly INotificationHandler _notificationHandler;
     private readonly ILogger<ReviewCreatedConsumer> _logger;
 
     public ReviewCreatedConsumer(
-        INotificationRepository notificationRepository,
+        INotificationHandler notificationHandler,
         ILogger<ReviewCreatedConsumer> logger)
     {
-        _notificationRepository = notificationRepository;
+        _notificationHandler = notificationHandler;
         _logger = logger;
     }
 
@@ -31,13 +31,12 @@ public class ReviewCreatedConsumer : IConsumer<ReviewCreatedMessage>
         {
             UserId = message.UserId,
             CreatedAt = message.CreatedAt,
-            Message = $"A new review has been posted with rating {message.Rating}/5. Comment: {message.Comment}",
-            IsSent = false
+            Message = $"A new review has been posted with rating {message.Rating}/5. Comment: {message.Comment}"
         };
 
-        await _notificationRepository.CreateAsync(notification, context.CancellationToken);
+        await _notificationHandler.SendAndPersistAsync(notification, context.CancellationToken);
 
-        _logger.LogInformation("Successfully created review notification for user ID: {UserId}, rating: {Rating}",
+        _logger.LogInformation("Successfully processed review notification for user ID: {UserId}, rating: {Rating}",
             message.UserId,
             message.Rating);
     }

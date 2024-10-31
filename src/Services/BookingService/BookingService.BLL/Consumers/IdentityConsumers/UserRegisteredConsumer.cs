@@ -1,3 +1,4 @@
+using BookingService.BLL.Handlers.Interfaces;
 using BookingService.DAL.Repositories.Interfaces;
 using BookingService.Domain.Entities;
 using Contracts.Messages.IdentityService;
@@ -8,14 +9,14 @@ namespace BookingService.BLL.Consumers.IdentityConsumers;
 
 public class UserRegisteredConsumer : IConsumer<UserRegisteredMessage>
 {
-    private readonly INotificationRepository _notificationRepository;
+    private readonly INotificationHandler _notificationHandler;
     private readonly ILogger<UserRegisteredConsumer> _logger;
 
     public UserRegisteredConsumer(
-        INotificationRepository notificationRepository,
+        INotificationHandler notificationHandler,
         ILogger<UserRegisteredConsumer> logger)
     {
-        _notificationRepository = notificationRepository;
+        _notificationHandler = notificationHandler;
         _logger = logger;
     }
 
@@ -31,13 +32,12 @@ public class UserRegisteredConsumer : IConsumer<UserRegisteredMessage>
         {
             UserId = message.UserId,
             CreatedAt = message.CreatedAt,
-            Message = $"Welcome, {message.Username}! Your account has been successfully registered.",
-            IsSent = false
+            Message = $"Welcome, {message.Username}! Your account has been successfully registered."
         };
 
-        await _notificationRepository.CreateAsync(notification, context.CancellationToken);
+        await _notificationHandler.SendAndPersistAsync(notification, context.CancellationToken);
         
-        _logger.LogInformation("Successfully created welcome notification for user: {Username} with ID: {UserId}", 
+        _logger.LogInformation("Successfully processed welcome notification for user: {Username} with ID: {UserId}", 
             message.Username, 
             message.UserId);
     }

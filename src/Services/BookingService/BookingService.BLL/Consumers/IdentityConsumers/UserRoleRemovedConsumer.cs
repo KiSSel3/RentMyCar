@@ -1,4 +1,4 @@
-using BookingService.DAL.Repositories.Interfaces;
+using BookingService.BLL.Handlers.Interfaces;
 using BookingService.Domain.Entities;
 using Contracts.Messages.IdentityService;
 using MassTransit;
@@ -8,14 +8,14 @@ namespace BookingService.BLL.Consumers.IdentityConsumers;
 
 public class UserRoleRemovedConsumer : IConsumer<UserRoleRemovedMessage>
 {
-    private readonly INotificationRepository _notificationRepository;
+    private readonly INotificationHandler _notificationHandler;
     private readonly ILogger<UserRoleRemovedConsumer> _logger;
 
     public UserRoleRemovedConsumer(
-        INotificationRepository notificationRepository,
+        INotificationHandler notificationHandler,
         ILogger<UserRoleRemovedConsumer> logger)
     {
-        _notificationRepository = notificationRepository;
+        _notificationHandler = notificationHandler;
         _logger = logger;
     }
 
@@ -31,13 +31,12 @@ public class UserRoleRemovedConsumer : IConsumer<UserRoleRemovedMessage>
         {
             UserId = message.UserId,
             CreatedAt = message.CreatedAt,
-            Message = $"The {message.Role} role has been removed from your account. Contact support if this is an error.",
-            IsSent = false
+            Message = $"The {message.Role} role has been removed from your account. Contact support if this is an error."
         };
 
-        await _notificationRepository.CreateAsync(notification, context.CancellationToken);
+        await _notificationHandler.SendAndPersistAsync(notification, context.CancellationToken);
 
-        _logger.LogInformation("Successfully created role removal notification for user ID: {UserId}, role: {Role}", 
+        _logger.LogInformation("Successfully processed role removal notification for user ID: {UserId}, role: {Role}", 
             message.UserId,
             message.Role);
     }
