@@ -132,7 +132,8 @@ public static class DependencyInjection
                     BackupStrategy = new NoneMongoBackupStrategy()
                 },
                 Prefix = "hangfire.mongo",
-                CheckConnection = true
+                CheckConnection = true,
+                CheckQueuedJobsStrategy = CheckQueuedJobsStrategy.TailNotificationsCollection
             });
         });
 
