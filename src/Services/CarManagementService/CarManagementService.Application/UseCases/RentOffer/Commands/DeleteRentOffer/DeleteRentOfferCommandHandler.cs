@@ -51,9 +51,12 @@ public class DeleteRentOfferCommandHandler : IRequestHandler<DeleteRentOfferComm
     
     private async Task<CarEntity> GetRelatedCarAsync(Guid carId, CancellationToken cancellationToken)
     {
-        var spec = new CarByIdSpecification(carId);
+        var carByIdSpec = new CarByIdSpecification(carId);
+        var includeSpec = new CarIncludeAllSpecification();
+        
+        var combinedSpec = carByIdSpec.And(includeSpec);
 
-        var car = await _carRepository.FirstOrDefault(spec, cancellationToken);
+        var car = await _carRepository.FirstOrDefault(combinedSpec, cancellationToken);
         if (car is null)
         {
             throw new EntityNotFoundException(nameof(CarEntity), carId);
