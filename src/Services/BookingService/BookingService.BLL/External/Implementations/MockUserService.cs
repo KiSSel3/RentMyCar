@@ -20,6 +20,15 @@ public class MockUserService : IUserService
                 UserName = "Admin",
                 Email = "admin.rent.my.car@gmail.com",
                 PhoneNumber = "+111111111111"
+            },
+            new UserResult()
+            {
+                Id = new Guid("ea1491fd-69d1-4041-94db-ee0295ec90c1"),
+                FirstName = "Andrey",
+                LastName = "Kiselev",
+                UserName = "Kissel3",
+                Email = "by.kissel@gmail.com",
+                PhoneNumber = "+375331111111"
             }
         };
     }
