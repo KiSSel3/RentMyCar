@@ -1,4 +1,5 @@
 using AutoMapper;
+using BookingService.BLL.BackgroundJobs.Interfaces;
 using BookingService.BLL.Exceptions;
 using BookingService.BLL.External.Interfaces;
 using BookingService.BLL.Infrastructure.Filters;
@@ -18,20 +19,22 @@ public class BookingService : IBookingService
     private readonly IUserService _userService;
     private readonly ILogger<BookingService> _logger;
     private readonly IMapper _mapper;
-
+    private readonly IBookingNotificationScheduler _bookingNotificationScheduler;
 
     public BookingService(
         IBookingRepository bookingRepository,
         IRentOfferService rentOfferService,
         IUserService userService,
         ILogger<BookingService> logger,
-        IMapper mapper)
+        IMapper mapper,
+        IBookingNotificationScheduler bookingNotificationScheduler)
     {
         _bookingRepository = bookingRepository;
         _rentOfferService = rentOfferService;
         _userService = userService;
         _logger = logger;
         _mapper = mapper;
+        _bookingNotificationScheduler = bookingNotificationScheduler;
     }
 
     public async Task CreateBookingAsync(CreateBookingDTO createBookingDTO,
@@ -73,6 +76,8 @@ public class BookingService : IBookingService
         
         _logger.LogInformation("Successfully created booking {BookingId} with total price {TotalPrice}", 
             booking.Id, booking.TotalPrice);
+        
+        _bookingNotificationScheduler.ScheduleBookingCreatedNotification(booking);
     }
 
     public async Task UpdateBookingAsync(Guid bookingId, UpdateBookingDTO updateBookingDTO,
@@ -97,6 +102,13 @@ public class BookingService : IBookingService
         await _bookingRepository.UpdateAsync(booking, cancellationToken);
         
         _logger.LogInformation("Successfully updated booking {BookingId}", bookingId);
+        
+        _bookingNotificationScheduler.ScheduleStatusChangedNotification(booking, updateBookingDTO.Status);
+        
+        if (updateBookingDTO.Status == BookingStatus.Confirmed)
+        {
+            _bookingNotificationScheduler.ScheduleReminder(booking);
+        }
     }
 
     public async Task DeleteBookingAsync(Guid bookingId, CancellationToken cancellationToken = default)

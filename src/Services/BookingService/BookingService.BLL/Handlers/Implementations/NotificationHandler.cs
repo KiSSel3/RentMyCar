@@ -53,6 +53,8 @@ public class NotificationHandler : INotificationHandler
             await _sender.SendAsync(notification, cancellationToken);
             
             notification.IsSent = true;
+            
+            await _repository.UpdateAsync(notification, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -60,10 +62,6 @@ public class NotificationHandler : INotificationHandler
                 "Failed to send notification. UserId: {UserId}. Error: {Error}", 
                 notification.UserId,
                 ex.Message);
-        }
-        finally
-        {
-            await _repository.UpdateAsync(notification, cancellationToken);
         }
     }
 }

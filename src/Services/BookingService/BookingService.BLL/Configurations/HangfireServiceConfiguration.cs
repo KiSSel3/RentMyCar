@@ -1,7 +1,6 @@
-using BookingService.BLL.BackgroundJobs;
+using BookingService.BLL.BackgroundJobs.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 
 namespace BookingService.BLL.Configurations;
 
@@ -16,7 +15,7 @@ public static class HangfireServiceConfiguration
             IsReadOnlyFunc = (context) => false
         });
         
-        RecurringJob.AddOrUpdate<UnsentNotificationsJob>(
+        RecurringJob.AddOrUpdate<IUnsentNotificationsJob>(
             "process-unsent-notifications",
             job => job.ProcessUnsentNotificationsAsync(CancellationToken.None),
             "*/30 * * * *"

@@ -1,10 +1,11 @@
+using BookingService.BLL.BackgroundJobs.Interfaces;
 using BookingService.BLL.Handlers.Interfaces;
 using BookingService.DAL.Repositories.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace BookingService.BLL.BackgroundJobs;
+namespace BookingService.BLL.BackgroundJobs.Implementations;
 
-public class UnsentNotificationsJob
+public class UnsentNotificationsJob : IUnsentNotificationsJob
 {
     private readonly INotificationHandler _notificationHandler;
     private readonly INotificationRepository _notificationRepository;

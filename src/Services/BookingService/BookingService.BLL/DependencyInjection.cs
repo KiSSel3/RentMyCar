@@ -1,8 +1,12 @@
 using System.Reflection;
 using BookingService.BLL.BackgroundJobs;
+using BookingService.BLL.BackgroundJobs.Implementations;
+using BookingService.BLL.BackgroundJobs.Interfaces;
 using BookingService.BLL.Consumers.IdentityConsumers;
 using BookingService.BLL.External.Implementations;
 using BookingService.BLL.External.Interfaces;
+using BookingService.BLL.Factories.Implementations;
+using BookingService.BLL.Factories.Interfaces;
 using BookingService.BLL.Handlers.Implementations;
 using BookingService.BLL.Handlers.Interfaces;
 using BookingService.BLL.Models.Options;
@@ -73,6 +77,8 @@ public static class DependencyInjection
         services.Configure<EmailNotificationOptions>(configuration.GetSection(EmailNotificationOptions.SectionName));
         services.AddScoped<INotificationSender, EmailNotificationSender>();
 
+        services.AddScoped<IBookingNotificationMessageFactory, BookingNotificationMessageFactory>();
+        
         return services;
     }
 
@@ -145,7 +151,8 @@ public static class DependencyInjection
             options.ShutdownTimeout = TimeSpan.FromMinutes(1);
         });
 
-        services.AddScoped<UnsentNotificationsJob>();
+        services.AddScoped<IUnsentNotificationsJob, UnsentNotificationsJob>();
+        services.AddScoped<IBookingNotificationScheduler, BookingNotificationScheduler>();
 
         return services;
     }
