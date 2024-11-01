@@ -1,19 +1,20 @@
 using System.Reflection;
-using BookingService.BLL.BackgroundJobs;
-using BookingService.BLL.BackgroundJobs.Implementations;
-using BookingService.BLL.BackgroundJobs.Interfaces;
-using BookingService.BLL.Consumers.IdentityConsumers;
-using BookingService.BLL.External.Implementations;
-using BookingService.BLL.External.Interfaces;
-using BookingService.BLL.Factories.Implementations;
-using BookingService.BLL.Factories.Interfaces;
-using BookingService.BLL.Handlers.Implementations;
-using BookingService.BLL.Handlers.Interfaces;
+using BookingService.BLL.External.Consumers.IdentityConsumers;
+using BookingService.BLL.External.Services.Implementations;
+using BookingService.BLL.External.Services.Interfaces;
+using BookingService.BLL.Features.Booking.Services.Implementations;
+using BookingService.BLL.Features.Booking.Services.Interfaces;
+using BookingService.BLL.Features.Notifications.BackgroundJobs.Implementations;
+using BookingService.BLL.Features.Notifications.BackgroundJobs.Interfaces;
+using BookingService.BLL.Features.Notifications.Factories.Implementations;
+using BookingService.BLL.Features.Notifications.Factories.Interfaces;
+using BookingService.BLL.Features.Notifications.Handlers.Implementations;
+using BookingService.BLL.Features.Notifications.Handlers.Interfaces;
+using BookingService.BLL.Features.Notifications.Services.Implementations;
+using BookingService.BLL.Features.Notifications.Services.Interfaces;
+using BookingService.BLL.Infrastructure.Providers.Implementations;
+using BookingService.BLL.Infrastructure.Providers.Interfaces;
 using BookingService.BLL.Models.Options;
-using BookingService.BLL.Providers.Implementations;
-using BookingService.BLL.Providers.Interfaces;
-using BookingService.BLL.Services.Implementations;
-using BookingService.BLL.Services.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Hangfire;
@@ -68,7 +69,7 @@ public static class DependencyInjection
         services.AddScoped<IRentOfferService, MockRentOfferService>();
         services.AddScoped<IUserService, MockUserService>();
         
-        services.AddScoped<Services.Implementations.BookingService>();
+        services.AddScoped<Features.Booking.Services.Implementations.BookingService>();
         services.AddScoped<IBookingService, CachedBookingServiceDecorator>();
         
         services.AddScoped<INotificationService, NotificationService>();

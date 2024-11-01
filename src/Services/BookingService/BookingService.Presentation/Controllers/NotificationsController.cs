@@ -1,4 +1,4 @@
-using BookingService.BLL.Services.Interfaces;
+using BookingService.BLL.Features.Notifications.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,4 @@
-using BookingService.BLL.BackgroundJobs.Interfaces;
+using BookingService.BLL.Features.Notifications.BackgroundJobs.Interfaces;
 using Hangfire;
 using Microsoft.AspNetCore.Builder;
 
