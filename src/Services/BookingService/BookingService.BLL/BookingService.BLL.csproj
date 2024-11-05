@@ -14,6 +14,12 @@
       <PackageReference Include="AutoMapper" Version="13.0.1" />
       <PackageReference Include="FluentValidation" Version="11.10.0" />
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+      <PackageReference Include="Google.Protobuf" Version="3.29.0-rc2" />
+      <PackageReference Include="Grpc.Net.Client" Version="2.67.0-pre1" />
+      <PackageReference Include="Grpc.Tools" Version="2.67.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Hangfire" Version="1.8.15" />
       <PackageReference Include="Hangfire.Mongo" Version="1.11.0" />
       <PackageReference Include="MailKit" Version="4.8.0" />
