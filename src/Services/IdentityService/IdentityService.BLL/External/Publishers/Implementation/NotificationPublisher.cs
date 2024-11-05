@@ -1,10 +1,10 @@
 using Contracts.Messages.IdentityService;
-using IdentityService.BLL.Publishers.Interfaces;
+using IdentityService.BLL.External.Publishers.Interfaces;
 using IdentityService.Domain.Entities;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityService.BLL.Publishers.Implementation;
+namespace IdentityService.BLL.External.Publishers.Implementation;
 
 public class NotificationPublisher : INotificationPublisher
 {
