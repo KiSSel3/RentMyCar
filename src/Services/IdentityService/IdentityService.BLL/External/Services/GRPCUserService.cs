@@ -33,7 +33,7 @@ public class GRPCUserService : GRPCUserServiceBase
         {
             _logger.LogWarning("[gRPC] Invalid userId format: {UserId}", request.UserId);
             
-            return null;
+            return new GetUserByIdResponse();
         }
         
         var user = await _userManager.Users
@@ -41,6 +41,13 @@ public class GRPCUserService : GRPCUserServiceBase
             .IgnoreQueryFilters()
             .FirstOrDefaultAsync(u=>u.Id == userId, context.CancellationToken);
 
+        if (user is null)
+        {
+            _logger.LogWarning("[gRPC] User not found for userId: {UserId}", userId);
+            
+            return new GetUserByIdResponse();
+        }
+        
         return _mapper.Map<GetUserByIdResponse>(user);
     }
 

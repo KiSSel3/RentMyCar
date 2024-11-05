@@ -32,13 +32,20 @@ public class GRPCRentOfferService : GRPCRentOfferServiceBase
         {
             _logger.LogWarning("[gRPC] Invalid rentOfferId format: {RentOfferId}", request.RentOfferId);
             
-            return null;
+            return new GetRentOfferByIdResponse();
         }
         
         var spec = new RentOfferByIdSpecification(rentOfferId);
     
         var rentOffer = await _rentOfferRepository.FirstOrDefault(spec, context.CancellationToken);
-
+        
+        if (rentOffer is null)
+        {
+            _logger.LogWarning("[gRPC] RentOffer not found for rentOfferId: {RentOfferId}", rentOfferId);
+            
+            return new GetRentOfferByIdResponse();
+        }
+        
         return _mapper.Map<GetRentOfferByIdResponse>(rentOffer);
     }
 }

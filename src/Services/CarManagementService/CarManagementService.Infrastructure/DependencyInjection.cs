@@ -1,3 +1,4 @@
+using System.Reflection;
 using CarManagementService.Domain.Abstractions.Services;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Infrastructure.Infrastructure;
@@ -17,6 +18,8 @@ public static class DependencyInjection
     {
         ConfigurePostgreSql(services, configuration);
 
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<ICarModelRepository, CarModelRepository>();
         services.AddScoped<ICarRepository, CarRepository>();

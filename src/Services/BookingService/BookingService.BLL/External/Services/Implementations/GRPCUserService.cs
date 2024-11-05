@@ -26,7 +26,7 @@ public class GRPCUserService : IUserService
         _logger = logger;
     }
     
-    public async Task<UserResult> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task<UserResult?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         using var channel = GrpcChannel.ForAddress(_grpcServerAddress);
 
@@ -37,6 +37,13 @@ public class GRPCUserService : IUserService
         var request = new UserRequest() { UserId = id.ToString() };
 
         var response = await client.GetUserByIdAsync(request, cancellationToken: cancellationToken);
+        
+        if (string.IsNullOrEmpty(response.Id))
+        {
+            _logger.LogWarning("[gRPC Client] Received empty response for userId: {UserId}", id);
+            
+            return null;
+        }
         
         _logger.LogInformation("[gRPC Client] Received GetUserById response for userId: {UserId}", id);
 

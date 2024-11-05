@@ -8,6 +8,9 @@ public class RentOfferMappingProfile : Profile
 {
     public RentOfferMappingProfile()
     {
+        CreateMap<DateTime, Google.Protobuf.WellKnownTypes.Timestamp>()
+            .ConvertUsing(src => Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.SpecifyKind(src, DateTimeKind.Utc)));
+        
         CreateMap<RentOfferEntity, GetRentOfferByIdResponse>();
     }
 }

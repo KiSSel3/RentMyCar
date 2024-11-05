@@ -26,7 +26,7 @@ public class GRPCRentOfferService : IRentOfferService
         _logger = logger;
     }
 
-    public async Task<RentOfferResult> GetRentOfferById(Guid id, CancellationToken cancellationToken = default)
+    public async Task<RentOfferResult?> GetRentOfferById(Guid id, CancellationToken cancellationToken = default)
     {
         using var channel = GrpcChannel.ForAddress(_grpcServerAddress);
         
@@ -37,6 +37,13 @@ public class GRPCRentOfferService : IRentOfferService
         var request = new RentOfferRequest() { RentOfferId = id.ToString() };
         
         var response = await client.GetRentOfferByIdAsync(request, cancellationToken: cancellationToken);
+        
+        if (string.IsNullOrEmpty(response.Id))
+        {
+            _logger.LogWarning("[gRPC Client] Received empty response for rentOfferId: {RentOfferId}", id);
+            
+            return null;
+        }
         
         _logger.LogInformation("[gRPC Client] Received GetRentOfferById response for rentOfferId: {RentOfferId}", id);
         
