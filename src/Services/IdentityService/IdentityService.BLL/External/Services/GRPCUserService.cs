@@ -3,6 +3,7 @@ using Contracts.Protos;
 using Grpc.Core;
 using IdentityService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using GRPCUserServiceBase = Contracts.Protos.GRPCUserService.GRPCUserServiceBase;
 
@@ -24,11 +25,21 @@ public class GRPCUserService : GRPCUserServiceBase
         _logger = logger;
     }
 
-    public override async Task<GetUserByIdResponse> GetUserById(UserRequest request, ServerCallContext context)
+    public override async Task<GetUserByIdResponse?> GetUserById(UserRequest request, ServerCallContext context)
     {
         _logger.LogInformation("[gRPC] GetUserById called with userId: {UserId}", request.UserId);
+
+        if (!Guid.TryParse(request.UserId, out var userId))
+        {
+            _logger.LogWarning("[gRPC] Invalid userId format: {UserId}", request.UserId);
+            
+            return null;
+        }
         
-        var user = await _userManager.FindByIdAsync(request.UserId);
+        var user = await _userManager.Users
+            .AsNoTracking()
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(u=>u.Id == userId, context.CancellationToken);
 
         return _mapper.Map<GetUserByIdResponse>(user);
     }
