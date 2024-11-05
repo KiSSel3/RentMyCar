@@ -1,6 +1,9 @@
+using CarManagementService.Domain.Abstractions.Services;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Infrastructure.Infrastructure;
+using CarManagementService.Infrastructure.Options;
 using CarManagementService.Infrastructure.Repositories.Implementations;
+using CarManagementService.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +22,10 @@ public static class DependencyInjection
         services.AddScoped<IImageRepository, ImageRepository>();
         services.AddScoped<IRentOfferRepository, RentOfferRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
+
+        services.AddScoped<IUserService, GRPCUserService>();
+        
+        services.Configure<GRPCOptions>(configuration.GetSection(GRPCOptions.SectionName));
         
         return services;
     }
