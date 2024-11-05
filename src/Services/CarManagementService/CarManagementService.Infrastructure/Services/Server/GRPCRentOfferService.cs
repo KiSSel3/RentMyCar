@@ -26,11 +26,11 @@ public class GRPCRentOfferService : GRPCRentOfferServiceBase
 
     public override async Task<GetRentOfferByIdResponse?> GetRentOfferById(RentOfferRequest request, ServerCallContext context)
     {
-        _logger.LogInformation("[gRPC] GetRentOfferById called with rentOfferId: {UserId}", request.RentOfferId);
+        _logger.LogInformation("[gRPC] GetRentOfferById called with rentOfferId: {RentOfferId}", request.RentOfferId);
 
         if (!Guid.TryParse(request.RentOfferId, out var rentOfferId))
         {
-            _logger.LogWarning("[gRPC] Invalid rentOfferId format: {UserId}", request.RentOfferId);
+            _logger.LogWarning("[gRPC] Invalid rentOfferId format: {RentOfferId}", request.RentOfferId);
             
             return null;
         }
