@@ -21,7 +21,7 @@ public class GRPCRentOfferService : IRentOfferService
         IMapper mapper,
         ILogger<GRPCRentOfferService> logger)
     {
-        _grpcServerAddress = options.Value.ConnectionString;
+        _grpcServerAddress = options.Value.ConnectionStringRentOffer;
         _mapper = mapper;
         _logger = logger;
     }

@@ -21,7 +21,7 @@ public class GRPCUserService : IUserService
         IMapper mapper,
         ILogger<GRPCUserService> logger)
     {
-        _grpcServerAddress = options.Value.ConnectionString;
+        _grpcServerAddress = options.Value.ConnectionStringUser;
         _mapper = mapper;
         _logger = logger;
     }

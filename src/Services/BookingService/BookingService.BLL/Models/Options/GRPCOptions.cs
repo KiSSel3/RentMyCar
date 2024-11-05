@@ -4,5 +4,6 @@ public class GRPCOptions
 {
     public const string SectionName = "GRPC";
     
-    public string ConnectionString { get; set; }
+    public string ConnectionStringUser { get; set; }
+    public string ConnectionStringRentOffer { get; set; }
 }
