@@ -14,8 +14,7 @@ public class GRPCUserService : GRPCUserServiceBase
     private readonly UserManager<UserEntity> _userManager;
     private readonly IMapper _mapper;
     private readonly ILogger<GRPCUserService> _logger;
-
-
+    
     public GRPCUserService(
         UserManager<UserEntity> userManager,
         IMapper mapper,

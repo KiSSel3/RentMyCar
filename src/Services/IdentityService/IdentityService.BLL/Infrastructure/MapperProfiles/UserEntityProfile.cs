@@ -1,4 +1,5 @@
 using AutoMapper;
+using Contracts.Protos;
 using IdentityService.BLL.Models.DTOs.Requests.Auth;
 using IdentityService.BLL.Models.DTOs.Responses.User;
 using IdentityService.Domain.Entities;
@@ -11,5 +12,6 @@ public class UserEntityProfile : Profile
     {
         CreateMap<RegisterRequestDTO, UserEntity>();
         CreateMap<UserEntity, UserResponseDTO>();
+        CreateMap<UserResponseDTO, GetUserByIdResponse>();
     }
 }
