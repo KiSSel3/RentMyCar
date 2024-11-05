@@ -12,6 +12,6 @@ public class UserEntityProfile : Profile
     {
         CreateMap<RegisterRequestDTO, UserEntity>();
         CreateMap<UserEntity, UserResponseDTO>();
-        CreateMap<UserResponseDTO, GetUserByIdResponse>();
+        CreateMap<UserEntity, GetUserByIdResponse>();
     }
 }
