@@ -1,5 +1,6 @@
 using AutoMapper;
 using CarManagementService.Application.Exceptions;
+using CarManagementService.Domain.Abstractions.Services;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.Car;
@@ -16,25 +17,34 @@ public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferComm
     private readonly IMapper _mapper;
     private readonly ILogger<CreateRentOfferCommandHandler> _logger;
     private readonly INotificationPublisher _notificationPublisher;
+    private readonly IUserService _userService;
     
     public CreateRentOfferCommandHandler(
         IRentOfferRepository rentOfferRepository,
         ICarRepository carRepository,
         IMapper mapper,
         ILogger<CreateRentOfferCommandHandler> logger,
-        INotificationPublisher notificationPublisher)
+        INotificationPublisher notificationPublisher,
+        IUserService userService)
     {
         _rentOfferRepository = rentOfferRepository;
         _carRepository = carRepository;
         _mapper = mapper;
         _logger = logger;
         _notificationPublisher = notificationPublisher;
+        _userService = userService;
     }
 
     public async Task Handle(CreateRentOfferCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Starting to create rent offer for car with ID: {CarId}", request.CarId);
 
+        var isUserValid = await _userService.IsUserValidAsync(request.UserId, cancellationToken);
+        if (!isUserValid)
+        {
+            throw new EntityNotFoundException("UserEntity", request.UserId);
+        }
+        
         var car = await GetRelatedCarEntityAsync(request.CarId, cancellationToken);
         
         var rentOffer = _mapper.Map<RentOfferEntity>(request);
