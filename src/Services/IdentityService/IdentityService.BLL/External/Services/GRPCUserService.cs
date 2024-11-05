@@ -1,7 +1,6 @@
 using AutoMapper;
 using Contracts.Protos;
 using Grpc.Core;
-using IdentityService.BLL.Services.Interfaces;
 using IdentityService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;

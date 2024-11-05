@@ -16,19 +16,29 @@ namespace IdentityService.BLL;
 
 public static class DependencyInjection
 {
-
     public static IServiceCollection AddBusinessLogicLayerServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddValidationServices()
+            .ConfigureMessageBroker(configuration)
+            .RegisterServices(configuration);
+        
+        return services;
+    }
+
+    private static IServiceCollection AddValidationServices(this IServiceCollection services)
     {
         services.AddFluentValidationAutoValidation();
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-        services.Configure<TokenOptions>(configuration.GetSection(TokenOptions.DefaultSection));
+        return services;
+    }
 
+    private static IServiceCollection ConfigureMessageBroker(this IServiceCollection services, IConfiguration configuration)
+    {
         services.AddMassTransit(x =>
         {
             x.SetKebabCaseEndpointNameFormatter();
-            
             x.AddScoped<INotificationPublisher, NotificationPublisher>();
             
             x.UsingRabbitMq((context, configurator) =>
@@ -41,10 +51,7 @@ public static class DependencyInjection
 
                 configurator.ConfigurePublish(p =>
                 {
-                    p.UseRetry(r =>
-                    {
-                        r.Interval(3, TimeSpan.FromMinutes(1));
-                    });
+                    p.UseRetry(r => r.Interval(3, TimeSpan.FromMinutes(1)));
                     
                     p.UseCircuitBreaker(cb =>
                     {
@@ -58,15 +65,21 @@ public static class DependencyInjection
                 configurator.ConfigureEndpoints(context);
             });
         });
-        
+
+        return services;
+    }
+
+    private static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<TokenOptions>(configuration.GetSection(TokenOptions.DefaultSection));
         services.AddScoped<ITokenProvider, TokenProvider>();
         
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
-            
-        services.AddGrpc();
         
+        services.AddGrpc();
+
         return services;
     }
 }
