@@ -1,11 +1,11 @@
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using IdentityService.BLL.External.Publishers.Implementation;
+using IdentityService.BLL.External.Publishers.Interfaces;
 using IdentityService.BLL.Models.Options;
 using IdentityService.BLL.Providers.Implementation;
 using IdentityService.BLL.Providers.Interfaces;
-using IdentityService.BLL.Publishers.Implementation;
-using IdentityService.BLL.Publishers.Interfaces;
 using IdentityService.BLL.Services.Implementation;
 using IdentityService.BLL.Services.Interfaces;
 using MassTransit;
@@ -65,6 +65,8 @@ public static class DependencyInjection
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRoleService, RoleService>();
             
+        services.AddGrpc();
+        
         return services;
     }
 }

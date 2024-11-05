@@ -1,3 +1,4 @@
+using IdentityService.BLL.Configurations;
 using IdentityService.Presentation.Middlewares;
 using NLog.Web;
 
@@ -26,6 +27,8 @@ public static class WebApplicationExtension
         
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseGRPCConfiguration();
         
         app.MapControllers();
 
