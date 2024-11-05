@@ -27,17 +27,17 @@ public class UnsentNotificationsJob : IUnsentNotificationsJob
         {
             var unsentNotifications = await _notificationRepository.GetUnsentNotificationsAsync(cancellationToken);
             
-            foreach (var notification in unsentNotifications)
+            await Parallel.ForEachAsync(unsentNotifications, cancellationToken, async (notification, ct) =>
             {
                 try
                 {
-                    await _notificationHandler.SendAndUpdateAsync(notification, cancellationToken);
+                    await _notificationHandler.SendAndUpdateAsync(notification, ct);
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Failed to process notification {NotificationId}", notification.Id);
                 }
-            }
+            });
         }
         catch (Exception ex)
         {
