@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Contracts.Protos";
+
+package rentOffer;
+
+message RentOfferRequest {
+  string RentOfferId = 1;
+}
+
+message GetRentOfferByIdResponse {
+  string Id = 1;
+  string UserId = 2;
+  google.protobuf.Timestamp AvailableFrom = 3;
+  google.protobuf.Timestamp availableTo = 4;
+  double PricePerDay = 5;
+  bool IsAvailable = 6;
+}
+
+service GRPCRentOfferService {
+  rpc GetRentOfferById (RentOfferRequest) returns (GetRentOfferByIdResponse);
+}
