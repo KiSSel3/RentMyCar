@@ -4,6 +4,7 @@ using CarManagementService.Infrastructure.Infrastructure;
 using CarManagementService.Infrastructure.Options;
 using CarManagementService.Infrastructure.Repositories.Implementations;
 using CarManagementService.Infrastructure.Services;
+using CarManagementService.Infrastructure.Services.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

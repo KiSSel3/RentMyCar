@@ -1,4 +1,3 @@
-using AutoMapper;
 using CarManagementService.Domain.Abstractions.Services;
 using CarManagementService.Infrastructure.Options;
 using Contracts.Protos;
@@ -7,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using GRPCUserServiceClient = Contracts.Protos.GRPCUserService.GRPCUserServiceClient;
 
-namespace CarManagementService.Infrastructure.Services;
+namespace CarManagementService.Infrastructure.Services.Client;
 
 public class GRPCUserService : IUserService
 {
