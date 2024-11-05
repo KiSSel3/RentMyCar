@@ -27,6 +27,8 @@ public static class DependencyInjection
         services.AddScoped<IUserService, GRPCUserService>();
         
         services.Configure<GRPCOptions>(configuration.GetSection(GRPCOptions.SectionName));
+
+        services.AddGrpc();
         
         return services;
     }

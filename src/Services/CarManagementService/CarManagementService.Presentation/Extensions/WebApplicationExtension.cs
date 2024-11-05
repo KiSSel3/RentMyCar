@@ -1,3 +1,4 @@
+using CarManagementService.Infrastructure.Configurations;
 using CarManagementService.Presentation.Middlewares;
 
 namespace CarManagementService.Presentation.Extensions;
@@ -25,6 +26,8 @@ public static class WebApplicationExtension
         
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseGRPCConfiguration();
         
         app.MapControllers();
 
