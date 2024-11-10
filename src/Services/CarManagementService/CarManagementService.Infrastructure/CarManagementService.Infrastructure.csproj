@@ -29,6 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Contracts\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\CarManagementService.Domain\CarManagementService.Domain.csproj" />
     </ItemGroup>
 

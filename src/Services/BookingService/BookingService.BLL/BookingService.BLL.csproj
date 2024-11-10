@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Contracts\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\BookingService.DAL\BookingService.DAL.csproj" />
     </ItemGroup>
 
@@ -26,12 +27,6 @@
       <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1-develop.2100" />
       <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.8" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Contracts">
-        <HintPath>..\..\..\Contracts\Contracts\bin\Debug\net8.0\Contracts.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
     <ItemGroup>
