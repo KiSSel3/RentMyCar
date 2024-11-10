@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\Contracts\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\..\..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\IdentityService.DAL\IdentityService.DAL.csproj" />
     </ItemGroup>
     
