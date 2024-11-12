@@ -21,7 +21,6 @@ public static class WebApplicationExtension
     {
         app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
         
-        app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
         

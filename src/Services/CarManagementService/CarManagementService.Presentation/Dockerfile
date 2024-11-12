@@ -23,8 +23,5 @@ RUN dotnet publish "CarManagementService.Presentation.csproj" -c $BUILD_CONFIGUR
 
 FROM base AS final
 WORKDIR /app
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_URLS=http://+:10001
-ENV ASPNETCORE_URLS=http://+:10101
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "CarManagementService.Presentation.dll"]

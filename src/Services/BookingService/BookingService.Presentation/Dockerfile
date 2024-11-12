@@ -23,8 +23,5 @@ RUN dotnet publish "BookingService.Presentation.csproj" -c $BUILD_CONFIGURATION 
 
 FROM base AS final
 WORKDIR /app
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_URLS=http://+:10002
-ENV ASPNETCORE_URLS=http://+:10102
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "BookingService.Presentation.dll"]

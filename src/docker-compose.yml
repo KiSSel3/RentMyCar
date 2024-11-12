@@ -1,0 +1,143 @@
+﻿version: '3.8'
+
+services:
+  booking-service:
+    container_name: "BookingService.Presentation"
+    image: ${DOCKER_REGISTRY}booking-service-presentation
+    build:
+      context: .
+      dockerfile: Services/BookingService/BookingService.Presentation/Dockerfile
+    ports:
+      - "10002:10002"
+      - "10102:10102"
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:10002;http://+:10102
+      - ASPNETCORE_HTTP_PORTS=10102
+      - ASPNETCORE_HTTPS_PORTS=10002
+      - MongoDb__ConnectionString=mongodb://mongodb:27017
+      - MongoDb__DatabaseName=BookingServiceDB
+      - MongoDb__NotificationsCollectionName=Notifications
+      - MongoDb__BookingsCollectionName=Bookings
+      - Redis__ConnectionString=redis:6379
+      - Redis__InstanceName=BookingService
+      - MessageBroker__Host=amqp://rabbitmq:5672
+      - MessageBroker__Username=guest
+      - MessageBroker__Password=guest
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - rentmycar-network
+
+  car-management-service:
+    container_name: "CarManagementService.Presentation"
+    image: ${DOCKER_REGISTRY}car-management-service-presentation
+    build:
+      context: .
+      dockerfile: Services/CarManagementService/CarManagementService.Presentation/Dockerfile
+    ports:
+      - "10001:10001"
+      - "10101:10101"
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:10001;http://+:10101
+      - ASPNETCORE_HTTP_PORTS=10101
+      - ASPNETCORE_HTTPS_PORTS=10001
+      - ConnectionStrings__PostrgeSql=Host=postgres;Port=5432;Database=RentMyCar.CarManagementService;Username=postgres;Password=eshorka
+      - MessageBroker__Host=amqp://rabbitmq:5672
+      - MessageBroker__Username=guest
+      - MessageBroker__Password=guest
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - rentmycar-network
+
+  identity-service:
+    container_name: "IdentityService.Presentation"
+    image: ${DOCKER_REGISTRY}identity-service-presentation
+    build:
+      context: .
+      dockerfile: Services/IdentityService/IdentityService.Presentation/Dockerfile
+    ports:
+      - "10000:10000"
+      - "10100:10100"
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:10000;http://+:10100
+      - ASPNETCORE_HTTP_PORTS=10100
+      - ASPNETCORE_HTTPS_PORTS=10000
+      - ConnectionStrings__PostrgeSql=Host=postgres;Port=5432;Database=RentMyCar.IdentityService;Username=postgres;Password=eshorka
+      - MessageBroker__Host=amqp://rabbitmq:5672
+      - MessageBroker__Username=guest
+      - MessageBroker__Password=guest
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - rentmycar-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - rentmycar-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - rentmycar-network
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: eshorka
+      POSTGRES_MULTIPLE_DATABASES: RentMyCar.CarManagementService,RentMyCar.IdentityService
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rentmycar-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rentmycar-network
+
+volumes:
+  mongodb_data:
+  redis_data:
+  postgres_data:
+  rabbitmq_data:
+
+networks:
+  rentmycar-network:
+    driver: bridge

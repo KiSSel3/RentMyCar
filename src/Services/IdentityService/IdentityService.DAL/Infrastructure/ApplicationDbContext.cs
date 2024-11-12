@@ -10,7 +10,9 @@ namespace IdentityService.DAL.Infrastructure;
 public class ApplicationDbContext : IdentityDbContext<UserEntity, RoleEntity, Guid>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    { }
+    {
+        Database.Migrate();
+    }
     
     protected override void OnModelCreating(ModelBuilder builder)
     {

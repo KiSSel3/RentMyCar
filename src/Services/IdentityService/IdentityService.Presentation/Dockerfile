@@ -23,8 +23,5 @@ RUN dotnet publish "IdentityService.Presentation.csproj" -c $BUILD_CONFIGURATION
 
 FROM base AS final
 WORKDIR /app
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_URLS=http://+:10000
-ENV ASPNETCORE_URLS=http://+:10100
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "IdentityService.Presentation.dll"]
