@@ -1,3 +1,4 @@
+using System.Net.Security;
 using AutoMapper;
 using BookingService.BLL.External.Services.Interfaces;
 using BookingService.BLL.Models.Options;
@@ -28,7 +29,19 @@ public class GRPCUserService : IUserService
     
     public async Task<UserResult?> GetUserByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcServerAddress);
+        var handler = new SocketsHttpHandler
+        {
+            SslOptions = new SslClientAuthenticationOptions
+            {
+                RemoteCertificateValidationCallback = 
+                    (sender, certificate, chain, errors) => true
+            }
+        };
+
+        using var channel = GrpcChannel.ForAddress(_grpcServerAddress, new GrpcChannelOptions
+        {
+            HttpHandler = handler
+        });
 
         _logger.LogInformation("[gRPC Client] Sending GetUserById request for userId: {UserId}", id);
         
@@ -52,7 +65,19 @@ public class GRPCUserService : IUserService
 
     public async Task<bool> IsUserValidAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        using var channel = GrpcChannel.ForAddress(_grpcServerAddress);
+        var handler = new SocketsHttpHandler
+        {
+            SslOptions = new SslClientAuthenticationOptions
+            {
+                RemoteCertificateValidationCallback = 
+                    (sender, certificate, chain, errors) => true
+            }
+        };
+
+        using var channel = GrpcChannel.ForAddress(_grpcServerAddress, new GrpcChannelOptions
+        {
+            HttpHandler = handler
+        });
 
         _logger.LogInformation("[gRPC Client] Sending IsUserValid request for userId: {UserId}", id);
         

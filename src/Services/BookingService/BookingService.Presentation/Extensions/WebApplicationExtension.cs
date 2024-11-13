@@ -1,6 +1,7 @@
 using BookingService.BLL;
 using BookingService.BLL.Configurations;
 using BookingService.Presentation.Middlewares;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace BookingService.Presentation.Extensions;
 
@@ -20,6 +21,13 @@ public static class WebApplicationExtension
     public static WebApplication AddApplicationMiddleware(this WebApplication app)
     {
         app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+        
+        app.UseForwardedHeaders(new ForwardedHeadersOptions {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        });
+        
+        app.UseHttpsRedirection();
+        app.UseHsts();
         
         app.UseStaticFiles();
         app.UseRouting();

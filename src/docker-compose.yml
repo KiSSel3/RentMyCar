@@ -1,15 +1,14 @@
-﻿version: '3.8'
-
-services:
+﻿services:
   booking-service:
     container_name: "BookingService.Presentation"
-    image: ${DOCKER_REGISTRY}booking-service-presentation
+    image: ${DOCKER_REGISTRY}booking-service
     build:
       context: .
       dockerfile: Services/BookingService/BookingService.Presentation/Dockerfile
     ports:
       - "10002:10002"
       - "10102:10102"
+      - "465:465"
     depends_on:
       - mongodb
       - redis
@@ -36,7 +35,7 @@ services:
 
   car-management-service:
     container_name: "CarManagementService.Presentation"
-    image: ${DOCKER_REGISTRY}car-management-service-presentation
+    image: ${DOCKER_REGISTRY}car-management-service
     build:
       context: .
       dockerfile: Services/CarManagementService/CarManagementService.Presentation/Dockerfile
@@ -63,7 +62,7 @@ services:
 
   identity-service:
     container_name: "IdentityService.Presentation"
-    image: ${DOCKER_REGISTRY}identity-service-presentation
+    image: ${DOCKER_REGISTRY}identity-service
     build:
       context: .
       dockerfile: Services/IdentityService/IdentityService.Presentation/Dockerfile

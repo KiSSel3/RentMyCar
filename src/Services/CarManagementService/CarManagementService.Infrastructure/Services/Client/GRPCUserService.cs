@@ -1,3 +1,4 @@
+using System.Net.Security;
 using CarManagementService.Domain.Abstractions.Services;
 using CarManagementService.Infrastructure.Options;
 using Contracts.Protos;
@@ -21,7 +22,19 @@ public class GRPCUserService : IUserService
 
     public async Task<bool> IsUserValidAsync(Guid id, CancellationToken cancellationToken = default)
     { 
-        using var channel = GrpcChannel.ForAddress(_grpcServerAddress);
+        var handler = new SocketsHttpHandler
+        {
+            SslOptions = new SslClientAuthenticationOptions
+            {
+                RemoteCertificateValidationCallback = 
+                    (sender, certificate, chain, errors) => true
+            }
+        };
+
+        using var channel = GrpcChannel.ForAddress(_grpcServerAddress, new GrpcChannelOptions
+        {
+            HttpHandler = handler
+        });
 
         _logger.LogInformation("[gRPC Client] Sending IsUserValid request for userId: {UserId}", id);
         
