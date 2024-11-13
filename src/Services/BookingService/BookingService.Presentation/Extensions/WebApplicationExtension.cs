@@ -1,3 +1,5 @@
+using BookingService.BLL;
+using BookingService.BLL.Configurations;
 using BookingService.Presentation.Middlewares;
 
 namespace BookingService.Presentation.Extensions;
@@ -25,6 +27,8 @@ public static class WebApplicationExtension
         
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseHangfireConfiguration();
         
         app.MapControllers();
 

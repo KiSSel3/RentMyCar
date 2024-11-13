@@ -15,8 +15,7 @@ public class RoleService : IRoleService
     private readonly RoleManager<RoleEntity> _roleManager;
     private readonly ILogger<RoleService> _logger;
     private readonly IMapper _mapper;
-
-
+    
     public RoleService(
         RoleManager<RoleEntity> roleManager,
         ILogger<RoleService> logger,

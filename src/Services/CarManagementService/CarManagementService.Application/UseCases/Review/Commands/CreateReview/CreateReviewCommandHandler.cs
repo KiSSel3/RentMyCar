@@ -5,6 +5,7 @@ using CarManagementService.Domain.Repositories;
 using CarManagementService.Domain.Specifications.RentOffer;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using INotificationPublisher = CarManagementService.Application.Publishers.Interfaces.INotificationPublisher;
 
 namespace CarManagementService.Application.UseCases.Review.Commands.CreateReview;
 
@@ -14,24 +15,27 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand>
     private readonly IRentOfferRepository _rentOfferRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<CreateReviewCommandHandler> _logger;
+    private readonly INotificationPublisher _notificationPublisher;
 
     public CreateReviewCommandHandler(
         IReviewRepository reviewRepository,
         IRentOfferRepository rentOfferRepository,
         IMapper mapper,
-        ILogger<CreateReviewCommandHandler> logger)
+        ILogger<CreateReviewCommandHandler> logger,
+        INotificationPublisher notificationPublisher)
     {
         _reviewRepository = reviewRepository;
         _rentOfferRepository = rentOfferRepository;
         _mapper = mapper;
         _logger = logger;
+        _notificationPublisher = notificationPublisher;
     }
 
     public async Task Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Starting to create a new review for rent offer with ID: {RentOfferId}", request.RentOfferId);
 
-        await EnsureRelatedEntityExistsAsync(request, cancellationToken);
+        var rentOffer = await GetRelatedRentOfferAsync(request.RentOfferId, cancellationToken);
         
         var review = _mapper.Map<ReviewEntity>(request);
         
@@ -41,16 +45,20 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand>
         await _reviewRepository.CreateAsync(review, cancellationToken);
 
         _logger.LogInformation("Successfully created a new review for rent offer with ID: {RentOfferId}", request.RentOfferId);
+        
+        await _notificationPublisher.PublishReviewCreatedMessageAsync(review, rentOffer, cancellationToken);
     }
     
-    private async Task EnsureRelatedEntityExistsAsync(CreateReviewCommand request, CancellationToken cancellationToken)
+    private async Task<RentOfferEntity> GetRelatedRentOfferAsync(Guid rentOfferId, CancellationToken cancellationToken)
     {
-        var spec = new RentOfferByIdSpecification(request.RentOfferId);
+        var spec = new RentOfferByIdSpecification(rentOfferId);
 
         var rentOffer = await _rentOfferRepository.FirstOrDefault(spec, cancellationToken);
         if (rentOffer is null)
         {
-            throw new EntityNotFoundException(nameof(RentOfferEntity), request.RentOfferId);
+            throw new EntityNotFoundException(nameof(RentOfferEntity), rentOfferId);
         }
+
+        return rentOffer;
     }
 }

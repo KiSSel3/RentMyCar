@@ -1,5 +1,5 @@
+using BookingService.BLL.Features.Booking.Services.Interfaces;
 using BookingService.BLL.Models.DTOs.Booking;
-using BookingService.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

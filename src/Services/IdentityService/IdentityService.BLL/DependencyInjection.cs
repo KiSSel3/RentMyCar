@@ -4,8 +4,11 @@ using FluentValidation.AspNetCore;
 using IdentityService.BLL.Models.Options;
 using IdentityService.BLL.Providers.Implementation;
 using IdentityService.BLL.Providers.Interfaces;
+using IdentityService.BLL.Publishers.Implementation;
+using IdentityService.BLL.Publishers.Interfaces;
 using IdentityService.BLL.Services.Implementation;
 using IdentityService.BLL.Services.Interfaces;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +25,40 @@ public static class DependencyInjection
 
         services.Configure<TokenOptions>(configuration.GetSection(TokenOptions.DefaultSection));
 
+        services.AddMassTransit(x =>
+        {
+            x.SetKebabCaseEndpointNameFormatter();
+            
+            x.AddScoped<INotificationPublisher, NotificationPublisher>();
+            
+            x.UsingRabbitMq((context, configurator) =>
+            {
+                configurator.Host(new Uri(configuration["MessageBroker:Host"]), h =>
+                {
+                    h.Username(configuration["MessageBroker:Username"]);
+                    h.Password(configuration["MessageBroker:Password"]);
+                });
+
+                configurator.ConfigurePublish(p =>
+                {
+                    p.UseRetry(r =>
+                    {
+                        r.Interval(3, TimeSpan.FromMinutes(1));
+                    });
+                    
+                    p.UseCircuitBreaker(cb =>
+                    {
+                        cb.TrackingPeriod = TimeSpan.FromMinutes(1);
+                        cb.TripThreshold = 15;
+                        cb.ActiveThreshold = 10;
+                        cb.ResetInterval = TimeSpan.FromMinutes(5);
+                    });
+                });
+                
+                configurator.ConfigureEndpoints(context);
+            });
+        });
+        
         services.AddScoped<ITokenProvider, TokenProvider>();
         
         services.AddScoped<IAuthService, AuthService>();
