@@ -79,6 +79,20 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "Identity API", Version = "v1" });
+            
+            options.AddServer(new OpenApiServer
+            {
+                Url = "https://localhost:10000",
+                Description = "Identity Service Direct"
+            });
+            
+            options.AddServer(new OpenApiServer
+            {
+                Url = "https://localhost/identity",
+                Description = "Through API Gateway"
+            });
+            
             options.AddSecurityDefinition(
                 "Bearer",
                 new OpenApiSecurityScheme
