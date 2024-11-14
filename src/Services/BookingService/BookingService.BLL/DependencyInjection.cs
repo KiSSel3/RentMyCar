@@ -6,8 +6,6 @@ using BookingService.BLL.Features.Booking.Services.Implementations;
 using BookingService.BLL.Features.Booking.Services.Interfaces;
 using BookingService.BLL.Features.Notifications.BackgroundJobs.Implementations;
 using BookingService.BLL.Features.Notifications.BackgroundJobs.Interfaces;
-using BookingService.BLL.Features.Notifications.Factories.Implementations;
-using BookingService.BLL.Features.Notifications.Factories.Interfaces;
 using BookingService.BLL.Features.Notifications.Handlers.Implementations;
 using BookingService.BLL.Features.Notifications.Handlers.Interfaces;
 using BookingService.BLL.Features.Notifications.Services.Implementations;
@@ -78,8 +76,6 @@ public static class DependencyInjection
         
         services.Configure<EmailNotificationOptions>(configuration.GetSection(EmailNotificationOptions.SectionName));
         services.AddScoped<INotificationSender, EmailNotificationSender>();
-
-        services.AddScoped<IBookingNotificationMessageFactory, BookingNotificationMessageFactory>();
         
         return services;
     }

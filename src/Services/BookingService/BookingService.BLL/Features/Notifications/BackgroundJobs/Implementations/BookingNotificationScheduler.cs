@@ -1,5 +1,4 @@
 using BookingService.BLL.Features.Notifications.BackgroundJobs.Interfaces;
-using BookingService.BLL.Features.Notifications.Factories.Interfaces;
 using BookingService.BLL.Features.Notifications.Handlers.Interfaces;
 using BookingService.BLL.Models.Options;
 using BookingService.Domain.Entities;
@@ -12,16 +11,13 @@ namespace BookingService.BLL.Features.Notifications.BackgroundJobs.Implementatio
 
 public class BookingNotificationScheduler : IBookingNotificationScheduler
 {
-    private readonly IBookingNotificationMessageFactory _messageFactory;
     private readonly SchedulerNotificationOptions _notificationOptions;
     private readonly ILogger<BookingNotificationScheduler> _logger;
 
     public BookingNotificationScheduler(
-        IBookingNotificationMessageFactory messageFactory,
         IOptions<SchedulerNotificationOptions> notificationOptions,
         ILogger<BookingNotificationScheduler> logger)
     {
-        _messageFactory = messageFactory;
         _logger = logger;
         _notificationOptions = notificationOptions.Value;
     }
@@ -30,7 +26,15 @@ public class BookingNotificationScheduler : IBookingNotificationScheduler
     {
         try
         {
-            var notification = _messageFactory.CreateBookingCreatedNotification(booking);
+            var notification = new NotificationEntity
+            {
+                UserId = booking.UserId,
+                CreatedAt = DateTime.UtcNow,
+                Message = $"Your booking has been successfully created. " +
+                          $"Rental start: {booking.RentalStart:d}, " +
+                          $"end: {booking.RentalEnd:d}",
+                IsSent = false
+            };
             
             BackgroundJob.Enqueue<INotificationHandler>(
                 handler => handler.SendAndPersistAsync(
@@ -48,7 +52,13 @@ public class BookingNotificationScheduler : IBookingNotificationScheduler
     {
         try
         {
-            var notification = _messageFactory.CreateStatusChangedNotification(booking, newStatus);
+            var notification = new NotificationEntity
+            {
+                UserId = booking.UserId,
+                CreatedAt = DateTime.UtcNow,
+                Message = $"Your booking status has been updated to {newStatus}",
+                IsSent = false
+            };
 
             BackgroundJob.Enqueue<INotificationHandler>(
                 handler => handler.SendAndPersistAsync(
@@ -83,7 +93,13 @@ public class BookingNotificationScheduler : IBookingNotificationScheduler
     
         if (reminderTime > DateTime.UtcNow)
         {
-            var notification = _messageFactory.CreateStartReminderNotification(booking);
+            var notification = new NotificationEntity
+            {
+                UserId = booking.UserId,
+                CreatedAt = DateTime.UtcNow,
+                Message = $"Reminder: your rental starts tomorrow at {booking.RentalStart:t}",
+                IsSent = false
+            };
 
             BackgroundJob.Schedule<INotificationHandler>(
                 handler => handler.SendAndPersistAsync(
@@ -99,7 +115,13 @@ public class BookingNotificationScheduler : IBookingNotificationScheduler
     
         if (reminderTime > DateTime.UtcNow)
         {
-            var notification = _messageFactory.CreateEndReminderNotification(booking);
+            var notification = new NotificationEntity
+            {
+                UserId = booking.UserId,
+                CreatedAt = DateTime.UtcNow,
+                Message = $"Reminder: your rental ends tomorrow at {booking.RentalEnd:t}",
+                IsSent = false
+            };
 
             BackgroundJob.Schedule<INotificationHandler>(
                 handler => handler.SendAndPersistAsync(
