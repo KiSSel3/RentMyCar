@@ -29,15 +29,6 @@
       - ASPNETCORE_URLS=https://+:10002;http://+:10102
       - ASPNETCORE_HTTP_PORTS=10102
       - ASPNETCORE_HTTPS_PORTS=10002
-      - MongoDb__ConnectionString=mongodb://mongodb:27017
-      - MongoDb__DatabaseName=BookingServiceDB
-      - MongoDb__NotificationsCollectionName=Notifications
-      - MongoDb__BookingsCollectionName=Bookings
-      - Redis__ConnectionString=redis:6379
-      - Redis__InstanceName=BookingService
-      - MessageBroker__Host=amqp://rabbitmq:5672
-      - MessageBroker__Username=guest
-      - MessageBroker__Password=guest
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
@@ -58,10 +49,6 @@
       - ASPNETCORE_URLS=https://+:10001;http://+:10101
       - ASPNETCORE_HTTP_PORTS=10101
       - ASPNETCORE_HTTPS_PORTS=10001
-      - ConnectionStrings__PostrgeSql=Host=postgres;Port=5432;Database=RentMyCar.CarManagementService;Username=postgres;Password=eshorka
-      - MessageBroker__Host=amqp://rabbitmq:5672
-      - MessageBroker__Username=guest
-      - MessageBroker__Password=guest
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
@@ -82,10 +69,6 @@
       - ASPNETCORE_URLS=https://+:10000;http://+:10100
       - ASPNETCORE_HTTP_PORTS=10100
       - ASPNETCORE_HTTPS_PORTS=10000
-      - ConnectionStrings__PostrgeSql=Host=postgres;Port=5432;Database=RentMyCar.IdentityService;Username=postgres;Password=eshorka
-      - MessageBroker__Host=amqp://rabbitmq:5672
-      - MessageBroker__Username=guest
-      - MessageBroker__Password=guest
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
