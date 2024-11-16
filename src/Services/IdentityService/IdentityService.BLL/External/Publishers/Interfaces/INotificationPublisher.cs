@@ -1,6 +1,6 @@
 using IdentityService.Domain.Entities;
 
-namespace IdentityService.BLL.Publishers.Interfaces;
+namespace IdentityService.BLL.External.Publishers.Interfaces;
 
 public interface INotificationPublisher
 {

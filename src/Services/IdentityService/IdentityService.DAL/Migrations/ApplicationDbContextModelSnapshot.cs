@@ -160,7 +160,7 @@ namespace IdentityService.DAL.Migrations
                         {
                             Id = new Guid("9ab61044-85f6-4c5e-a93a-d860efae0cce"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7a22a913-a1dd-4215-a4b8-5b2cdc29e089",
+                            ConcurrencyStamp = "e012336c-218c-4d88-9d26-2138dc7d4e79",
                             Email = "admin.rent.my.car@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -169,11 +169,12 @@ namespace IdentityService.DAL.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN.RENT.MY.CAR@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAECzoNc7ZK2e99jtOyZfkdLHuMZIV/RzYYn9+CgZAL5NcEn9lwyS2Rz2ywdghPnBt2A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFtiM1MSHtY3mfLustESVL21tQHKvRcFBpxEAKaGJ0f82Z38BT8aTkfOMOiWQdFBag==",
                             PhoneNumber = "+111111111111",
                             PhoneNumberConfirmed = false,
                             RefreshToken = "",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "4a6123ad-7670-4539-b4ee-3230ffec7135",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });

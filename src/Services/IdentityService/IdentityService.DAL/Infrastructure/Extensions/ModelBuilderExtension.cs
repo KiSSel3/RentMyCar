@@ -21,6 +21,7 @@ public static class ModelBuilderExtension
         var admin = new UserEntity
         {
             Id = new Guid("9AB61044-85F6-4C5E-A93A-D860EFAE0CCE"),
+            SecurityStamp = Guid.NewGuid().ToString(),
             FirstName = "Admin",
             LastName = "Admin",
             UserName = "Admin",

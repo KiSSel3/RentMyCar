@@ -64,8 +64,9 @@ public static class DependencyInjection
 
     private static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped<IRentOfferService, MockRentOfferService>();
-        services.AddScoped<IUserService, MockUserService>();
+        services.Configure<GRPCOptions>(configuration.GetSection(GRPCOptions.SectionName));
+        services.AddScoped<IRentOfferService, GRPCRentOfferService>();
+        services.AddScoped<IUserService, GRPCUserService>();
         
         services.AddScoped<Features.Booking.Services.Implementations.BookingService>();
         services.AddScoped<IBookingService, CachedBookingServiceDecorator>();

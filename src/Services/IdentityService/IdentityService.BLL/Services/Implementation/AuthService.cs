@@ -1,9 +1,9 @@
 using AutoMapper;
 using IdentityService.BLL.Exceptions;
+using IdentityService.BLL.External.Publishers.Interfaces;
 using IdentityService.BLL.Models.DTOs.Requests.Auth;
 using IdentityService.BLL.Models.DTOs.Responses.Token;
 using IdentityService.BLL.Providers.Interfaces;
-using IdentityService.BLL.Publishers.Interfaces;
 using IdentityService.BLL.Services.Interfaces;
 using IdentityService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;

@@ -1,6 +1,11 @@
+using System.Reflection;
+using CarManagementService.Domain.Abstractions.Services;
 using CarManagementService.Domain.Repositories;
 using CarManagementService.Infrastructure.Infrastructure;
+using CarManagementService.Infrastructure.Options;
 using CarManagementService.Infrastructure.Repositories.Implementations;
+using CarManagementService.Infrastructure.Services;
+using CarManagementService.Infrastructure.Services.Client;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,12 +18,20 @@ public static class DependencyInjection
     {
         ConfigurePostgreSql(services, configuration);
 
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+        
         services.AddScoped<IBrandRepository, BrandRepository>();
         services.AddScoped<ICarModelRepository, CarModelRepository>();
         services.AddScoped<ICarRepository, CarRepository>();
         services.AddScoped<IImageRepository, ImageRepository>();
         services.AddScoped<IRentOfferRepository, RentOfferRepository>();
         services.AddScoped<IReviewRepository, ReviewRepository>();
+
+        services.AddScoped<IUserService, GRPCUserService>();
+        
+        services.Configure<GRPCOptions>(configuration.GetSection(GRPCOptions.SectionName));
+
+        services.AddGrpc();
         
         return services;
     }

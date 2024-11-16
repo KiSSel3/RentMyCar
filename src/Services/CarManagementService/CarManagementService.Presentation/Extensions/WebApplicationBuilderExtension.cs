@@ -92,7 +92,19 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new OpenApiInfo { Title = "CarManagementService", Version = "v1" });
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "CarManagement API", Version = "v1" });
+            
+            options.AddServer(new OpenApiServer
+            {
+                Url = "https://localhost:10001",
+                Description = "CarManagement Service Direct"
+            });
+            
+            options.AddServer(new OpenApiServer
+            {
+                Url = "https://localhost/Booking",
+                Description = "Through API Gateway"
+            });
             
             options.AddSecurityDefinition(
                 "Bearer",

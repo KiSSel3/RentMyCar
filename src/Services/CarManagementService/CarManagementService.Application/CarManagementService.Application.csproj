@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\CarManagementService.Domain\CarManagementService.Domain.csproj" />
     </ItemGroup>
 
@@ -30,12 +31,6 @@
       <Folder Include="UseCases\RentOffer\Queries\" />
       <Folder Include="UseCases\Review\Commands\" />
       <Folder Include="UseCases\Review\Queries\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Contracts">
-        <HintPath>..\..\..\Contracts\Contracts\bin\Debug\net8.0\Contracts.dll</HintPath>
-      </Reference>
     </ItemGroup>
 
 </Project>
