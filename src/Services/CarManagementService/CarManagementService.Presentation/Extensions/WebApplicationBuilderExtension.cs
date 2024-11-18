@@ -102,7 +102,7 @@ public static class WebApplicationBuilderExtension
             
             options.AddServer(new OpenApiServer
             {
-                Url = "https://localhost/Booking",
+                Url = "https://localhost/cars",
                 Description = "Through API Gateway"
             });
             
