@@ -38,8 +38,8 @@ public class AuthController : ControllerBase
     }
     
     [Authorize]
-    [HttpDelete("logout")]
-    public async Task<IActionResult> LogoutAsync([FromBody] string userId, CancellationToken cancellationToken = default)
+    [HttpDelete("logout/{userId}")]
+    public async Task<IActionResult> LogoutAsync(string userId, CancellationToken cancellationToken = default)
     {
         await _authService.RevokeAsync(userId, cancellationToken);
         return Ok();
