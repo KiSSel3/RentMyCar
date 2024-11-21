@@ -99,7 +99,7 @@ public class RentOfferController : ControllerBase
     }
     
     [HttpPost("get-by-user-id/{id}")]
-    public async Task<IActionResult> GetRentOffersByUserIdAsync(Guid id, [FromBody] PaginationRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetRentOffersByUserIdAsync(Guid id, [FromBody] UserRentOffersRequestDTO request, CancellationToken cancellationToken = default)
     {
         var query = _mapper.Map<GetUserRentOffersQuery>(request);
         query.UserId = id;

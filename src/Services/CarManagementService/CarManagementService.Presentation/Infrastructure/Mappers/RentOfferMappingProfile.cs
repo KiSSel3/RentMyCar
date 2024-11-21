@@ -25,6 +25,6 @@ public class RentOfferMappingProfile : Profile
         
         CreateMap<RentOfferParametersRequestDTO, GetRentOffersQuery>();
         
-        CreateMap<PaginationRequestDTO, GetUserRentOffersQuery>();
+        CreateMap<UserRentOffersRequestDTO, GetUserRentOffersQuery>();
     }
 }
