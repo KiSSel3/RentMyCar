@@ -8,8 +8,5 @@ public class UpdateRentOfferRequestDTOValidator : AbstractValidator<UpdateRentOf
     public UpdateRentOfferRequestDTOValidator()
     {
         Include(new RentOfferRequestDTOValidator());
-        
-        RuleFor(x => x.IsAvailable)
-            .NotEmpty().WithMessage("IsAvailable is required.");
     }
 }
