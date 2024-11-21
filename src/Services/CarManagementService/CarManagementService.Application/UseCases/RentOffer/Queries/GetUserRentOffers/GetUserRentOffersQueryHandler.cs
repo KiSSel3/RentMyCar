@@ -33,8 +33,13 @@ public class GetUserRentOffersQueryHandler : IRequestHandler<GetUserRentOffersQu
         
         var rentOfferByUserIdSpec = new RentOfferByUserIdSpecification(request.UserId);
         var rentOfferPaginationSpec = new RentOfferPaginationSpecification(request.PageNumber.Value, request.PageSize.Value);
-
+        
         var combinedSpec = rentOfferPaginationSpec.And(rentOfferByUserIdSpec);
+        
+        if (request.IsAvailable is not null)
+        {
+            combinedSpec.And(new RentOfferByAvailabilitySpecification(request.IsAvailable.Value));
+        }
         
         var totalCount = await _repository.CountAsync(rentOfferByUserIdSpec, cancellationToken);
         
