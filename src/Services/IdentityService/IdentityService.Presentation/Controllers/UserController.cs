@@ -23,15 +23,13 @@ public class UserController : ControllerBase
         return Ok(users);
     }
     
-    [Authorize]
     [HttpGet("get-by-id/{userId}")]
     public async Task<ActionResult> GetUserById(string userId, CancellationToken cancellationToken  = default)
     {
         var user = await _userService.GetUserByIdAsync(userId, cancellationToken);
         return Ok(user);
     }
-
-    [Authorize]
+    
     [HttpGet("get-by-username/{username}")]
     public async Task<ActionResult> GetUserByUsername(string username, CancellationToken cancellationToken = default)
     {

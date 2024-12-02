@@ -59,7 +59,7 @@ public class BookingService : IBookingService
 
         var booking = _mapper.Map<BookingEntity>(createBookingDTO);
 
-        var rentalDuration = (createBookingDTO.RentalEnd - createBookingDTO.RentalStart).TotalDays;
+        var rentalDuration = (createBookingDTO.RentalEnd - createBookingDTO.RentalStart).TotalDays + 1;
         booking.TotalPrice = rentOffer.PricePerDay * (decimal)rentalDuration;
         
         booking.Events = new List<EventEntity>

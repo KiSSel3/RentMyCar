@@ -35,7 +35,7 @@ public class GetUserRentOffersQueryHandler : IRequestHandler<GetUserRentOffersQu
         
         var spec = new RentOfferByUserIdSpecification(request.UserId) as BaseSpecification<RentOfferEntity>;
         
-        if (request.IsAvailable is not null)
+        if (request.IsAvailable.HasValue)
         {
             spec = spec.And(new RentOfferByAvailabilitySpecification(request.IsAvailable.Value));
         }
