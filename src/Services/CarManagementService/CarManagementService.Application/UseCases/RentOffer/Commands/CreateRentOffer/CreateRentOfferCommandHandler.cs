@@ -10,7 +10,7 @@ using INotificationPublisher = CarManagementService.Application.Publishers.Inter
 
 namespace CarManagementService.Application.UseCases.RentOffer.Commands.CreateRentOffer;
 
-public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferCommand>
+public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferCommand, Guid>
 {
     private readonly IRentOfferRepository _rentOfferRepository;
     private readonly ICarRepository _carRepository;
@@ -35,7 +35,7 @@ public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferComm
         _userService = userService;
     }
 
-    public async Task Handle(CreateRentOfferCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateRentOfferCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Starting to create rent offer for car with ID: {CarId}", request.CarId);
 
@@ -58,6 +58,8 @@ public class CreateRentOfferCommandHandler : IRequestHandler<CreateRentOfferComm
         _logger.LogInformation("Successfully created rent offer with ID: {RentOfferId} for car: {CarId}", rentOffer.Id, request.CarId);
 
         await _notificationPublisher.PublishRentOfferCreatedMessageAsync(rentOffer, car, cancellationToken);
+
+        return rentOffer.Id;
     }
     
     private async Task<CarEntity> GetRelatedCarEntityAsync(Guid carId, CancellationToken cancellationToken)

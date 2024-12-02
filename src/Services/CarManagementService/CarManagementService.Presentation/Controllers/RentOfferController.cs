@@ -36,9 +36,9 @@ public class RentOfferController : ControllerBase
     {
         var command = _mapper.Map<CreateRentOfferCommand>(request);
 
-        await _mediator.Send(command, cancellationToken);
-        
-        return NoContent();
+        var rentOfferId = await _mediator.Send(command, cancellationToken);
+
+        return Ok(rentOfferId);
     }
 
     [Authorize]
