@@ -1,4 +1,5 @@
 using System.Reflection;
+using CarManagementService.Application.Consumers;
 using CarManagementService.Application.Publishers.Implementations;
 using CarManagementService.Application.Publishers.Interfaces;
 using MassTransit;
@@ -17,6 +18,8 @@ public static class DependencyInjection
         {
             x.SetKebabCaseEndpointNameFormatter();
             
+            x.AddConsumers(typeof(UserDeletedConsumer).Assembly);
+            
             x.AddScoped<INotificationPublisher, NotificationPublisher>();
             
             x.UsingRabbitMq((context, configurator) =>
@@ -27,6 +30,11 @@ public static class DependencyInjection
                     h.Password(configuration["MessageBroker:Password"]);
                 });
 
+                configurator.ReceiveEndpoint("user-deleted-rent-offers-queue", e =>
+                {
+                    e.ConfigureConsumer<UserDeletedConsumer>(context);
+                });
+                
                 configurator.ConfigurePublish(p =>
                 {
                     p.UseRetry(r =>
