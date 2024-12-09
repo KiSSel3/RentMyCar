@@ -95,6 +95,11 @@ public static class DependencyInjection
                     h.Password(configuration["MessageBroker:Password"]);
                 });
 
+                configurator.ReceiveEndpoint("user-deleted-notifications-queue", e =>
+                {
+                    e.ConfigureConsumer<UserDeletedConsumer>(context);
+                });
+                
                 configurator.UseMessageRetry(r =>
                 {
                     r.Intervals(

@@ -36,9 +36,9 @@ public class RentOfferController : ControllerBase
     {
         var command = _mapper.Map<CreateRentOfferCommand>(request);
 
-        await _mediator.Send(command, cancellationToken);
-        
-        return NoContent();
+        var rentOfferId = await _mediator.Send(command, cancellationToken);
+
+        return Ok(rentOfferId);
     }
 
     [Authorize]
@@ -99,7 +99,7 @@ public class RentOfferController : ControllerBase
     }
     
     [HttpPost("get-by-user-id/{id}")]
-    public async Task<IActionResult> GetRentOffersByUserIdAsync(Guid id, [FromBody] PaginationRequestDTO request, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetRentOffersByUserIdAsync(Guid id, [FromBody] UserRentOffersRequestDTO request, CancellationToken cancellationToken = default)
     {
         var query = _mapper.Map<GetUserRentOffersQuery>(request);
         query.UserId = id;

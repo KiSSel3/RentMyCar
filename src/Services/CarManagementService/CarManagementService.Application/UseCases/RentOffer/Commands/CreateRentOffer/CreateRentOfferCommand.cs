@@ -3,7 +3,7 @@ using MediatR;
 
 namespace CarManagementService.Application.UseCases.RentOffer.Commands.CreateRentOffer;
 
-public class CreateRentOfferCommand : IRequest
+public class CreateRentOfferCommand : IRequest<Guid>
 {
     public Guid UserId { get; set; }
     public Guid CarId { get; set; }

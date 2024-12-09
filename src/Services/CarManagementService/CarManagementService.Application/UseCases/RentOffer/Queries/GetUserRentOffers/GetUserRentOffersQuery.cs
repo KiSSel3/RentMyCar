@@ -7,6 +7,7 @@ namespace CarManagementService.Application.UseCases.RentOffer.Queries.GetUserRen
 public class GetUserRentOffersQuery : IRequest<PaginatedResult<RentOfferDTO>>
 {
     public Guid UserId { get; set; }
+    public bool? IsAvailable { get; set; }
     public int? PageNumber { get; set; }
     public int? PageSize { get; set; }
 }

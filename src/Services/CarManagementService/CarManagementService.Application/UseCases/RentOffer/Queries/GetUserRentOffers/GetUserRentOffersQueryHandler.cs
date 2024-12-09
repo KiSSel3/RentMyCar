@@ -1,7 +1,9 @@
 using AutoMapper;
 using CarManagementService.Application.Models.DTOs;
 using CarManagementService.Application.Models.Results;
+using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
+using CarManagementService.Domain.Specifications.Common;
 using CarManagementService.Domain.Specifications.RentOffer;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -31,14 +33,18 @@ public class GetUserRentOffersQueryHandler : IRequestHandler<GetUserRentOffersQu
         request.PageSize ??= int.MaxValue;
         request.PageNumber ??= 1;
         
-        var rentOfferByUserIdSpec = new RentOfferByUserIdSpecification(request.UserId);
-        var rentOfferPaginationSpec = new RentOfferPaginationSpecification(request.PageNumber.Value, request.PageSize.Value);
+        var spec = new RentOfferByUserIdSpecification(request.UserId) as BaseSpecification<RentOfferEntity>;
+        
+        if (request.IsAvailable.HasValue)
+        {
+            spec = spec.And(new RentOfferByAvailabilitySpecification(request.IsAvailable.Value));
+        }
+        
+        var totalCount = await _repository.CountAsync(spec, cancellationToken);
 
-        var combinedSpec = rentOfferPaginationSpec.And(rentOfferByUserIdSpec);
+        spec = spec.And(new RentOfferPaginationSpecification(request.PageNumber.Value, request.PageSize.Value));
         
-        var totalCount = await _repository.CountAsync(rentOfferByUserIdSpec, cancellationToken);
-        
-        var rentOffers = await _repository.GetBySpecificationAsync(combinedSpec, cancellationToken);
+        var rentOffers = await _repository.GetBySpecificationAsync(spec, cancellationToken);
         
         var rentOfferDTOs = _mapper.Map<IEnumerable<RentOfferDTO>>(rentOffers);
     

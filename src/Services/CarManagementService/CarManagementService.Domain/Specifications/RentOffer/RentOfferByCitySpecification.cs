@@ -6,7 +6,7 @@ namespace CarManagementService.Domain.Specifications.RentOffer;
 public class RentOfferByCitySpecification : DirectSpecification<RentOfferEntity>
 {
     public RentOfferByCitySpecification(string city)
-        : base(offer => offer.LocationModel.City.ToLower() == city.ToLower())
+        : base(offer => offer.LocationModel.City.ToLower().Contains(city.ToLower()))
     {
     }
 }

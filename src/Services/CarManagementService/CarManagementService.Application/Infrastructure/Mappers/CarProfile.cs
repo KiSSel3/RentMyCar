@@ -13,8 +13,9 @@ public class CarProfile : Profile
         CreateMap<CarEntity, CarDTO>()
             .ForMember(dest => dest.Image, opt => opt.MapFrom(src => Convert.ToBase64String(src.Image)));
         
-        CreateMap<CreateCarCommand, CarEntity>();
+        CreateMap<CreateCarCommand, CarEntity>()
+            .ForMember(dest => dest.Image, opt => opt.Ignore());
         CreateMap<UpdateCarCommand, CarEntity>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore());
+            .ForMember(dest => dest.Image, opt => opt.Ignore());
     }
 }

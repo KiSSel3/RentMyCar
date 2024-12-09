@@ -59,7 +59,7 @@ public class BookingService : IBookingService
 
         var booking = _mapper.Map<BookingEntity>(createBookingDTO);
 
-        var rentalDuration = (createBookingDTO.RentalEnd - createBookingDTO.RentalStart).TotalDays;
+        var rentalDuration = (createBookingDTO.RentalEnd - createBookingDTO.RentalStart).TotalDays + 1;
         booking.TotalPrice = rentOffer.PricePerDay * (decimal)rentalDuration;
         
         booking.Events = new List<EventEntity>
@@ -147,8 +147,11 @@ public class BookingService : IBookingService
         var filter = new BookingFilterBuilder()
             .ByUserId(parametersDTO.UserId)
             .ByRentOfferId(parametersDTO.RentOfferId)
-            .ByStartDate(parametersDTO.StartDate)
-            .ByEndDate(parametersDTO.EndDate)
+            .ByStartDateTo(parametersDTO.StartDateTo)
+            .ByStartDateFrom(parametersDTO.StartDateFrom)
+            .ByEndDateTo(parametersDTO.EndDateTo)
+            .ByEndDateFrom(parametersDTO.EndDateFrom)
+            .ByStatus(parametersDTO.Status)
             .Build();
 
         var bookings = await _bookingRepository.GetByFilterAsync(filter, cancellationToken);
@@ -205,7 +208,12 @@ public class BookingService : IBookingService
             .Build();
 
         var existingBookings = await _bookingRepository.GetByFilterAsync(bookingFilter, cancellationToken);
-        if (existingBookings.Any())
+        
+        var conflictingBookings = existingBookings.Where(booking =>
+            booking.Events.Any() && 
+            booking.Events.OrderByDescending(e => e.Timestamp).First().Status != BookingStatus.Canceled);
+        
+        if (conflictingBookings.Any())
         {
             throw new BookingConflictException();
         }

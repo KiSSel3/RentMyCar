@@ -101,6 +101,8 @@ public class GetRentOffersQueryHandler : IRequestHandler<GetRentOffersQuery, Pag
             spec = spec.And(new RentOfferByMaxAvailableDateSpecification(request.AvailableTo.Value));
         }
 
+        spec = spec.And(new RentOfferByAvailabilitySpecification(true));
+        
         return spec;
     }
 }

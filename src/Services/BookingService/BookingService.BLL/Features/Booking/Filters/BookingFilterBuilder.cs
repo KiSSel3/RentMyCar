@@ -29,7 +29,7 @@ public class BookingFilterBuilder
         return this;
     }
 
-    public BookingFilterBuilder ByStartDate(DateTime? startDate)
+    public BookingFilterBuilder ByStartDateFrom(DateTime? startDate)
     {
         if (startDate.HasValue)
         {
@@ -38,8 +38,28 @@ public class BookingFilterBuilder
 
         return this;
     }
-    
-    public BookingFilterBuilder ByEndDate(DateTime? endDate)
+
+    public BookingFilterBuilder ByStartDateTo(DateTime? startDate)
+    {
+        if (startDate.HasValue)
+        {
+            _filters.Add(_builder.Lte(b => b.RentalStart, startDate.Value));
+        }
+
+        return this;
+    }
+
+    public BookingFilterBuilder ByEndDateFrom(DateTime? endDate)
+    {
+        if (endDate.HasValue)
+        {
+            _filters.Add(_builder.Gte(b => b.RentalEnd, endDate.Value));
+        }
+
+        return this;
+    }
+
+    public BookingFilterBuilder ByEndDateTo(DateTime? endDate)
     {
         if (endDate.HasValue)
         {
@@ -53,12 +73,14 @@ public class BookingFilterBuilder
     {
         if (status.HasValue)
         {
-            _filters.Add(_builder.ElemMatch(b => b.Events, 
-                e => e.Status == status.Value));
+            _filters.Add(
+                _builder.Where(b => b.Events.Any() && b.Events.Last().Status == status.Value)
+            );
         }
 
         return this;
     }
+
 
     public BookingFilterBuilder ByDateOverlap(DateTime start, DateTime end)
     {
