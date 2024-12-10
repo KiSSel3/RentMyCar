@@ -1,7 +1,7 @@
 using IdentityService.BLL.Configurations;
 using IdentityService.Presentation.Middlewares;
 using Microsoft.AspNetCore.HttpOverrides;
-using NLog.Web;
+using Serilog;
 
 namespace IdentityService.Presentation.Extensions;
 
@@ -30,6 +30,9 @@ public static class WebApplicationExtension
         app.UseHsts();
         
         app.UseStaticFiles();
+        
+        app.UseSerilogRequestLogging();
+        
         app.UseRouting();
         
         app.UseAuthentication();

@@ -2,8 +2,6 @@ using System.Net;
 using FluentValidation;
 using IdentityService.BLL.Exceptions;
 using Newtonsoft.Json;
-using NLog;
-using ILogger = NLog.ILogger;
 
 namespace IdentityService.Presentation.Middlewares;
 
