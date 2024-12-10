@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NLog.Web;
+using Serilog;
 
 namespace CarManagementService.Presentation.Extensions;
 
@@ -142,7 +142,12 @@ public static class WebApplicationBuilderExtension
     public static WebApplicationBuilder AddLogging(this WebApplicationBuilder builder)
     {
         builder.Logging.ClearProviders();
-        builder.Host.UseNLog();
+        
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(builder.Configuration)
+            .CreateLogger();
+        
+        builder.Host.UseSerilog();
 
         return builder;
     }
