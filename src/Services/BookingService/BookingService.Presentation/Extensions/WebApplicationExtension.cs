@@ -2,6 +2,7 @@ using BookingService.BLL;
 using BookingService.BLL.Configurations;
 using BookingService.Presentation.Middlewares;
 using Microsoft.AspNetCore.HttpOverrides;
+using Serilog;
 
 namespace BookingService.Presentation.Extensions;
 
@@ -30,6 +31,9 @@ public static class WebApplicationExtension
         app.UseHsts();
         
         app.UseStaticFiles();
+        
+        app.UseSerilogRequestLogging();
+        
         app.UseRouting();
         
         app.UseAuthentication();
