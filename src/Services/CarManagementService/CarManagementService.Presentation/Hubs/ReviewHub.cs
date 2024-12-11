@@ -20,6 +20,15 @@ public class ReviewHub : Hub
         _logger.LogInformation("Successfully sent review message to group {RentOfferId}.", rentOfferId);
     }
 
+    public async Task NotifyReviewDeleted(Guid rentOfferId, Guid reviewId)
+    {
+        _logger.LogInformation("Notifying group {RentOfferId} about deleted review {ReviewId}.", rentOfferId, reviewId);
+        
+        await Clients.Group(rentOfferId.ToString()).SendAsync("ReviewDeleted", reviewId);
+        
+        _logger.LogInformation("Group {RentOfferId} notified about deleted review {ReviewId}.", rentOfferId, reviewId);
+    }
+    
     public async Task JoinGroup(string rentOfferId)
     {
         _logger.LogInformation("Connection {ConnectionId} attempting to join group {RentOfferId}.", Context.ConnectionId, rentOfferId);
