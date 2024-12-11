@@ -1,5 +1,6 @@
 using AutoMapper;
 using CarManagementService.Application.Exceptions;
+using CarManagementService.Application.Models.DTOs;
 using CarManagementService.Domain.Abstractions.Services;
 using CarManagementService.Domain.Data.Entities;
 using CarManagementService.Domain.Repositories;
@@ -10,7 +11,7 @@ using INotificationPublisher = CarManagementService.Application.Publishers.Inter
 
 namespace CarManagementService.Application.UseCases.Review.Commands.CreateReview;
 
-public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand>
+public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand, ReviewDTO>
 {
     private readonly IReviewRepository _reviewRepository;
     private readonly IRentOfferRepository _rentOfferRepository;
@@ -35,7 +36,7 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand>
         _userService = userService;
     }
 
-    public async Task Handle(CreateReviewCommand request, CancellationToken cancellationToken)
+    public async Task<ReviewDTO> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Starting to create a new review for rent offer with ID: {RentOfferId}", request.RentOfferId);
 
@@ -57,6 +58,8 @@ public class CreateReviewCommandHandler : IRequestHandler<CreateReviewCommand>
         _logger.LogInformation("Successfully created a new review for rent offer with ID: {RentOfferId}", request.RentOfferId);
         
         await _notificationPublisher.PublishReviewCreatedMessageAsync(review, rentOffer, cancellationToken);
+        
+        return _mapper.Map<ReviewDTO>(review);
     }
     
     private async Task<RentOfferEntity> GetRelatedRentOfferAsync(Guid rentOfferId, CancellationToken cancellationToken)
