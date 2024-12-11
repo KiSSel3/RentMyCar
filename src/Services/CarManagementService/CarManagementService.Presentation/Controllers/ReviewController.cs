@@ -63,7 +63,10 @@ public class ReviewController : ControllerBase
     {
         var command = new DeleteReviewCommand { Id = id };
 
-        await _mediator.Send(command, cancellationToken);
+        var deletedReview = await _mediator.Send(command, cancellationToken);
+        
+        await _hubContext.Clients.Groups(deletedReview.RentOfferId.ToString())
+            .SendAsync("ReviewDeleted", deletedReview.Id, cancellationToken: cancellationToken);
         
         return NoContent();
     }
