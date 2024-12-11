@@ -31,6 +31,8 @@ public static class WebApplicationBuilderExtension
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices(builder.Configuration);
         
+        builder.Services.AddSignalR();
+        
         return builder;
     }
 
