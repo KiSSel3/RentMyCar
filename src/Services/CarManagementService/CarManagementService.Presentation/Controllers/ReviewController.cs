@@ -4,10 +4,12 @@ using CarManagementService.Application.UseCases.Review.Commands.DeleteReview;
 using CarManagementService.Application.UseCases.Review.Commands.UpdateReview;
 using CarManagementService.Application.UseCases.Review.Queries.GetReviewById;
 using CarManagementService.Application.UseCases.Review.Queries.GetReviews;
+using CarManagementService.Presentation.Hubs;
 using CarManagementService.Presentation.Models.DTOs.Review;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace CarManagementService.Presentation.Controllers;
 
@@ -17,11 +19,16 @@ public class ReviewController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly IHubContext<ReviewHub> _hubContext;
 
-    public ReviewController(IMediator mediator, IMapper mapper)
+    public ReviewController(
+        IMediator mediator,
+        IMapper mapper,
+        IHubContext<ReviewHub> hubContext)
     {
         _mediator = mediator;
         _mapper = mapper;
+        _hubContext = hubContext;
     }
 
     [Authorize]
@@ -30,7 +37,10 @@ public class ReviewController : ControllerBase
     {
         var command = _mapper.Map<CreateReviewCommand>(request);
 
-        await _mediator.Send(command, cancellationToken);
+        var newReview = await _mediator.Send(command, cancellationToken);
+
+        await _hubContext.Clients.Groups(newReview.RentOfferId.ToString())
+            .SendAsync("ReceiveReview", newReview, cancellationToken: cancellationToken);
         
         return NoContent();
     }
@@ -53,7 +63,10 @@ public class ReviewController : ControllerBase
     {
         var command = new DeleteReviewCommand { Id = id };
 
-        await _mediator.Send(command, cancellationToken);
+        var deletedReview = await _mediator.Send(command, cancellationToken);
+        
+        await _hubContext.Clients.Groups(deletedReview.RentOfferId.ToString())
+            .SendAsync("ReviewDeleted", deletedReview.Id, cancellationToken: cancellationToken);
         
         return NoContent();
     }

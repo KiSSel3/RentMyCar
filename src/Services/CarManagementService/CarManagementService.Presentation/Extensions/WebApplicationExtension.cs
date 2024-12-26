@@ -1,6 +1,8 @@
 using CarManagementService.Infrastructure.Configurations;
+using CarManagementService.Presentation.Hubs;
 using CarManagementService.Presentation.Middlewares;
 using Microsoft.AspNetCore.HttpOverrides;
+using Serilog;
 
 namespace CarManagementService.Presentation.Extensions;
 
@@ -29,6 +31,9 @@ public static class WebApplicationExtension
         app.UseHsts();
         
         app.UseStaticFiles();
+        
+        app.UseSerilogRequestLogging();
+        
         app.UseRouting();
         
         app.UseAuthentication();
@@ -38,6 +43,8 @@ public static class WebApplicationExtension
         
         app.MapControllers();
 
+        app.MapHub<ReviewHub>("/hubs/reviews");
+        
         return app;
     }
 }

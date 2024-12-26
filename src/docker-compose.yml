@@ -126,6 +126,46 @@
     networks:
       - rentmycar-network
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    networks:
+      - rentmycar-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.1
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - rentmycar-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.10.1
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    networks:
+      - rentmycar-network
+    depends_on:
+      - elasticsearch
+
 volumes:
   mongodb_data:
   redis_data:
