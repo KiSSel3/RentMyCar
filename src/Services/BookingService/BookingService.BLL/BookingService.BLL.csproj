@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\BookingService.DAL\BookingService.DAL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="FluentValidation" Version="11.10.0" />
+      <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+      <PackageReference Include="Google.Protobuf" Version="3.29.0-rc2" />
+      <PackageReference Include="Grpc.Net.Client" Version="2.67.0-pre1" />
+      <PackageReference Include="Grpc.Tools" Version="2.67.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Hangfire" Version="1.8.15" />
+      <PackageReference Include="Hangfire.Mongo" Version="1.11.0" />
+      <PackageReference Include="MailKit" Version="4.8.0" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1-develop.2100" />
+      <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.8" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="External\Services\" />
+    </ItemGroup>
+
+</Project>

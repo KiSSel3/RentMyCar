@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
+      <PackageReference Include="FluentValidation" Version="11.10.0" />
+      <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+      <PackageReference Include="MassTransit.RabbitMQ" Version="8.3.1-develop.2100" />
+      <PackageReference Include="MediatR" Version="12.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\CarManagementService.Domain\CarManagementService.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="UseCases\Brand\Commands\" />
+      <Folder Include="UseCases\Brand\Queries\" />
+      <Folder Include="UseCases\CarModel\Commands\" />
+      <Folder Include="UseCases\CarModel\Queries\" />
+      <Folder Include="UseCases\Car\Commands\" />
+      <Folder Include="UseCases\Car\Queries\" />
+      <Folder Include="UseCases\RentOffer\Commands\" />
+      <Folder Include="UseCases\RentOffer\Queries\" />
+      <Folder Include="UseCases\Review\Commands\" />
+      <Folder Include="UseCases\Review\Queries\" />
+    </ItemGroup>
+
+</Project>

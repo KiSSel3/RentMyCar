@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "Contracts.Protos";
+
+package user;
+
+message UserRequest {
+  string UserId = 1;
+}
+
+message GetUserByIdResponse {
+  string Id = 1;
+  string FirstName = 2;
+  string LastName = 3;
+  string UserName = 4;
+  string Email = 5;
+  string PhoneNumber = 6;
+}
+
+message IsUserValidResponse {
+  bool IsValid = 1;
+}
+
+service GRPCUserService {
+  rpc GetUserById (UserRequest) returns (GetUserByIdResponse);
+  rpc IsUserValid (UserRequest) returns (IsUserValidResponse);
+}

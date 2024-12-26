@@ -1,0 +1,178 @@
+﻿services:
+  nginx:
+    image: nginx:latest
+    container_name: api-gateway
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/cert:/etc/nginx/cert:ro
+    depends_on:
+      - identity-service
+      - car-management-service
+      - booking-service
+    networks:
+      - rentmycar-network
+  booking-service:
+    container_name: "BookingService.Presentation"
+    image: ${DOCKER_REGISTRY}booking-service
+    build:
+      context: .
+      dockerfile: Services/BookingService/BookingService.Presentation/Dockerfile
+    depends_on:
+      - mongodb
+      - redis
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:10002;http://+:10102
+      - ASPNETCORE_HTTP_PORTS=10102
+      - ASPNETCORE_HTTPS_PORTS=10002
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - rentmycar-network
+
+  car-management-service:
+    container_name: "CarManagementService.Presentation"
+    image: ${DOCKER_REGISTRY}car-management-service
+    build:
+      context: .
+      dockerfile: Services/CarManagementService/CarManagementService.Presentation/Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:10001;http://+:10101
+      - ASPNETCORE_HTTP_PORTS=10101
+      - ASPNETCORE_HTTPS_PORTS=10001
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - rentmycar-network
+
+  identity-service:
+    container_name: "IdentityService.Presentation"
+    image: ${DOCKER_REGISTRY}identity-service
+    build:
+      context: .
+      dockerfile: Services/IdentityService/IdentityService.Presentation/Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:10000;http://+:10100
+      - ASPNETCORE_HTTP_PORTS=10100
+      - ASPNETCORE_HTTPS_PORTS=10000
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - rentmycar-network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - rentmycar-network
+
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+    networks:
+      - rentmycar-network
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: eshorka
+      POSTGRES_MULTIPLE_DATABASES: RentMyCar.CarManagementService,RentMyCar.IdentityService
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - rentmycar-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - rentmycar-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rentmycar-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    networks:
+      - rentmycar-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.10.1
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - rentmycar-network
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.10.1
+    container_name: logstash
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    networks:
+      - rentmycar-network
+    depends_on:
+      - elasticsearch
+
+volumes:
+  mongodb_data:
+  redis_data:
+  postgres_data:
+  pgadmin_data:
+  rabbitmq_data:
+
+networks:
+  rentmycar-network:
+    driver: bridge
